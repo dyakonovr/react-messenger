@@ -1,0 +1,28 @@
+.message {
+  display: flex;
+  width: fit-content;
+  border-radius: 15px;
+  padding: 10px;
+  font-size: 14px;
+  max-width: 95%;
+
+  &_companion {
+    align-self: flex-start;
+    color: #696969;
+    background-color: var(--color-white);
+  }
+
+  &_my {
+    align-self: flex-end;
+    color: var(--color-white);
+    background-color: #5B96F7;
+  }
+
+  &_time {
+    display: inline-block;
+    align-self: flex-end;
+    margin: 0 0 0 10px;
+    font-size: 11px;
+    transform: translateY(3px);
+  }
+}

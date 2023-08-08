@@ -1,0 +1,10 @@
+:root {
+  --color-background: #161616;
+
+  --color-white: #fff;
+  --color-black: #222;
+
+  --border-color: rgba(255, 255, 255, 0.155);
+
+  --font-family: "Manrope", sans-serif;
+}
