@@ -5,7 +5,7 @@
   &_header {
     display: flex;
     align-items: center;
-    padding: 15px 30px;
+    padding: 15px;
     border-bottom: 1px solid var(--border-color);
   }
 
@@ -64,7 +64,7 @@
     font-weight: 700;
 
     a {
-      color: #5B96F7;
+      color: var(--color-main);
     }
   }
 }

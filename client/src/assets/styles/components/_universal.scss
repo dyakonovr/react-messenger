@@ -26,3 +26,19 @@
     color: #709CE6;
   }
 }
+
+.button {
+  align-self: center;
+  border-radius: 5px;
+  border: none;
+  padding: 10px;
+  color: var(--color-white);
+  background-color: var(--color-main);
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+
+  &:hover {
+    color: var(--color-main);
+    background-color: var(--color-white);
+  }
+}

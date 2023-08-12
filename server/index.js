@@ -1,8 +1,12 @@
 import express from "express";
-import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/?retryWrites=true&w=majority").then(() => {
+import { checkAuth } from "./utils/checkAuth.js";
+import * as UserController from "./controllers/UserController.js";
+import { registerValidation } from "./validators/register.js";
+
+mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/messenger?retryWrites=true&w=majority")
+  .then(() => {
     console.log("DB is ok");
   }).catch((error) => {
     console.log(`DB error: ${error}`);
@@ -10,24 +14,12 @@ mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/?retry
 
 const app = express();
 app.use(express.json());
-
-app.get("/", (request, response) => {
-  response.send("Hello world!");
-});
   
-app.post("/login", (request, response) => {
-  const { email, password } = request.body;
-
-  const token = jwt.sign({ email, password }, "super-secret-key-777");
-
-  response.json({
-    success: true,
-    token
-  });
-});
+app.post("/login", UserController.login);
+app.post("/register", registerValidation, UserController.register);
+app.get("/me", checkAuth, UserController.getMe);
 
 app.listen(4444, (error) => {
   if (error) return console.log(`Server error: ${error}`);
-
   console.log("Server started!");
 });

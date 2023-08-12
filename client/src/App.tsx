@@ -1,13 +1,7 @@
-import Chat from "./components/Chat/Chat";
-import Sidebar from "./components/Sidebar/Sidebar";
+import Pages from "./pages/Pages";
 
 function App() {
-  return (
-    <div className="app">
-      <Sidebar />
-      <Chat />
-    </div>
-  )
+  return <Pages />
 }
 
 export default App;
