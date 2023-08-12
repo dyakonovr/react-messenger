@@ -16,13 +16,16 @@
   &_input {
     width: 100%;
 
+    &:not(:last-child) {
+      margin: 0 0 15px;
+    }
+
     &_password {
       padding-right: 40px !important;
     }
   }
 
   &_password_wrapper {
-    margin: 15px 0;
     position: relative;
     display: flex;
     width: 100%;

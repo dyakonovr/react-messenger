@@ -9,11 +9,11 @@ export const register = async (request, response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) return response.status(400).json(errors.array());
 
-    const { email, password, login, avatarUrl } = request.body;
+    const { email, password, login } = request.body;
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash(password, salt);
 
-    const doc = new UserModel({ email, passwordHash, login, avatarUrl });
+    const doc = new UserModel({ email, passwordHash, login });
 
     const user = await doc.save();
     const { passwordHash: _, ...restUserData } = user._doc;

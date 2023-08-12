@@ -1,5 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
+import cors from "cors";
 
 import { checkAuth } from "./utils/checkAuth.js";
 import * as UserController from "./controllers/UserController.js";
@@ -14,6 +15,7 @@ mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/messen
 
 const app = express();
 app.use(express.json());
+app.use(cors());
   
 app.post("/login", UserController.login);
 app.post("/register", registerValidation, UserController.register);

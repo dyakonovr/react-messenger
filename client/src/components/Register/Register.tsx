@@ -4,13 +4,13 @@ import { useAuthStore } from "../../store/authStore";
 import Form from "../UI/Form/Form";
 import axios from "../../axios";
 
-function Login() {
+function Register() {
   const setUser = useAuthStore(state => state.setUser);
   const navigate = useNavigate();
 
   // Функции
-  async function handleLogin(email: string, password: string) {
-    await axios.post("/login", { email, password })
+  async function handleRegister(email: string, password: string, login: string) {
+    await axios.post("/register", { email, password, login })
       .then(response => {
         const { email, login, token } = response.data;
         setUser(email, login, token);
@@ -25,13 +25,14 @@ function Login() {
 
   return (
     <Form
-      title="Авторизация"
-      buttonText="Авторизироваться"
-      altText="Нажмите для регистрации"
-      altLink={Paths.REGISTER}
-      handleClick={handleLogin}
+      title="Регистрация"
+      buttonText="Зарегестрироваться"
+      altText="Нажмите для авторизации"
+      altLink={Paths.LOGIN}
+      handleClick={handleRegister}
+      isRegister={true}
     />
   );
 };
 
-export default Login;
+export default Register;
