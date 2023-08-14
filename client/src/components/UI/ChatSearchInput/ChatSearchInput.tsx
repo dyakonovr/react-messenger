@@ -1,11 +1,11 @@
-import classes from './SearchChatInput.module.css'
+import classes from './ChatSearchInput.module.css'
 import searchIconSvg from "../../../assets/img/icon-search.svg";
 
-interface ISearchChatInputProps {
+interface IChatSearchInputProps {
   placeholder: string
 }
 
-function SearchChatInput({placeholder = "Search"}: ISearchChatInputProps) {
+function ChatSearchInput({placeholder = "Search"}: IChatSearchInputProps) {
   return (
     <div className={classes.input_wrapper}>
       <img src={searchIconSvg} alt="" className={classes.input_icon} />
@@ -14,4 +14,4 @@ function SearchChatInput({placeholder = "Search"}: ISearchChatInputProps) {
   );
 };
 
-export default SearchChatInput;
+export default ChatSearchInput;

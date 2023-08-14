@@ -1,4 +1,4 @@
-// import NotificationsContainer from "../components/UI/NotificationsContainer/NotificationsContainer";
+import NotificationsContainer from "../components/UI/NotificationsContainer/NotificationsContainer";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Home from "./HomePage/HomePage";
 import Login from "./LoginPage/LoginPage";
@@ -7,6 +7,7 @@ import { Paths } from "../enums/Paths";
 import { useEffect } from "react";
 import axios from '../axios';
 import { useAuthStore } from "../store/authStore";
+import { createToast } from "../utils/createToast";
 
 function Pages() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function Pages() {
           setUser(email, login, token);
           navigate(Paths.HOME);
         })
-        .catch(error => console.log(error.response.message))
+        .catch(error => createToast(error.response.message))
     };
 
     fetchMyData();
@@ -39,7 +40,7 @@ function Pages() {
         <Route path={Paths.REGISTER} element={<Register />} />
         <Route path={Paths.LOGIN} element={<Login />} />
       </Routes>
-      {/* <NotificationsContainer /> */}
+      <NotificationsContainer />
     </>
   );
 };

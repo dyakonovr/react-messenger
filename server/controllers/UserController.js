@@ -27,12 +27,12 @@ export const register = async (request, response) => {
 
 export const login = async (request, response) => {
   try {
-    const { email, password } = request.body;
-    const user = await UserModel.findOne({ email });
+    const { emailOrLogin, password } = request.body;
+    const user = await UserModel.findOne(emailOrLogin.includes("@") ? { email: emailOrLogin } : { login: emailOrLogin });
     if (!user) return response.status(404).json({ success: false, message: "Пользователь не найден" });
 
     const isValidPass = await bcrypt.compare(password, user._doc.passwordHash);
-    if (!isValidPass) return response.status(404).json({ success: false, message: "Неверный логин или пароль" });
+    if (!isValidPass) return response.status(404).json({ success: false, message: "Неверный почта/логин или пароль" });
 
     const { passwordHash: _, ...restUserData } = user._doc;
     const token = jwt.sign({ _id: restUserData._id }, "super-secret-key-777", { expiresIn: "30d" });
@@ -55,3 +55,17 @@ export const getMe = async (request, response) => {
     response.status(500).json({ success: false, message: "Нет доступа" });
   }
 };
+
+export const getUsersByString = async (request, response) => {
+  try {
+    const { searchString } = request.body;
+    const users = await UserModel.find(
+      { $or: [{ login: { $regex: searchString } }, { email: { $regex: searchString } }] },
+      { login: true, email: true, _id: true }
+    );
+    response.json(users);
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ success: false, message: "Ошибка" });
+  }
+}

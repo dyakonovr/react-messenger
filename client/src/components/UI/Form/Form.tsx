@@ -4,14 +4,16 @@ import { Link } from "react-router-dom";
 import classes from "./Form.module.scss";
 import { FieldValues, useForm } from "react-hook-form";
 
-// type handleClickType = ((param: string) => void) | (param: number) => void;
+type handleClickTypeWithoutLogin = (email: string, password: string) => Promise<void>;
+type handleClickTypeWithLogin = (email: string, password: string, login: string) => Promise<void>;
+
 interface IFormProps {
-  isRegister?: boolean
+  isRegister: boolean
   title: string,
   buttonText: string,
   altText: string,
   altLink: string,
-  handleClick: (email: string, password: string, login: string) => void;
+  handleClick: handleClickTypeWithLogin & handleClickTypeWithoutLogin;
 }
 
 function Form({ isRegister, title, buttonText, altText, altLink, handleClick }: IFormProps) {
@@ -20,7 +22,7 @@ function Form({ isRegister, title, buttonText, altText, altLink, handleClick }: 
   // Функции
   function handleFormSubmit(data: FieldValues) {
     if (isRegister) handleClick(data.email, data.password, data.login);
-    else handleClick(data.email, data.password, "");
+    else handleClick(data.emailOrLogin, data.password);
   }
   // Функции END
 
@@ -38,9 +40,9 @@ function Form({ isRegister, title, buttonText, altText, altLink, handleClick }: 
       }
       <input 
         className={["input", classes.form_input].join(' ')} 
-        {...register("email")}
-        placeholder="Почта"
-        type="email"
+        {...register(isRegister ? "email" : "emailOrLogin")}
+        placeholder={isRegister ? "Почта" : "Почта или логин"}
+        type="text"
       />
       <div className={classes.form_password_wrapper}>
         <input 

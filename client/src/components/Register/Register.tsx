@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import axios from "../../axios";
 import { Paths } from "../../enums/Paths";
 import { useAuthStore } from "../../store/authStore";
+import { createToast } from "../../utils/createToast";
 import Form from "../UI/Form/Form";
-import axios from "../../axios";
 
 function Register() {
   const setUser = useAuthStore(state => state.setUser);
@@ -17,9 +18,7 @@ function Register() {
         navigate(Paths.HOME);
         localStorage.setItem("token", token);
       })
-      .catch(error => {
-        console.log(error.response.data.message);
-      });
+      .catch(error => createToast(error.response.data.message));
   }
   // Функции END
 

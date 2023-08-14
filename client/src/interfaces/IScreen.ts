@@ -1,0 +1,1 @@
+type IScreen =  "chat" | "user-search" | "settings";

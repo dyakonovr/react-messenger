@@ -5,6 +5,7 @@ import cors from "cors";
 import { checkAuth } from "./utils/checkAuth.js";
 import * as UserController from "./controllers/UserController.js";
 import { registerValidation } from "./validators/register.js";
+import { loginValidation } from "./validators/login.js";
 
 mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/messenger?retryWrites=true&w=majority")
   .then(() => {
@@ -17,8 +18,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
   
-app.post("/login", UserController.login);
+app.post("/login", loginValidation, UserController.login);
 app.post("/register", registerValidation, UserController.register);
+app.post("/users", UserController.getUsersByString);
 app.get("/me", checkAuth, UserController.getMe);
 
 app.listen(4444, (error) => {

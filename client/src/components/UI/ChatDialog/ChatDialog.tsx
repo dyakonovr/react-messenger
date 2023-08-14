@@ -1,6 +1,6 @@
-import classes from './Dialog.module.scss';
+import classes from './ChatDialog.module.scss';
 
-function Dialog() {
+function ChatDialog() {
   return (
     <li className={classes.dialog}>
       <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" />
@@ -18,4 +18,4 @@ function Dialog() {
   );
 };
 
-export default Dialog;
+export default ChatDialog;

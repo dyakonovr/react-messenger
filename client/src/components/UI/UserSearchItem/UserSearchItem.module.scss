@@ -1,0 +1,39 @@
+.user_search_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 12px;
+  padding: 10px;
+  background-color: #363636;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: #505050;
+
+    .user_search_item_button {
+      color: #b0b0b0;
+    }
+  }
+
+  &_wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &_email {
+    color: rgb(148, 148, 148);
+    font-size: 14px;
+  }
+
+  &_button {
+    border: none;
+    margin: 0 0 0 auto;
+    font-size: 30px;
+    color: #828282;
+    background: none;
+    transition: color 0.15s ease-in-out;
+    cursor: pointer;
+  }
+}
