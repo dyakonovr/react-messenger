@@ -21,6 +21,8 @@ app.use(cors());
 app.post("/login", loginValidation, UserController.login);
 app.post("/register", registerValidation, UserController.register);
 app.post("/users", UserController.getUsersByString);
+app.post("/add-friend", UserController.addFriend);
+app.get("/get-friends", UserController.getFriends);
 app.get("/me", checkAuth, UserController.getMe);
 
 app.listen(4444, (error) => {

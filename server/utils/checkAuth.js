@@ -1,7 +1,8 @@
 import jwt from "jsonwebtoken";
+import { getToken } from "./getToken.js";
 
 export function checkAuth(request, response, next) {
-  const token = (request.headers.authorization || "").replace(/Bearer\s?/, "");
+  const token = getToken(request);
   if (!token) return response.status(403).json({ success: false, message: "Нет доступа" });
 
   try {

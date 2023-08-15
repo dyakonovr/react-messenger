@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "../../axios";
+import { IFriend } from "../../interfaces/IFriend";
 import UserSearchItem from "../UI/UserSearchItem/UserSearchItem";
 import classes from './UserSearch.module.scss';
-import axios from "../../axios";
-import { ISearchUser } from "../../interfaces/ISearchUser";
 
 function UserSearch() {
   const [value, setValue] = useState("");
-  const [searchResults, setSearchResults] = useState<ISearchUser[]>([]);
+  const [searchResults, setSearchResults] = useState<IFriend[]>([]);
 
   useEffect(() => { 
     const searchUsers = setTimeout(() => { 

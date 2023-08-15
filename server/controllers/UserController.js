@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import UserModel from "../models/User.js";
+import { getToken } from "../utils/getToken.js";
+import { getUserIdByToken } from "../utils/getUserIdByToken.js";
 
 export const register = async (request, response) => {
   try {
@@ -58,14 +60,50 @@ export const getMe = async (request, response) => {
 
 export const getUsersByString = async (request, response) => {
   try {
+    const token = getToken(request);
+    if (!token) return response.status(403).json({ success: false, message: "Нет доступа" });
+
+    const _id = getUserIdByToken(token);
     const { searchString } = request.body;
     const users = await UserModel.find(
-      { $or: [{ login: { $regex: searchString } }, { email: { $regex: searchString } }] },
+      {$or: [{ login: { $regex: searchString } }, { email: { $regex: searchString } }] },
       { login: true, email: true, _id: true }
-    );
+    ).where("_id").ne(_id);
     response.json(users);
   } catch (error) {
     console.log(error);
-    response.status(500).json({ success: false, message: "Ошибка" });
+    response.status(500).json({ success: false, message: "Произошла ошибка получения пользователей по вашему запросу" });
+  }
+}
+
+export const addFriend = async (request, response) => {
+  try {
+    const token = getToken(request);
+    if (!token) return response.status(403).json({ success: false, message: "Нет доступа" });
+    
+    const friendId = request.body.id;
+    const myUserId = getUserIdByToken(token);
+    await UserModel.updateOne({ _id: myUserId }, { $addToSet: { friends: friendId } });
+    await UserModel.updateOne({ _id: friendId }, { $addToSet: { friends: myUserId } });
+    response.json({success: true, message: "Пользователь успешно добавлен в друзья"});
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ success: false, message: "Произошла ошибка добавления пользователя в друзья" });
+  }
+}
+
+export const getFriends = async (request, response) => {
+  try {
+    const token = getToken(request);
+    if (!token) return response.status(403).json({ success: false, message: "Нет доступа" });
+
+    const myUserId = getUserIdByToken(token);
+    const user = await UserModel.findById(myUserId);
+    const friends = await UserModel.find({ _id: { $in: user._doc.friends }}, {_id: true, email: true, login: true});
+
+    response.json({ success: true, friends });
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ success: false, message: "Произошла ошибка добавления пользователя в друзья" });
   }
 }
