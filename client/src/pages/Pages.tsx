@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import axios from '../axios';
 import { useAuthStore } from "../store/authStore";
 import { createToast } from "../utils/createToast";
+import { ServerPaths } from "../enums/ServerPaths";
 
 function Pages() {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ function Pages() {
     }
 
     const fetchMyData = async () => {
-      await axios.get("/me")
+      await axios.get(ServerPaths.USERS.GET_ME)
         .then(response => {
           const { email, login } = response.data;
           setUser(email, login, token);

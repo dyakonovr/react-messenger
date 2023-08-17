@@ -4,6 +4,7 @@ import { Paths } from "../../enums/Paths";
 import { useAuthStore } from "../../store/authStore";
 import { createToast } from "../../utils/createToast";
 import Form from "../UI/Form/Form";
+import { ServerPaths } from "../../enums/ServerPaths";
 
 function Register() {
   const setUser = useAuthStore(state => state.setUser);
@@ -11,7 +12,7 @@ function Register() {
 
   // Функции
   async function handleRegister(email: string, password: string, login: string) {
-    await axios.post("/register", { email, password, login })
+    await axios.post(ServerPaths.USERS.REGISTER, { email, password, login })
       .then(response => {
         const { email, login, token } = response.data;
         setUser(email, login, token);

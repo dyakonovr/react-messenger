@@ -4,6 +4,7 @@ import { useAuthStore } from "../../store/authStore";
 import Form from "../UI/Form/Form";
 import axios from "../../axios";
 import { createToast } from "../../utils/createToast";
+import { ServerPaths } from "../../enums/ServerPaths";
 
 function Login() {
   const setUser = useAuthStore(state => state.setUser);
@@ -11,7 +12,7 @@ function Login() {
 
   // Функции
   async function handleLogin(emailOrLogin: string, password: string) {
-    await axios.post("/login", { emailOrLogin, password })
+    await axios.post(ServerPaths.USERS.LOGIN, { emailOrLogin, password })
       .then(response => {
         const { email, login, token } = response.data;
         setUser(email, login, token);

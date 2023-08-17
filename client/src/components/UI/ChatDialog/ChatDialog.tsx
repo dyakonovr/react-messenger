@@ -1,13 +1,16 @@
 import { IFriend } from "../../../interfaces/IFriend";
+import { useDialogStore } from "../../../store/dialogStore";
 import classes from './ChatDialog.module.scss';
 
 interface IChatDialogProps {
   user: IFriend
 }
 
-function ChatDialog({user}: IChatDialogProps) {
+function ChatDialog({ user }: IChatDialogProps) {
+  const openDialog = useDialogStore(state => state.openDialog);
+
   return (
-    <li className={classes.dialog}>
+    <li className={classes.dialog} onClick={() => openDialog(user)}>
       <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" />
       <div className={classes.dialog_wrapper}>
         <div className={classes.dialog_header}>

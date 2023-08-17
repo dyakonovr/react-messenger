@@ -5,4 +5,17 @@
   padding: 20px;
   height: 100%;
   background-color: #424242;
+
+  &:has(.chat_empty) {
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.chat_empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+  color: #9f9f9f;
 }

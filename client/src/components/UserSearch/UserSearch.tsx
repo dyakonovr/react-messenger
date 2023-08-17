@@ -3,6 +3,7 @@ import axios from "../../axios";
 import { IFriend } from "../../interfaces/IFriend";
 import UserSearchItem from "../UI/UserSearchItem/UserSearchItem";
 import classes from './UserSearch.module.scss';
+import { ServerPaths } from "../../enums/ServerPaths";
 
 function UserSearch() {
   const [value, setValue] = useState("");
@@ -10,7 +11,7 @@ function UserSearch() {
 
   useEffect(() => { 
     const searchUsers = setTimeout(() => { 
-      axios.post("/users", { searchString: value }).then(response => setSearchResults(response.data));
+      axios.post(ServerPaths.USERS.GET_USERS, { searchString: value }).then(response => setSearchResults(response.data));
     }, 500);
 
     return () => clearTimeout(searchUsers);
