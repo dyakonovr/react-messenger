@@ -14,8 +14,8 @@ function Login() {
   async function handleLogin(emailOrLogin: string, password: string) {
     await axios.post(ServerPaths.USERS.LOGIN, { emailOrLogin, password })
       .then(response => {
-        const { email, login, token } = response.data;
-        setUser(email, login, token);
+        const { email, login, token, _id } = response.data;
+        setUser(email, login, token, _id);
         navigate(Paths.HOME);
         localStorage.setItem("token", token);
       })

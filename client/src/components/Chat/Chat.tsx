@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 function Chat() {
   const currentDialogUser = useDialogStore(state => state.currentDialogUser);
   const openDialog = useDialogStore(state => state.openDialog);
+  const dialogIsOpen = !!currentDialogUser?._id;
 
   useEffect(() => {
     return () => openDialog(null);
@@ -18,13 +19,14 @@ function Chat() {
     <div className={classes.chat_wrapper}>
       <ChatSidebar />
 
-      {!!currentDialogUser?._id
+      {dialogIsOpen
         ?
-        <div className={classes.chat}>
+          <div className={classes.chat}>
             <div className={classes.chat_header}>
-              <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" />
+              <div className="avatar-placeholder">{currentDialogUser.login[0]}</div>
+              {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
               <div className={classes.chat_title_wrapper}>
-              <strong className="name">{currentDialogUser?.login}</strong>
+                <strong className="name">{currentDialogUser.login}</strong>
                 <span className={classes.chat_user_status}>Online</span>
               </div>
               <button className={classes.chat_button_more}></button>

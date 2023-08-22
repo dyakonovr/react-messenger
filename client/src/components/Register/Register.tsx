@@ -14,8 +14,8 @@ function Register() {
   async function handleRegister(email: string, password: string, login: string) {
     await axios.post(ServerPaths.USERS.REGISTER, { email, password, login })
       .then(response => {
-        const { email, login, token } = response.data;
-        setUser(email, login, token);
+        const { email, login, token, _id } = response.data;
+        setUser(email, login, token, _id);
         navigate(Paths.HOME);
         localStorage.setItem("token", token);
       })

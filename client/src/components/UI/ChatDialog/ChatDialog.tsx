@@ -11,7 +11,8 @@ function ChatDialog({ user }: IChatDialogProps) {
 
   return (
     <li className={classes.dialog} onClick={() => openDialog(user)}>
-      <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" />
+      <div className="avatar-placeholder">{user.login[0]}</div>
+      {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
       <div className={classes.dialog_wrapper}>
         <div className={classes.dialog_header}>
           <strong className="name">{user.login}</strong>

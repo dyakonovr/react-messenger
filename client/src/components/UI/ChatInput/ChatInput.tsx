@@ -1,28 +1,41 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import classes from './ChatInput.module.scss';
 import axios from "../../../axios";
 import { createToast } from "../../../utils/createToast";
 import { useChatsStore } from "../../../store/chatsStore";
 import { ServerPaths } from "../../../enums/ServerPaths";
+import socket from "../../../socket";
+import { IMessage } from "../../../interfaces/IMessage";
+import { useAuthStore } from "../../../store/authStore";
 
 interface IChatInputProps {
-  recipientUserId: string
+  recipientUserId: string,
 }
 
 function ChatInput({recipientUserId}: IChatInputProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const addMessageInChat = useChatsStore(state => state.addMessageInChat);
+  const sender = useAuthStore(state => state._id);
+
+  useEffect(() => {
+    socket.on('MESSAGE:SEND', (data: IMessage) => {
+      console.log(`new message:`, data);
+      addMessageInChat(recipientUserId, data);
+    });
+  }, []);
 
   // Функции
   async function handleClick() {
     const input = inputRef.current as HTMLInputElement;
     const inputValue = input.value;
 
-    console.log(`message: ${inputValue}`);
+    const obj = { recipient: recipientUserId, text: inputValue, sender };
+    console.log(obj);
+    socket.emit("MESSAGE:SEND", obj);
 
-    await axios.post(ServerPaths.MESSAGES.CREATE, { recipient: recipientUserId, text: inputValue })
-      .then(response => addMessageInChat(recipientUserId, response.data.message))
-      .catch(error => createToast(error.response.data.message))
+    // await axios.post(ServerPaths.MESSAGES.CREATE, { recipient: recipientUserId, text: inputValue })
+    //   .then(response => )
+    //   .catch(error => createToast(error.response.data.message))
 
     input.value = '';
   }

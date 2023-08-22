@@ -19,7 +19,8 @@ function UserSearchItem({ user }: IUserSearchItemProps) {
 
   return (
     <li className={classes.user_search_item} data-id={user._id} onClick={handleClick}>
-      <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" />
+      {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
+      <div className="avatar-placeholder">{user.login[0]}</div>
       <div className={classes.user_search_item_wrapper}>
         <strong className="name">{user.login}</strong>
         <span className={classes.user_search_item_email}>{user.email}</span>

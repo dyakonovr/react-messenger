@@ -24,8 +24,8 @@ function Pages() {
     const fetchMyData = async () => {
       await axios.get(ServerPaths.USERS.GET_ME)
         .then(response => {
-          const { email, login } = response.data;
-          setUser(email, login, token);
+          const { email, login, _id } = response.data;
+          setUser(email, login, token, _id);
           navigate(Paths.HOME);
         })
         .catch(error => createToast(error.response.message))

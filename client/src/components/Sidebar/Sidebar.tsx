@@ -9,10 +9,12 @@ import SidebarButton from "../UI/SidebarButton/SidebarButton";
 import { useScreenStore } from "../../store/screenStore";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../enums/Paths";
+import { useAuthStore } from "../../store/authStore";
 
 function Sidebar() {
   const screen = useScreenStore(state => state.screen);
   const navigate = useNavigate();
+  const login = useAuthStore(state => state.login);
 
   return (
     <div className={classes.sidebar}>
@@ -22,8 +24,9 @@ function Sidebar() {
       <button onClick={() => { 
         localStorage.removeItem("token");
         navigate(Paths.REGISTER);
-       }}>logout</button>
-      <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className={["avatar", classes.sidebar_avatar].join(' ')} />
+      }}>logout</button>
+      <div className={["avatar-placeholder", classes.sidebar_avatar].join(' ')}>{login && login[0]}</div>
+      {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className={["avatar", classes.sidebar_avatar].join(' ')} /> */}
     </div>
   );
 };

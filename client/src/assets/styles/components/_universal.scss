@@ -47,3 +47,17 @@
   margin: 0;
   font-size: 32px;
 }
+
+.avatar-placeholder {
+  border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 50px;
+  height: 50px;
+  font-size: 30px;
+  color: var(--color-main);
+  background-color: var(--color-white);
+  text-transform: uppercase;
+  user-select: none;
+}
