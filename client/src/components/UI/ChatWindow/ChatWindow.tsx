@@ -1,12 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import axios from "../../../axios";
 import { ServerPaths } from "../../../enums/ServerPaths";
 import { useChatsStore } from "../../../store/chatsStore";
-import { createToast } from "../../../utils/createToast";
 import Message from "../Message/Message";
 import { IMessage } from './../../../interfaces/IMessage';
 import classes from './ChatWindow.module.scss';
-import { useRef } from 'react';
 
 interface IChatWindowProps {
   recipientUserId: string
@@ -14,7 +12,7 @@ interface IChatWindowProps {
 
 function ChatWindow({ recipientUserId }: IChatWindowProps) {
   const addChat = useChatsStore(state => state.addChat);
-  const currentMessages = useChatsStore(state => state.chats[recipientUserId]);
+  const currentMessages = useChatsStore(state => state.chats[recipientUserId]?.viewed);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,7 +27,7 @@ function ChatWindow({ recipientUserId }: IChatWindowProps) {
         const allMessages: IMessage[] = response.data.allMessages;
         addChat(recipientUserId, allMessages);
       })
-      .catch(error => createToast(error.response.data.error));
+      .catch(error => console.log(error));
     
     // Если сообщения уже лежат в сторе, не нужно их обновлять
     if (!currentMessages) getAllMessages();

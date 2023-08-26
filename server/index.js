@@ -10,6 +10,7 @@ import * as MessageController from "./controllers/MessagesController.js";
 import { registerValidation } from "./validators/register.js";
 import { loginValidation } from "./validators/login.js";
 import MessageModel from "./models/Message.js";
+import { getUserIdByToken } from "./utils/getUserIdByToken.js";
 
 mongoose.connect("mongodb+srv://admin:wwwwww@cluster1.xialhyu.mongodb.net/messenger?retryWrites=true&w=majority")
   .then(() => {
@@ -30,7 +31,16 @@ const io = new Server(server, {
 app.use(express.json());
 app.use(cors());
 
+const allSockets = {};
+
 io.on("connection", (socket) => {
+  const token = socket.handshake.auth.token;
+  if (token) {
+    const userId = getUserIdByToken(token);
+    allSockets[userId] = socket.id;
+  }
+
+  // console.log(io.sockets.sockets);
   // console.log("A user connected: ", socket.id);
 
   socket.on('MESSAGE:SEND', (data) => {
@@ -38,8 +48,22 @@ io.on("connection", (socket) => {
     const { text, sender, recipient } = data;
     const newMessage = new MessageModel({ text, sender, recipient });
 
-    newMessage.save().then(() => io.emit('MESSAGE:SEND', newMessage));
+    console.log(allSockets[sender], allSockets[recipient]);
+    newMessage.save().then(() => {
+      io.to(allSockets[recipient]).emit('MESSAGE:SEND', newMessage);
+      io.to(allSockets[sender]).emit('MESSAGE:SEND', newMessage);
+    });
   });
+
+  // io.emit("SOCKET-ID:SEND", socket.id);
+
+  // socket.on('MESSAGE:SEND', (data) => {
+  //   console.log('Received message:', data);
+  //   const { text, sender, recipient } = data;
+  //   const newMessage = new MessageModel({ text, sender, recipient });
+
+  //   newMessage.save().then(() => io.emit('MESSAGE:SEND', newMessage));
+  // });
 })
 
 // USERS

@@ -28,7 +28,7 @@ function Pages() {
           setUser(email, login, token, _id);
           navigate(Paths.HOME);
         })
-        .catch(error => createToast(error.response.message))
+        .catch(error => createToast(error.response.data.message))
     };
 
     fetchMyData();

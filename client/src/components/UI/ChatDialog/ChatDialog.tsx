@@ -1,4 +1,5 @@
 import { IFriend } from "../../../interfaces/IFriend";
+import { useChatsStore } from "../../../store/chatsStore";
 import { useDialogStore } from "../../../store/dialogStore";
 import classes from './ChatDialog.module.scss';
 
@@ -8,6 +9,9 @@ interface IChatDialogProps {
 
 function ChatDialog({ user }: IChatDialogProps) {
   const openDialog = useDialogStore(state => state.openDialog);
+  const allChatMessages = useChatsStore(state => state.chats[user._id]);
+
+  console.log(user.login, allChatMessages);
 
   return (
     <li className={classes.dialog} onClick={() => openDialog(user)}>
