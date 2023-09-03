@@ -1,30 +1,32 @@
 import { IFriend } from "../../../interfaces/IFriend";
-import { useChatsStore } from "../../../store/chatsStore";
+import { IMessage } from "../../../interfaces/IMessage";
 import { useDialogStore } from "../../../store/dialogStore";
+import { getNormalTime } from "../../../utils/getNormalTime";
 import classes from './ChatDialog.module.scss';
 
 interface IChatDialogProps {
-  user: IFriend
+  friend: IFriend,
+  lastMessage: IMessage | null,
+  newMessagesCounter?: number
 }
 
-function ChatDialog({ user }: IChatDialogProps) {
+function ChatDialog({ friend, lastMessage, newMessagesCounter }: IChatDialogProps) {
   const openDialog = useDialogStore(state => state.openDialog);
-  const allChatMessages = useChatsStore(state => state.chats[user._id]);
-
-  console.log(user.login, allChatMessages);
+  const lastMessageText = lastMessage !== null
+    ? (lastMessage?.recipient === friend._id ? `You: ${lastMessage.text}` : lastMessage.text) : "";
 
   return (
-    <li className={classes.dialog} onClick={() => openDialog(user)}>
-      <div className="avatar-placeholder">{user.login[0]}</div>
+    <li className={classes.dialog} onClick={() => openDialog(friend)}>
+      <div className="avatar-placeholder">{friend.login[0]}</div>
       {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
       <div className={classes.dialog_wrapper}>
         <div className={classes.dialog_header}>
-          <strong className="name">{user.login}</strong>
-          <span className={classes.dialog_last_message_time}>9:36</span>
+          <strong className="name">{friend.login}</strong>
+          <span className={classes.dialog_last_message_time}>{lastMessage ? getNormalTime(lastMessage.createdAt) : ""}</span>
         </div>
         <div className={classes.dialog_footer}>
-          <p className={classes.dialog_last_message}>You: tnx!</p>
-          {/* <span className={classes.dialog_new_messages_counter}>3</span> */}
+          <p className={classes.dialog_last_message}>{lastMessageText}</p>
+          {newMessagesCounter && <span className={classes.dialog_new_messages_counter}>{newMessagesCounter}</span>}
         </div>
       </div>
     </li>

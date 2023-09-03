@@ -1,18 +1,17 @@
 import { useEffect, useRef } from 'react';
-import axios from "../../../axios";
-import { ServerPaths } from "../../../enums/ServerPaths";
 import { useChatsStore } from "../../../store/chatsStore";
 import Message from "../Message/Message";
-import { IMessage } from './../../../interfaces/IMessage';
 import classes from './ChatWindow.module.scss';
+import { sortMessages } from "../../../utils/sortMessages";
 
 interface IChatWindowProps {
   recipientUserId: string
 }
 
 function ChatWindow({ recipientUserId }: IChatWindowProps) {
-  const addChat = useChatsStore(state => state.addChat);
-  const currentMessages = useChatsStore(state => state.chats[recipientUserId]?.viewed);
+  const currentMessages = useChatsStore(state => state.chats[recipientUserId]);
+  // console.log(currentMessages);
+  const sortedMessages = sortMessages([...currentMessages]);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,22 +20,10 @@ function ChatWindow({ recipientUserId }: IChatWindowProps) {
     }, 70);
   });
 
-  useEffect(() => {
-    const getAllMessages = async () => await axios.post(ServerPaths.MESSAGES.GET_MESSAGES, { recipient: recipientUserId })
-      .then((response) => {
-        const allMessages: IMessage[] = response.data.allMessages;
-        addChat(recipientUserId, allMessages);
-      })
-      .catch(error => console.log(error));
-    
-    // Если сообщения уже лежат в сторе, не нужно их обновлять
-    if (!currentMessages) getAllMessages();
-  }, [recipientUserId]);
-
   return (
     <div className={classes.chat_window} ref={wrapperRef}>
-      {currentMessages && currentMessages.length !== 0 &&
-          currentMessages?.map((messageObj) =>
+      {sortedMessages && sortedMessages.length !== 0 &&
+          sortedMessages.map((messageObj) =>
             <Message obj={messageObj} isMyMessage={recipientUserId !== messageObj.sender} key={messageObj.createdAt} />)
       }
     </div>

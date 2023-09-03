@@ -4,10 +4,13 @@ import { IFriend } from "../../interfaces/IFriend";
 import UserSearchItem from "../UI/UserSearchItem/UserSearchItem";
 import classes from './UserSearch.module.scss';
 import { ServerPaths } from "../../enums/ServerPaths";
+import { useFriendsStore } from "../../store/friendsStore";
 
 function UserSearch() {
   const [value, setValue] = useState("");
   const [searchResults, setSearchResults] = useState<IFriend[]>([]);
+  const friends = useFriendsStore(state => state.friends);
+  const friendsIds = friends.map(friend => friend._id);
 
   useEffect(() => { 
     const searchUsers = setTimeout(() => { 
@@ -30,7 +33,7 @@ function UserSearch() {
         />
       </div>
       <ul className={classes.user_search_list}>
-        {searchResults.map((obj, index) => <UserSearchItem user={obj} key={index} />)}
+        {searchResults.map((obj, index) => <UserSearchItem user={obj} key={index} isAlreadyFriend={friendsIds.includes(obj._id)} />)}
       </ul>
     </div>
   );

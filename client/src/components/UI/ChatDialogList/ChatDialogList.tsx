@@ -1,28 +1,26 @@
-import axios from "../../../axios";
-import { ServerPaths } from "../../../enums/ServerPaths";
-import { IFriend } from "../../../interfaces/IFriend";
-import { createToast } from "../../../utils/createToast";
+import { IMessage } from "../../../interfaces/IMessage";
+import { useChatsStore } from "../../../store/chatsStore";
+import { useFriendsStore } from "../../../store/friendsStore";
 import ChatDialog from "../ChatDialog/ChatDialog";
-import classes from './ChatDialogList.module.css'
-import { useEffect } from 'react';
-import { useState } from 'react';
+import classes from './ChatDialogList.module.css';
 
 function ChatDialogList() {
-  const [dialogsUsers, setDialogsUsers] = useState<IFriend[]>([]);
-
-  useEffect(() => {
-    const getFriends = async () => {
-      await axios.get(ServerPaths.USERS.GET_FRIENDS)
-        .then(response => setDialogsUsers(response.data.friends))
-        .catch((error) => createToast(error.response.data.message));
-    };
-
-    getFriends();
-  }, []);
+  const friends = useFriendsStore(state => state.friends);
+  const allFriendsMessages = useChatsStore(state => state.chats);
 
   return (
     <ul className={classes.dialog_list}>
-      {dialogsUsers.map((user, index) => <ChatDialog user={user} key={index} />)}
+      {friends.map((user, index) => {
+        const friendMessages = allFriendsMessages[user._id];
+        if (!friendMessages) return;
+
+        const viewedMessages = friendMessages.filter((message: IMessage) => message.isChecked === true);
+        const newMessages = friendMessages.filter((message: IMessage) => message.isChecked === false);
+
+        if (friendMessages?.length === 0) return <ChatDialog friend={user} key={index} lastMessage={null} />
+        if (newMessages?.length === 0) return <ChatDialog friend={user} key={index} lastMessage={viewedMessages[viewedMessages.length - 1]} /> 
+        else return <ChatDialog friend={user} key={index} lastMessage={newMessages[newMessages.length - 1]} newMessagesCounter={newMessages.length} />
+      })}
     </ul>
   );
 };

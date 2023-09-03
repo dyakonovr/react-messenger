@@ -5,10 +5,11 @@ import { createToast } from "../../../utils/createToast";
 import classes from './UserSearchItem.module.scss';
 
 interface IUserSearchItemProps {
-  user: IFriend
+  user: IFriend,
+  isAlreadyFriend: boolean
 }
 
-function UserSearchItem({ user }: IUserSearchItemProps) {
+function UserSearchItem({ user, isAlreadyFriend }: IUserSearchItemProps) {
   // Функции
   async function handleClick() {
     axios.put(ServerPaths.USERS.ADD_FRIEND, { id: user._id })
@@ -18,14 +19,14 @@ function UserSearchItem({ user }: IUserSearchItemProps) {
   // Функции END
 
   return (
-    <li className={classes.user_search_item} data-id={user._id} onClick={handleClick}>
+    <li className={classes.user_search_item} onClick={isAlreadyFriend ? undefined : handleClick}>
       {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
       <div className="avatar-placeholder">{user.login[0]}</div>
       <div className={classes.user_search_item_wrapper}>
         <strong className="name">{user.login}</strong>
         <span className={classes.user_search_item_email}>{user.email}</span>
       </div>
-      <button className={classes.user_search_item_button}>+</button>
+      {!isAlreadyFriend && <button className={classes.user_search_item_button}>+</button>}
     </li>
   );
 };

@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import classes from './SidebarButton.module.scss';
 import { useScreenStore } from "../../../store/screenStore";
 
 interface ISidebarButtonProps {
@@ -10,7 +9,7 @@ interface ISidebarButtonProps {
 
 function SidebarButton({ isActive, children, screen }: ISidebarButtonProps) {
   const setScreen = useScreenStore(state => state.setScreen);
-  const currentClasses = isActive ? [classes.sidebar_button, classes.sidebar_button_active].join(' ') : classes.sidebar_button;
+  const currentClasses = isActive ? "sidebar_button sidebar_button_active" : "sidebar_button";
 
   return (
     <button

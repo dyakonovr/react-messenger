@@ -5,4 +5,5 @@ export interface IMessage {
   recipient: string,
   createdAt: string,
   updatedAt: string,
+  isChecked: boolean
 }

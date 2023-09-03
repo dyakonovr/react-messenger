@@ -13,6 +13,11 @@ const MessageSchema = new Schema({
     type: String,
     required: true,
   },
+  isChecked: {
+    type: Boolean,
+    required: true,
+    default: false,
+  },
 }, {
   timestamps: true
 });

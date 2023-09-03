@@ -9,6 +9,11 @@ import ChatInput from "../UI/ChatInput/ChatInput";
 import ChatSidebar from "../UI/ChatSidebar/ChatSidebar";
 import ChatWindow from "../UI/ChatWindow/ChatWindow";
 import classes from './Chat.module.scss';
+import axios from "../../axios";
+import { ServerPaths } from "../../enums/ServerPaths";
+import { useFriendsStore } from "../../store/friendsStore";
+import { createToast } from "../../utils/createToast";
+import { IFriend } from "../../interfaces/IFriend";
 
 function Chat() {
   const addMessageInChat = useChatsStore(state => state.addMessageInChat);
@@ -16,6 +21,10 @@ function Chat() {
   const openDialog = useDialogStore(state => state.openDialog);
   const dialogIsOpen = !!currentDialogUser?._id;
   const myId = useAuthStore(state => state._id);
+  const setFriends = useFriendsStore(state => state.setFriends);
+  const addChat = useChatsStore(state => state.addChat);
+  const checkMessage = useChatsStore(state => state.checkMessage);
+
 
   ///////////////////////////////////////////////////////////////////////////////////
 
@@ -24,7 +33,7 @@ function Chat() {
       socket.on('MESSAGE:SEND', (data: IMessage) => {
         // console.log(`dialog is open: ${!currentDialogUser?._id}`);
         console.log(`New message:`, data);
-        addMessageInChat(myId !== data.sender ? data.sender : data.recipient, data, dialogIsOpen);
+        addMessageInChat(myId !== data.sender ? data.sender : data.recipient, data, dialogIsOpen, myId === data.sender);
       });
     }
 
@@ -32,6 +41,14 @@ function Chat() {
 
     return () => openDialog(null);
   }, [myId]);
+
+  ///////////////////////////////////////////////////////////////////////////////////
+
+  useEffect(() => {
+    socket.on('MESSAGE:VIEWED', ({messageId, recipientId}: {messageId: string, recipientId: string}) => {
+      checkMessage(recipientId, messageId);
+      });
+  }, []);
 
   ///////////////////////////////////////////////////////////////////////////////////
 
@@ -47,7 +64,27 @@ function Chat() {
 
   ///////////////////////////////////////////////////////////////////////////////////
 
-  
+  useEffect(() => {
+    new Promise<IFriend[]>((resolve) => {
+      axios.get(ServerPaths.USERS.GET_FRIENDS)
+        .then(response => {
+          setFriends(response.data.friends);
+          resolve(response.data.friends);
+        })
+        .catch((error) => createToast(error.response.data.message));
+    }).then((friends) => {
+      for (let i = 0; i < friends.length; i++) {
+        const friendId = friends[i]._id;
+        
+        axios.post(ServerPaths.MESSAGES.GET_MESSAGES, { recipient: friendId })
+          .then((response) => {
+            const allMessages: IMessage[] = response.data.allMessages;
+            addChat(friendId, allMessages);
+          })
+          .catch(error => console.log(error));
+      }
+    })
+  }, [myId]);
 
   return (
     <div className={classes.chat_wrapper}>

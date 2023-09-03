@@ -48,11 +48,17 @@ io.on("connection", (socket) => {
     const { text, sender, recipient } = data;
     const newMessage = new MessageModel({ text, sender, recipient });
 
-    console.log(allSockets[sender], allSockets[recipient]);
+    // console.log(allSockets[sender], allSockets[recipient]);
     newMessage.save().then(() => {
+      console.log("New message in DB:", newMessage);
       io.to(allSockets[recipient]).emit('MESSAGE:SEND', newMessage);
       io.to(allSockets[sender]).emit('MESSAGE:SEND', newMessage);
     });
+  });
+
+  socket.on("MESSAGE:VIEWED", async (data) => {
+    const { messageId, recipientId } = data;
+    await MessageModel.updateOne({ _id: messageId }, { isChecked: true }).then(() => { io.emit("MESSAGED:VIEWED", {messageId, recipientId}) });
   });
 
   // io.emit("SOCKET-ID:SEND", socket.id);
