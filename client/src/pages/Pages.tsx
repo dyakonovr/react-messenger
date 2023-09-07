@@ -10,9 +10,20 @@ import { useAuthStore } from "../store/authStore";
 import { createToast } from "../utils/createToast";
 import { ServerPaths } from "../enums/ServerPaths";
 
+interface IRoute {
+  path: string,
+  element: JSX.Element
+}
+
 function Pages() {
   const navigate = useNavigate();
   const setUser = useAuthStore(state => state.setUser);
+
+  const routes: IRoute[] = [
+    { path: Paths.HOME, element: <Home /> },
+    { path: Paths.REGISTER, element: <Register /> },
+    { path: Paths.LOGIN, element: <Login /> }
+  ];
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -37,9 +48,7 @@ function Pages() {
   return (
     <>
       <Routes>
-        <Route path={Paths.HOME} element={<Home />} />
-        <Route path={Paths.REGISTER} element={<Register />} />
-        <Route path={Paths.LOGIN} element={<Login />} />
+        {routes.map((route, index) => <Route path={route.path} element={route.element} key={index} />)}
       </Routes>
       <NotificationsContainer />
     </>

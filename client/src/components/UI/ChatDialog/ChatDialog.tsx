@@ -22,7 +22,7 @@ function ChatDialog({ friend, lastMessage, newMessagesCounter }: IChatDialogProp
       <div className={classes.dialog_wrapper}>
         <div className={classes.dialog_header}>
           <strong className="name">{friend.login}</strong>
-          <span className={classes.dialog_last_message_time}>{lastMessage ? getNormalTime(lastMessage.createdAt) : ""}</span>
+          <span className={classes.dialog_last_message_time}>{lastMessage ? getNormalTime(lastMessage.createdAt, "dialog") : ""}</span>
         </div>
         <div className={classes.dialog_footer}>
           <p className={classes.dialog_last_message}>{lastMessageText}</p>

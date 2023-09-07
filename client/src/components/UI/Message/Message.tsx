@@ -2,7 +2,7 @@ import { IMessage } from "../../../interfaces/IMessage";
 import socket from "../../../socket";
 import { getNormalTime } from "../../../utils/getNormalTime";
 import classes from './Message.module.scss';
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 import { useRef } from 'react';
 
 interface IMessageProps {
@@ -37,9 +37,9 @@ function Message({ obj, isMyMessage }: IMessageProps) {
   return (
     <div className={messageClasses} ref={messageRef}>
       {obj.text} 
-      <span className={classes.message_time}>{getNormalTime(obj.createdAt)}</span>
+      <span className={classes.message_time}>{getNormalTime(obj.createdAt, "time")}</span>
     </div>
   );
 };
 
-export default Message;
+export default memo(Message);

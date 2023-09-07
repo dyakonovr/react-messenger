@@ -6,15 +6,15 @@ import { ReactComponent as UsersLogo } from "../../assets/img/icon-users.svg";
 import { ReactComponent as SettingsIcon } from "../../assets/img/icon-settings.svg";
 //@ts-ignore
 import { ReactComponent as LogoutIcon } from "../../assets/img/icon-logout.svg";
-import classes from './Sidebar.module.scss';
-import SidebarButton from "../UI/SidebarButton/SidebarButton";
-import { useScreenStore } from "../../store/screenStore";
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../enums/Paths";
 import { useAuthStore } from "../../store/authStore";
+import { useHomeScreensStore } from "../../store/screenStore";
+import SidebarButton from "../UI/SidebarButton/SidebarButton";
+import classes from './Sidebar.module.scss';
 
 function Sidebar() {
-  const screen = useScreenStore(state => state.screen);
+  const screen = useHomeScreensStore(state => state.screen);
   const navigate = useNavigate();
   const login = useAuthStore(state => state.login);
 

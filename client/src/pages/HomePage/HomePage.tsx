@@ -1,11 +1,11 @@
 import Chat from "../../components/Chat/Chat";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import { useScreenStore } from "../../store/screenStore";
-import classes from "./HomePage.module.css";
 import UserSearch from "../../components/UserSearch/UserSearch";
+import { useHomeScreensStore } from "../../store/screenStore";
+import classes from "./HomePage.module.css";
 
 function HomePage() {
-  const screen = useScreenStore(state => state.screen);
+  const screen = useHomeScreensStore(state => state.screen);
 
   return (
     <div className={classes.app}>

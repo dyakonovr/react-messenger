@@ -1,12 +1,12 @@
 import { create } from "zustand";
 import { immer } from 'zustand/middleware/immer';
 
-interface IScreenState {
+interface IHomeScreensState {
   screen: IScreen;
   setScreen: (newScreen: IScreen) => void,
 }
 
-export const useScreenStore = create<IScreenState>()(immer((set) => ({
+export const useHomeScreensStore = create<IHomeScreensState>()(immer((set) => ({
   screen: "chat",
   setScreen: (screen: IScreen) => set(state => {
     state.screen = screen;
