@@ -39,10 +39,19 @@ export const useChatsStore = create<IChatsState>()(immer((set) => ({
     //   if (message._id === messageId) message.isChecked = true;
     // });
 
-    for (let i = state.chats[recipientId].length; i >= 0; i--) {
-      const message = state.chats[recipientId][i];
+    if (!state.chats[recipientId]) return;
+
+    state.chats[recipientId] = state.chats[recipientId].map(message => { 
       if (message._id === messageId) message.isChecked = true;
-    }
+      return message;
+    });
+
+    // for (let i = state.chats[recipientId].length; i >= 0; i--) {
+      
+    //   const message = state.chats[recipientId][i];
+    //   console.log(state.chats[recipientId], message);
+      
+    // }
     // state.chats[recipientId].new.
   })
 })));

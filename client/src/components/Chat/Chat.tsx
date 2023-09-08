@@ -44,10 +44,15 @@ function Chat() {
   ///////////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
-    socket.on('MESSAGE:VIEWED', ({messageId, recipientId}: {messageId: string, recipientId: string}) => {
-      checkMessage(recipientId, messageId);
+    const runSocketViewMessage = () => {
+      socket.on('MESSAGE:VIEWED', ({ messageId, recipient, sender }: { messageId: string, recipient: string, sender: string }) => {
+        console.log(myId, messageId);
+        checkMessage(myId === recipient ? sender : recipient, messageId);
       });
-  }, []);
+    };
+
+    if (myId) runSocketViewMessage();
+  }, [myId]);
 
   ///////////////////////////////////////////////////////////////////////////////////
 

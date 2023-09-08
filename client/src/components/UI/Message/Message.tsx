@@ -15,25 +15,25 @@ function Message({ obj, isMyMessage }: IMessageProps) {
   const messageClasses = [classes.message, isMyMessage ? classes.message_my : classes.message_companion].join(' ');
   const isCheckedClasses = !obj.isChecked ? classes.message_is_checked : "";
 
-  // useEffect(() => {
-  //   if (!messageRef.current || obj.isChecked) return;
+  useEffect(() => {
+    if (!messageRef.current || obj.isChecked || isMyMessage) return;
 
-  //   let observers: IntersectionObserver;
+    let observers: IntersectionObserver;
 
-  //   observers = new IntersectionObserver(
-  //     (entries) => {
-  //       entries.forEach((entry) => {
-  //         if (entry.intersectionRatio === 1) {
-  //           socket.emit("MESSAGE:VIEWED", {messageId: obj._id, recipientId: isMyMessage ? obj.recipient : obj.sender});
-  //           observers.disconnect();
-  //         }
-  //       })
-  //     },
-  //     {root: null, rootMargin: "0px", threshold: [0, 0.25, 0.5, 0.75, 1.0]},
-  //   );
+    observers = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.intersectionRatio === 1) {
+            socket.emit("MESSAGE:VIEWED", {messageId: obj._id, recipient:  obj.recipient, sender: obj.sender});
+            observers.disconnect();
+          }
+        })
+      },
+      {root: null, rootMargin: "0px", threshold: [0, 0.25, 0.5, 0.75, 1.0]},
+    );
 
-  //   observers.observe(messageRef.current);
-  // }, []);
+    observers.observe(messageRef.current);
+  }, []);
 
   return (
     <div className={`${messageClasses} ${isCheckedClasses}`} ref={messageRef}>

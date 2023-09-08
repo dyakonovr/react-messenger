@@ -57,8 +57,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("MESSAGE:VIEWED", async (data) => {
-    const { messageId, recipientId } = data;
-    await MessageModel.updateOne({ _id: messageId }, { isChecked: true }).then(() => { io.emit("MESSAGED:VIEWED", {messageId, recipientId}) });
+    const { messageId, recipient, sender } = data;
+    await MessageModel.updateOne({ _id: messageId }, { isChecked: true }).then(() => { 
+      io.to(allSockets[recipient]).emit('MESSAGE:VIEWED', { messageId, recipient, sender });
+      io.to(allSockets[sender]).emit('MESSAGE:VIEWED', { messageId, recipient, sender });
+    });
   });
 
   // io.emit("SOCKET-ID:SEND", socket.id);
