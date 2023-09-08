@@ -11,10 +11,9 @@ export function getNormalTime(time: string, type: ReturnTimeType) {
       return getOnlyDate(date);
     
     case "dialog":
-      const d = new Date();
-      const currentDate = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      const now = new Date();
 
-      if (Math.abs(date.getTime() - currentDate.getTime()) > 86400000) return getOnlyDate(date);
+      if (now.getDate() !== date.getDate() || now.getMonth() !== date.getMonth() || now.getFullYear() !== date.getFullYear()) return getOnlyDate(date);
       else return getOnlyTime(date); 
     
     default:

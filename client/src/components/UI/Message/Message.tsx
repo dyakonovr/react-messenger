@@ -2,7 +2,7 @@ import { IMessage } from "../../../interfaces/IMessage";
 import socket from "../../../socket";
 import { getNormalTime } from "../../../utils/getNormalTime";
 import classes from './Message.module.scss';
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRef } from 'react';
 
 interface IMessageProps {
@@ -13,6 +13,7 @@ interface IMessageProps {
 function Message({ obj, isMyMessage }: IMessageProps) {
   const messageRef = useRef<HTMLDivElement>(null);
   const messageClasses = [classes.message, isMyMessage ? classes.message_my : classes.message_companion].join(' ');
+  const isCheckedClasses = !obj.isChecked ? classes.message_is_checked : "";
 
   // useEffect(() => {
   //   if (!messageRef.current || obj.isChecked) return;
@@ -35,11 +36,13 @@ function Message({ obj, isMyMessage }: IMessageProps) {
   // }, []);
 
   return (
-    <div className={messageClasses} ref={messageRef}>
-      {obj.text} 
-      <span className={classes.message_time}>{getNormalTime(obj.createdAt, "time")}</span>
+    <div className={`${messageClasses} ${isCheckedClasses}`} ref={messageRef}>
+      <p className={classes.message_text}>
+        {obj.text}
+        <span className={classes.message_time}>{getNormalTime(obj.createdAt, "time")}</span>
+      </p>
     </div>
   );
 };
 
-export default memo(Message);
+export default Message;

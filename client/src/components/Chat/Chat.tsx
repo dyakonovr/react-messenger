@@ -31,7 +31,6 @@ function Chat() {
   useEffect(() => {
     const runSocket = (myId: string, dialogIsOpen: boolean) => {
       socket.on('MESSAGE:SEND', (data: IMessage) => {
-        // console.log(`dialog is open: ${!currentDialogUser?._id}`);
         console.log(`New message:`, data);
         addMessageInChat(myId !== data.sender ? data.sender : data.recipient, data, dialogIsOpen, myId === data.sender);
       });
