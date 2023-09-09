@@ -1,14 +1,13 @@
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import NotificationsContainer from "../components/UI/NotificationsContainer/NotificationsContainer";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Paths } from "../enums/Paths";
+import { getMe } from "../services/UserService";
+import { useAuthStore } from "../store/authStore";
+import { createToast } from "../utils/createToast";
 import Home from "./HomePage/HomePage";
 import Login from "./LoginPage/LoginPage";
 import Register from "./RegisterPage/RegisterPage";
-import { Paths } from "../enums/Paths";
-import { useEffect } from "react";
-import axios from '../axios';
-import { useAuthStore } from "../store/authStore";
-import { createToast } from "../utils/createToast";
-import { ServerPaths } from "../enums/ServerPaths";
 
 interface IRoute {
   path: string,
@@ -32,17 +31,19 @@ function Pages() {
       return;
     }
 
-    const fetchMyData = async () => {
-      await axios.get(ServerPaths.USERS.GET_ME)
-        .then(response => {
-          const { email, login, _id } = response.data;
-          setUser(email, login, token, _id);
-          navigate(Paths.HOME);
-        })
-        .catch(error => createToast(error.response.data.message))
+    const getMyData = async () => {
+      const getMeResponse: IAuthResponse | string = await getMe(); 
+      if (typeof getMeResponse === "string") {
+        createToast(getMeResponse);
+        return;
+      }
+
+      const { email, login, _id } = getMeResponse;
+      setUser(email, login, token, _id);
+      navigate(Paths.HOME);
     };
 
-    fetchMyData();
+    getMyData();
   }, []);
 
   return (

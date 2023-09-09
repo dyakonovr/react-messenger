@@ -40,15 +40,11 @@ io.on("connection", (socket) => {
     allSockets[userId] = socket.id;
   }
 
-  // console.log(io.sockets.sockets);
-  // console.log("A user connected: ", socket.id);
-
   socket.on('MESSAGE:SEND', (data) => {
     console.log('Received message:', data);
     const { text, sender, recipient } = data;
     const newMessage = new MessageModel({ text, sender, recipient });
 
-    // console.log(allSockets[sender], allSockets[recipient]);
     newMessage.save().then(() => {
       console.log("New message in DB:", newMessage);
       io.to(allSockets[recipient]).emit('MESSAGE:SEND', newMessage);
@@ -63,16 +59,6 @@ io.on("connection", (socket) => {
       io.to(allSockets[sender]).emit('MESSAGE:VIEWED', { messageId, recipient, sender });
     });
   });
-
-  // io.emit("SOCKET-ID:SEND", socket.id);
-
-  // socket.on('MESSAGE:SEND', (data) => {
-  //   console.log('Received message:', data);
-  //   const { text, sender, recipient } = data;
-  //   const newMessage = new MessageModel({ text, sender, recipient });
-
-  //   newMessage.save().then(() => io.emit('MESSAGE:SEND', newMessage));
-  // });
 })
 
 // USERS
@@ -84,7 +70,7 @@ app.get("/get-friends", UserController.getFriends);
 app.get("/me", checkAuth, UserController.getMe);
 
 // MESSAGES
-app.post("/create-message", MessageController.create);
+// app.post("/create-message", MessageController.create);
 app.post("/get-messages", MessageController.getDialogMessages);
 
 

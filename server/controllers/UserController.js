@@ -104,6 +104,6 @@ export const getFriends = async (request, response) => {
     response.json({ success: true, friends });
   } catch (error) {
     console.log(error);
-    response.status(500).json({ success: false, message: "Произошла ошибка добавления пользователя в друзья" });
+    response.status(500).json({ success: false, message: "Произошла ошибка. Попробуйте ещё раз" });
   }
 }

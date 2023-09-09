@@ -9,11 +9,11 @@ import ChatInput from "../UI/ChatInput/ChatInput";
 import ChatSidebar from "../UI/ChatSidebar/ChatSidebar";
 import ChatWindow from "../UI/ChatWindow/ChatWindow";
 import classes from './Chat.module.scss';
-import axios from "../../axios";
-import { ServerPaths } from "../../enums/ServerPaths";
 import { useFriendsStore } from "../../store/friendsStore";
 import { createToast } from "../../utils/createToast";
 import { IFriend } from "../../interfaces/IFriend";
+import { getFriends } from "../../services/UserService";
+import { getMessages } from "../../services/MessagesService";
 
 function Chat() {
   const addMessageInChat = useChatsStore(state => state.addMessageInChat);
@@ -24,35 +24,6 @@ function Chat() {
   const setFriends = useFriendsStore(state => state.setFriends);
   const addChat = useChatsStore(state => state.addChat);
   const checkMessage = useChatsStore(state => state.checkMessage);
-
-
-  ///////////////////////////////////////////////////////////////////////////////////
-
-  useEffect(() => {
-    const runSocket = (myId: string, dialogIsOpen: boolean) => {
-      socket.on('MESSAGE:SEND', (data: IMessage) => {
-        console.log(`New message:`, data);
-        addMessageInChat(myId !== data.sender ? data.sender : data.recipient, data, dialogIsOpen, myId === data.sender);
-      });
-    }
-
-    if (myId) runSocket(myId, dialogIsOpen);
-
-    return () => openDialog(null);
-  }, [myId]);
-
-  ///////////////////////////////////////////////////////////////////////////////////
-
-  useEffect(() => {
-    const runSocketViewMessage = () => {
-      socket.on('MESSAGE:VIEWED', ({ messageId, recipient, sender }: { messageId: string, recipient: string, sender: string }) => {
-        console.log(myId, messageId);
-        checkMessage(myId === recipient ? sender : recipient, messageId);
-      });
-    };
-
-    if (myId) runSocketViewMessage();
-  }, [myId]);
 
   ///////////////////////////////////////////////////////////////////////////////////
 
@@ -69,25 +40,51 @@ function Chat() {
   ///////////////////////////////////////////////////////////////////////////////////
 
   useEffect(() => {
-    new Promise<IFriend[]>((resolve) => {
-      axios.get(ServerPaths.USERS.GET_FRIENDS)
-        .then(response => {
-          setFriends(response.data.friends);
-          resolve(response.data.friends);
-        })
-        .catch((error) => createToast(error.response.data.message));
-    }).then((friends) => {
-      for (let i = 0; i < friends.length; i++) {
-        const friendId = friends[i]._id;
-        
-        axios.post(ServerPaths.MESSAGES.GET_MESSAGES, { recipient: friendId })
-          .then((response) => {
-            const allMessages: IMessage[] = response.data.allMessages;
-            addChat(friendId, allMessages);
-          })
-          .catch(error => console.log(error));
+    const runSocketViewMessage = () => {
+      socket.off('MESSAGE:VIEWED');
+
+      socket.on('MESSAGE:VIEWED', ({ messageId, recipient, sender }: { messageId: string, recipient: string, sender: string }) => {
+        checkMessage(myId === recipient ? sender : recipient, messageId);
+      });
+    };
+
+    const runSendMessageSocket = (myId: string, dialogIsOpen: boolean) => {
+      socket.off('MESSAGE:SEND');
+
+      socket.on('MESSAGE:SEND', (data: IMessage) => {
+        addMessageInChat(myId !== data.sender ? data.sender : data.recipient, data, dialogIsOpen, myId === data.sender);
+      });
+    }
+
+    const getFriendsAndTheirMessages = async () => {
+      const friendsResponse: IFriend[] | string = await getFriends();
+      if (typeof friendsResponse === "string") {
+        createToast(friendsResponse);
+        return;
       }
-    })
+
+      setFriends(friendsResponse);
+
+      for (let i = 0; i < friendsResponse.length; i++) {
+        const friendId = friendsResponse[i]._id;
+        const friendsMessages: IMessage[] | string = await getMessages(friendId);
+
+        if (typeof friendsResponse === "string") {
+          createToast(friendsResponse);
+          break;
+        }
+
+        addChat(friendId, friendsMessages as IMessage[]);
+      }
+    };
+    
+    if (myId) {
+      runSendMessageSocket(myId, dialogIsOpen);
+      runSocketViewMessage();
+      getFriendsAndTheirMessages();
+    }
+
+    return () => openDialog(null);
   }, [myId]);
 
   return (

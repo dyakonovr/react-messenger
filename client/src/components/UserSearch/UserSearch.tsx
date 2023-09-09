@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import axios from "../../axios";
 import { IFriend } from "../../interfaces/IFriend";
+import { getUsers } from "../../services/UserService";
+import { useFriendsStore } from "../../store/friendsStore";
+import { createToast } from "../../utils/createToast";
 import UserSearchItem from "../UI/UserSearchItem/UserSearchItem";
 import classes from './UserSearch.module.scss';
-import { ServerPaths } from "../../enums/ServerPaths";
-import { useFriendsStore } from "../../store/friendsStore";
 
 function UserSearch() {
   const [value, setValue] = useState("");
@@ -13,8 +13,14 @@ function UserSearch() {
   const friendsIds = friends.map(friend => friend._id);
 
   useEffect(() => { 
-    const searchUsers = setTimeout(() => { 
-      axios.post(ServerPaths.USERS.GET_USERS, { searchString: value }).then(response => setSearchResults(response.data));
+    const searchUsers = setTimeout(async () => { 
+      const searchResponse: IFriend[] | string = await getUsers(value);
+      if (typeof searchResponse === "string") {
+        createToast(searchResponse);
+        return;
+      }
+
+      setSearchResults(searchResponse);
     }, 500);
 
     return () => clearTimeout(searchUsers);

@@ -1,6 +1,5 @@
-import axios from "../../../axios";
-import { ServerPaths } from "../../../enums/ServerPaths";
 import { IFriend } from "../../../interfaces/IFriend";
+import { addFriend } from "../../../services/UserService";
 import { createToast } from "../../../utils/createToast";
 import classes from './UserSearchItem.module.scss';
 
@@ -12,9 +11,8 @@ interface IUserSearchItemProps {
 function UserSearchItem({ user, isAlreadyFriend }: IUserSearchItemProps) {
   // Функции
   async function handleClick() {
-    axios.put(ServerPaths.USERS.ADD_FRIEND, { id: user._id })
-      .then(response => createToast(response.data.message))
-      .catch(error => createToast(error.response.data.message))
+    const userSearchResponse: string = await addFriend(user._id);
+    createToast(userSearchResponse);
   }
   // Функции END
 

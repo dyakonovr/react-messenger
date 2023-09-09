@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import { Paths } from "../../enums/Paths";
+import { authorization } from "../../services/UserService";
 import { useAuthStore } from "../../store/authStore";
-import Form from "../UI/Form/Form";
-import axios from "../../axios";
 import { createToast } from "../../utils/createToast";
-import { ServerPaths } from "../../enums/ServerPaths";
+import Form from "../UI/Form/Form";
 
 function Login() {
   const setUser = useAuthStore(state => state.setUser);
@@ -12,14 +11,17 @@ function Login() {
 
   // Функции
   async function handleLogin(emailOrLogin: string, password: string) {
-    await axios.post(ServerPaths.USERS.LOGIN, { emailOrLogin, password })
-      .then(response => {
-        const { email, login, token, _id } = response.data;
-        setUser(email, login, token, _id);
-        navigate(Paths.HOME);
-        localStorage.setItem("token", token);
-      })
-      .catch(error => createToast(error.response.data.message));
+    const loginResponse: IAuthResponse | string = await authorization(emailOrLogin, password);
+
+    if (typeof loginResponse === "string") {
+      createToast(loginResponse);
+      return;
+    }
+
+    const { email, login, token, _id } = loginResponse;
+    setUser(email, login, token, _id);
+    navigate(Paths.HOME);
+    localStorage.setItem("token", token);
   }
   // Функции END
 
