@@ -10,16 +10,16 @@ function Register() {
   const navigate = useNavigate();
 
   // Функции
-  async function handleRegister(typedEmail: string, password: string, typedLogin: string) {
-    const registerResponse: IAuthResponse | string = await register(typedEmail, password, typedLogin);
+  async function handleRegister(email: string, password: string, login: string) {
+    const registerResponse: IAuthResponse | string = await register(email, password, login);
 
     if (typeof registerResponse === "string") {
       createToast(registerResponse);
       return;
     }
 
-    const { email, login, token, _id } = registerResponse;
-    setUser(email, login, token, _id);
+    const { email: responseEmail, login: responseLogin, token, _id } = registerResponse;
+    setUser(responseEmail, responseLogin, token, _id);
     navigate(Paths.HOME);
     localStorage.setItem("token", token);
   }

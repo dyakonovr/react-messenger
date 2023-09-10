@@ -26,7 +26,7 @@ function ChatDialog({ friend, lastMessage, newMessagesCounter }: IChatDialogProp
         </div>
         <div className={classes.dialog_footer}>
           <p className={classes.dialog_last_message}>{lastMessageText}</p>
-          {newMessagesCounter && <span className={classes.dialog_new_messages_counter}>{newMessagesCounter}</span>}
+          {newMessagesCounter && <span className={classes.dialog_new_messages_counter}>{newMessagesCounter < 10 ? newMessagesCounter : "9+"}</span>}
         </div>
       </div>
     </li>

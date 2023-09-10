@@ -11,7 +11,7 @@ interface IFormProps {
   buttonText: string,
   altText: string,
   altLink: string,
-  handleClick: handleClickTypeWithLogin & handleClickTypeWithoutLogin;
+  handleClick: handleClickTypeWithLogin | handleClickTypeWithoutLogin;
 }
 
 function Form({ isRegister, title, buttonText, altText, altLink, handleClick }: IFormProps) {
@@ -20,7 +20,10 @@ function Form({ isRegister, title, buttonText, altText, altLink, handleClick }: 
   // Функции
   function handleFormSubmit(data: FieldValues) {
     if (isRegister) handleClick(data.email, data.password, data.login);
-    else handleClick(data.emailOrLogin, data.password);
+    else {
+      // @ts-ignore т.к. TS ругается, что нет третьего параметра
+      handleClick(data.emailOrLogin, data.password);
+    }
   }
   // Функции END
 

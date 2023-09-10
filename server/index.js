@@ -45,11 +45,13 @@ io.on("connection", (socket) => {
     const { text, sender, recipient } = data;
     const newMessage = new MessageModel({ text, sender, recipient });
 
-    newMessage.save().then(() => {
-      console.log("New message in DB:", newMessage);
-      io.to(allSockets[recipient]).emit('MESSAGE:SEND', newMessage);
-      io.to(allSockets[sender]).emit('MESSAGE:SEND', newMessage);
-    });
+    newMessage.save()
+      .then(() => {
+        console.log("New message in DB:", newMessage);
+        io.to(allSockets[recipient]).emit('MESSAGE:SEND', newMessage);
+        io.to(allSockets[sender]).emit('MESSAGE:SEND', newMessage);
+      })
+      .catch(() => { io.to(allSockets[sender]).emit('MESSAGE:SEND', {success: true, message: "Не удалось отправить сообщение"}); })
   });
 
   socket.on("MESSAGE:VIEWED", async (data) => {

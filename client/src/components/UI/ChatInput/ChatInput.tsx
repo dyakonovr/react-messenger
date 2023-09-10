@@ -15,6 +15,8 @@ function ChatInput({recipientUserId}: IChatInputProps) {
   async function handleClick() {
     const input = inputRef.current as HTMLInputElement;
     const inputValue = input.value;
+    if (inputValue.length === 0) return;
+
     socket.emit("MESSAGE:SEND", { recipient: recipientUserId, text: inputValue, sender });
     input.value = '';
   }
