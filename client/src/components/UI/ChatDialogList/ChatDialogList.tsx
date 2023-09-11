@@ -1,16 +1,19 @@
+import { IFriend } from "../../../interfaces/IFriend";
 import { IMessage } from "../../../interfaces/IMessage";
 import { useChatsStore } from "../../../store/chatsStore";
-import { useFriendsStore } from "../../../store/friendsStore";
 import ChatDialog from "../ChatDialog/ChatDialog";
 import classes from './ChatDialogList.module.css';
 
-function ChatDialogList() {
-  const friends = useFriendsStore(state => state.friends);
+interface IChatDialogListProps {
+  friends: IFriend[]
+}
+
+function ChatDialogList({friends}: IChatDialogListProps) {
   const allFriendsMessages = useChatsStore(state => state.chats);
 
   // Функции
   function createDialogs() {
-    if (!friends) return;
+    if (friends.length === 0) return (<div className={classes.empty}>Nobody's here...</div>);
 
     return friends.map((friend, index) => {
       const friendMessages = allFriendsMessages[friend._id];

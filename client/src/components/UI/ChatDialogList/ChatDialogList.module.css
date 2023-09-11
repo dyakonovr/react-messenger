@@ -6,3 +6,9 @@
   list-style: none;
   padding: 0;
 }
+
+.empty {
+  text-align: center;
+  font-size: 20px;
+  color: grey;
+}

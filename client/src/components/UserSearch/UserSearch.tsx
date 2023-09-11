@@ -34,7 +34,7 @@ function UserSearch() {
           className="input"
           onChange={(e) => setValue((e.target as HTMLInputElement).value)}
           value={value}
-          placeholder="Type user login or email..."
+          placeholder="Type login or email..."
           type="text"
         />
       </div>
