@@ -11,7 +11,7 @@ function Register() {
 
   // Функции
   async function handleRegister(email: string, password: string, login: string) {
-    const registerResponse: IAuthResponse | string = await register(email, password, login);
+    const registerResponse = await register(email, password, login);
 
     if (typeof registerResponse === "string") {
       createToast(registerResponse);

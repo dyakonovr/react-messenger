@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
 import SelectChatIcon from "../../assets/img/select-chat-icon.svg";
 import { IMessage } from "../../interfaces/IMessage";
+import { getMessages } from "../../services/MessagesService";
+import { getFriends } from "../../services/UserService";
 import socket from "../../socket";
 import { useAuthStore } from "../../store/authStore";
 import { useChatsStore } from "../../store/chatsStore";
 import { useDialogStore } from "../../store/dialogStore";
+import { useFriendsStore } from "../../store/friendsStore";
+import { createToast } from "../../utils/createToast";
 import ChatInput from "../UI/ChatInput/ChatInput";
 import ChatSidebar from "../UI/ChatSidebar/ChatSidebar";
 import ChatWindow from "../UI/ChatWindow/ChatWindow";
 import classes from './Chat.module.scss';
-import { useFriendsStore } from "../../store/friendsStore";
-import { createToast } from "../../utils/createToast";
-import { IFriend } from "../../interfaces/IFriend";
-import { getFriends } from "../../services/UserService";
-import { getMessages } from "../../services/MessagesService";
 
 function Chat() {
   const addMessageInChat = useChatsStore(state => state.addMessageInChat);
@@ -57,7 +56,7 @@ function Chat() {
     }
 
     const getFriendsAndTheirMessages = async () => {
-      const friendsResponse: IFriend[] | string = await getFriends();
+      const friendsResponse = await getFriends();
       if (typeof friendsResponse === "string") {
         createToast(friendsResponse);
         return;
@@ -67,7 +66,7 @@ function Chat() {
 
       for (let i = 0; i < friendsResponse.length; i++) {
         const friendId = friendsResponse[i]._id;
-        const friendsMessages: IMessage[] | string = await getMessages(friendId);
+        const friendsMessages = await getMessages(friendId);
 
         if (typeof friendsResponse === "string") {
           createToast(friendsResponse);

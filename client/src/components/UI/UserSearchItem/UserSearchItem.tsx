@@ -11,20 +11,23 @@ interface IUserSearchItemProps {
 function UserSearchItem({ user, isAlreadyFriend }: IUserSearchItemProps) {
   // Функции
   async function handleClick() {
-    const userSearchResponse: string = await addFriend(user._id);
+    const userSearchResponse = await addFriend(user._id);
     createToast(userSearchResponse);
   }
   // Функции END
 
   return (
-    <li className={classes.user_search_item} onClick={isAlreadyFriend ? undefined : handleClick}>
+    <li
+      className={isAlreadyFriend ? `${classes.user_search_item} ${classes.user_search_item_friend}` : classes.user_search_item}
+      onClick={isAlreadyFriend ? undefined : handleClick}
+    >
       {/* <img src="https://reqres.in/img/faces/1-image.jpg" alt="Avatar" className="avatar" /> */}
       <div className="avatar-placeholder">{user.login[0]}</div>
       <div className={classes.user_search_item_wrapper}>
         <strong className="name">{user.login}</strong>
         <span className={classes.user_search_item_email}>{user.email}</span>
       </div>
-      {!isAlreadyFriend && <button className={classes.user_search_item_button}>+</button>}
+      <button className={classes.user_search_item_button}>{isAlreadyFriend ? "✔" : "+"} </button>
     </li>
   );
 };

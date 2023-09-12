@@ -5,25 +5,26 @@ import { useFriendsStore } from "../../store/friendsStore";
 import { createToast } from "../../utils/createToast";
 import UserSearchItem from "../UI/UserSearchItem/UserSearchItem";
 import classes from './UserSearch.module.scss';
+import { useDebounce } from "../../hooks/useDebounce";
 
 function UserSearch() {
   const [value, setValue] = useState("");
   const [searchResults, setSearchResults] = useState<IFriend[]>([]);
   const friends = useFriendsStore(state => state.friends);
   const friendsIds = friends.map(friend => friend._id);
+  
+  const searchUser = useDebounce(async () => {
+    const searchResponse = await getUsers(value);
+    if (typeof searchResponse === "string") {
+      createToast(searchResponse);
+      return;
+    }
 
-  useEffect(() => { 
-    const searchUsers = setTimeout(async () => { 
-      const searchResponse: IFriend[] | string = await getUsers(value);
-      if (typeof searchResponse === "string") {
-        createToast(searchResponse);
-        return;
-      }
-
-      setSearchResults(searchResponse);
-    }, 500);
-
-    return () => clearTimeout(searchUsers);
+    setSearchResults(searchResponse);
+  }, 500);
+  
+  useEffect(() => {
+    searchUser();
   }, [value]);
 
   return (

@@ -32,7 +32,7 @@ function Pages() {
     }
 
     const getMyData = async () => {
-      const getMeResponse: IAuthResponse | string = await getMe(); 
+      const getMeResponse = await getMe(); 
       if (typeof getMeResponse === "string") {
         createToast(getMeResponse);
         return;

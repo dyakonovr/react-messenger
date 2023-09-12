@@ -11,7 +11,7 @@ function Login() {
 
   // Функции
   async function handleLogin(emailOrLogin: string, password: string) {
-    const loginResponse: IAuthResponse | string = await authorization(emailOrLogin, password);
+    const loginResponse = await authorization(emailOrLogin, password);
 
     if (typeof loginResponse === "string") {
       createToast(loginResponse);

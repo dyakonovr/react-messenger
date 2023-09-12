@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import { useHomeScreensStore } from "../../../store/screenStore";
+import { memo } from "react";
 
 interface ISidebarButtonProps {
   isActive: boolean,
@@ -21,4 +22,4 @@ function SidebarButton({ isActive, children, screen }: ISidebarButtonProps) {
   );
 };
 
-export default SidebarButton;
+export default memo(SidebarButton);
