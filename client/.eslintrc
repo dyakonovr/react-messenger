@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:prettier/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "rules": {
+    "prettier/prettier": ["warn", { "endOfLine": "auto" }],
+    "no-console": "warn",
+    "jsx-quotes": ["warn", "prefer-double"],
+    "prefer-const": "error",
+    "comma-dangle": ["warn", "never"],
+    "semi": ["warn", "always"],
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "@typescript-eslint/consistent-type-imports": "error",
+    "react/display-name": "off"
+  }
+}
