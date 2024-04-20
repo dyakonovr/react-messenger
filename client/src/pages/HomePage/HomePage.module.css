@@ -1,7 +1,0 @@
-.app {
-  display: grid;
-  grid-template-columns: 1fr 19fr;
-  height: 100%;
-  max-height: 100vh;
-  background-color: var(--color-black);
-}
