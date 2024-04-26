@@ -6,6 +6,23 @@
   --main-color: #5B96F7;
 }
 
+::-webkit-scrollbar {
+  width: 5px
+}
+
+::-webkit-scrollbar-track {
+  background: #8d8d8d21;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 15px;
+  background: #8d8d8d;
+}
+
+.custom-shadow {
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.25);
+}
+
 /*:root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

@@ -1,0 +1,3 @@
+.messages_wrapper {
+  @apply flex h-full max-h-[747px] flex-col items-start gap-4 overflow-y-auto bg-[#F0F4FA] px-5 py-7
+}

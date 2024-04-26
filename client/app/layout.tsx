@@ -19,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={[inter.className, "flex h-screen w-screen bg-white"].join(" ")}>
-        <div className="flex flex-col gap-3 border border-red-600 bg-[#F0F4FA] p-6">
-          <HomeSidebar />
-        </div>
+        <HomeSidebar />
         <div className="w-full">{children}</div>
       </body>
     </html>

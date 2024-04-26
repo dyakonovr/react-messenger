@@ -15,7 +15,7 @@ export function HomeSidebar() {
   const pathname = usePathname();
 
   return (
-    <>
+    <div className="flex flex-col gap-3 bg-[#F0F4FA] p-6">
       <Link href={PagePaths.HOME}>
         <Button variant={pathname === PagePaths.HOME ? "contained" : "transparent"}>
           <ChatIcon />
@@ -39,6 +39,6 @@ export function HomeSidebar() {
         alt="User avatar"
         className="mt-auto"
       />
-    </>
+    </div>
   );
 }

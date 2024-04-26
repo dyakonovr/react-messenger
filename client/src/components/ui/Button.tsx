@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { clsx } from "clsx";
 import { forwardRef, type ComponentProps, type ReactNode } from "react";
 
 type ButtonVariant = "transparent" | "contained";
@@ -35,5 +35,3 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
     );
   }
 );
-
-export default Button;

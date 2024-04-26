@@ -4,7 +4,8 @@
     "plugin:prettier/recommended",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:tailwindcss/recommended"
   ],
   "rules": {
     "prettier/prettier": ["warn", { "endOfLine": "auto" }],
@@ -15,6 +16,7 @@
     "semi": ["warn", "always"],
     "@typescript-eslint/ban-ts-comment": "warn",
     "@typescript-eslint/consistent-type-imports": "error",
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "tailwindcss/classnames-order": "warn"
   }
 }
