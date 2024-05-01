@@ -4,7 +4,7 @@ import ChatsList from "./list";
 
 export function Chats() {
   return (
-    <div className="z-[1] bg-[#F8FAFF] p-[30px] custom-shadow">
+    <div className="custom-shadow z-[1] w-full bg-[#F8FAFF] p-[30px]">
       <Typography tag="h1" variant="title" className="mb-7">
         Chats
       </Typography>

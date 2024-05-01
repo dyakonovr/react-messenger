@@ -3,6 +3,7 @@ const nextConfig = {
   images: {
     remotePatterns: [{ hostname: "avatar.iran.liara.run" }]
   },
+  
 };
 
 

@@ -1,8 +1,9 @@
 import { ChatWindow, Chats } from "@/src/components/screens/Home/index";
+import classes from "./styles.module.css";
 
 export default function Home() {
   return (
-    <main className="grid h-full grid-cols-[3fr_9fr]">
+    <main className={classes.index_page}>
       <Chats />
       <ChatWindow />
     </main>
