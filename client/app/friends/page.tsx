@@ -1,15 +1,7 @@
-import { FriendsList } from "@/src/components/screens/Friends";
-import { Typography } from "@/src/components/ui";
+import FriendsPage from "@/src/components/screens/Friends/page";
 
-function FriendsPage() {
-  return (
-    <div className="p-[30px]">
-      <Typography tag="h1" variant="title">
-        Friends
-      </Typography>
-      <FriendsList />
-    </div>
-  );
+function Friends() {
+  return <FriendsPage />;
 }
 
-export default FriendsPage;
+export default Friends;

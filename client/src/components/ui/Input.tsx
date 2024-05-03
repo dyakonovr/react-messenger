@@ -3,13 +3,14 @@ import { forwardRef, type ComponentProps, type ReactNode } from "react";
 
 interface IInputProps extends ComponentProps<"input"> {
   startIconSlot?: ReactNode;
+  rootClassName?: string;
   // endIconSlot?: ReactNode;
 }
 
 export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  ({ startIconSlot, className, ...props }, ref) => {
+  ({ startIconSlot, className, rootClassName, ...props }, ref) => {
     return (
-      <div className="relative w-full">
+      <div className={clsx("relative", rootClassName)}>
         {startIconSlot && (
           <div className="absolute bottom-1/2 left-3 translate-y-2/4">
             {startIconSlot}

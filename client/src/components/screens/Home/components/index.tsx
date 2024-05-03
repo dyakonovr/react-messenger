@@ -1,2 +1,2 @@
-export * from "./ChatsBlock";
 export * from "./ChatWindow";
+export * from "./ChatsBlock";

@@ -1,5 +1,6 @@
 import { Typography } from "@/src/components/ui";
 import ChatItem from "./item";
+import classes from "./styles.module.css";
 
 function ChatsList() {
   return (
@@ -8,7 +9,7 @@ function ChatsList() {
       <Typography tag="p" variant="regular" className="mb-6 font-bold text-[#676667]">
         All chats
       </Typography>
-      <div className="max-h-[650px] overflow-y-auto pr-3">
+      <div className={classes.chats_list}>
         <ChatItem />
         <ChatItem />
         <ChatItem />

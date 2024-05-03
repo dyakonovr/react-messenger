@@ -1,7 +1,7 @@
 import Message from "./message";
 import classes from "./styles.module.css";
 
-function ChatMessages() {
+export function ChatMessages() {
   return (
     <div className={classes.messages_wrapper}>
       <Message />
@@ -17,5 +17,3 @@ function ChatMessages() {
     </div>
   );
 }
-
-export default ChatMessages;

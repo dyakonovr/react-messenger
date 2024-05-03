@@ -18,7 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={[inter.className, "flex h-screen w-screen bg-white"].join(" ")}>
+      <body
+        className={[inter.className, "flex h-screen w-screen bg-white max-h-screen"].join(
+          " "
+        )}
+      >
         <HomeSidebar />
         <div className="w-full">{children}</div>
       </body>

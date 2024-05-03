@@ -1,0 +1,4 @@
+.chats_list {
+  /* 30*2+48+28+40+28+1+24+16+24 - всё, кроме самого листа */
+  @apply max-h-[calc(100vh-269px)] overflow-y-auto pr-3;
+}

@@ -1,6 +1,6 @@
 import { Input, Typography } from "@/src/components/ui";
 import { Search } from "lucide-react";
-import ChatsList from "./list";
+import ChatsList from "./list/list";
 
 export function Chats() {
   return (

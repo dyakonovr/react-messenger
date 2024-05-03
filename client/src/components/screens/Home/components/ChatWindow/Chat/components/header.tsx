@@ -1,7 +1,7 @@
 import { Typography } from "@/src/components/ui";
 import Image from "next/image";
 
-function ChatHeader() {
+export function ChatHeader() {
   return (
     <div className="flex bg-[#F8FAFF] px-8 py-4">
       <Image
@@ -30,5 +30,3 @@ function ChatHeader() {
     </div>
   );
 }
-
-export default ChatHeader;
