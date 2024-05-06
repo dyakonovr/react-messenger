@@ -1,6 +1,5 @@
-import { Input, Typography } from "@/src/components/ui";
-import { Search } from "lucide-react";
-import ChatsList from "./list/list";
+import { Typography } from "@/src/components/ui";
+import { ChatsSearchInput, ChatsList } from "./components";
 
 export function Chats() {
   return (
@@ -8,9 +7,7 @@ export function Chats() {
       <Typography tag="h1" variant="title" className="mb-7">
         Chats
       </Typography>
-      <Input
-        startIconSlot={<Search size={24} className="stroke-[var(--main-color)]" />}
-      />
+      <ChatsSearchInput />
       <ChatsList />
     </div>
   );

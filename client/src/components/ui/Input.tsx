@@ -1,33 +1,21 @@
 import { clsx } from "clsx";
-import { forwardRef, type ComponentProps, type ReactNode } from "react";
+import { forwardRef, type ComponentProps } from "react";
 
-interface IInputProps extends ComponentProps<"input"> {
-  startIconSlot?: ReactNode;
-  rootClassName?: string;
-  // endIconSlot?: ReactNode;
-}
-
-export const Input = forwardRef<HTMLInputElement, IInputProps>(
-  ({ startIconSlot, className, rootClassName, ...props }, ref) => {
+export const Input = forwardRef<HTMLInputElement, ComponentProps<"input">>(
+  ({ className, ...props }, ref) => {
     return (
-      <div className={clsx("relative", rootClassName)}>
-        {startIconSlot && (
-          <div className="absolute bottom-1/2 left-3 translate-y-2/4">
-            {startIconSlot}
-          </div>
+      <input
+        ref={ref}
+        type="text"
+        className={clsx(
+          "w-full rounded-[10px] bg-[#EAF2FE] px-3.5 py-2 font-semibold placeholder:text-[var(--main-color)]",
+          "file:cursor-pointer file:rounded-l-[10px] file:border-0 file:bg-[var(--main-color)] file:p-2.5 file:text-sm",
+          "file:mr-3 file:h-full file:font-medium file:text-white",
+          className
         )}
-        <input
-          ref={ref}
-          type="text"
-          className={clsx(
-            className,
-            "w-full rounded-[10px] bg-[#EAF2FE] px-3.5 py-2 font-semibold placeholder:text-[var(--main-color)]",
-            startIconSlot ? "pl-12" : ""
-          )}
-          placeholder="Search"
-          {...props}
-        />
-      </div>
+        placeholder="Search"
+        {...props}
+      />
     );
   }
 );

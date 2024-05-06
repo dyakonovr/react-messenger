@@ -1,17 +1,19 @@
 import { Typography } from "@/src/components/ui";
 
-function Message() {
+function ChatMessage() {
   const isMyMessage = true;
   const messageStyles = !isMyMessage
     ? "bg-white text-[#696969]"
     : "bg-[var(--main-color)] text-white";
   return (
     <div className={`flex ${isMyMessage && "justify-end self-end"}`}>
-      <div
+      <Typography
+        tag="p"
+        variant="regular"
         className={`flex max-w-[85%] items-center justify-center rounded-2xl px-5 py-3 ${messageStyles}`}
       >
         Hi, How are ya? Hi, How are ya? Hi, How are ya? Hi, How are ya? Hi, How are ya?Hi,
-      </div>
+      </Typography>
       <Typography
         variant="small"
         tag="span"
@@ -23,4 +25,4 @@ function Message() {
   );
 }
 
-export default Message;
+export default ChatMessage;

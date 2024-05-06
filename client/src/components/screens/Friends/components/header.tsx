@@ -6,10 +6,7 @@ export function FriendsHeader() {
       <Typography tag="h1" variant="title">
         Friends
       </Typography>
-      <Input
-        placeholder="Start typing..."
-        rootClassName="w-full max-w-[500px] ml-5 mr-7"
-      />
+      <Input placeholder="Start typing..." className="ml-5 mr-7 w-full max-w-[500px]" />
       <Button variant="contained" className="h-fit py-1.5">
         All&nbsp;users
       </Button>

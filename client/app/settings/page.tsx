@@ -1,5 +1,7 @@
-function SettingsPage() {
-  return <div>Settings Page!</div>;
+import SettingsPage from "@/src/components/screens/Settings/page";
+
+function Settings() {
+  return <SettingsPage />;
 }
 
-export default SettingsPage;
+export default Settings;

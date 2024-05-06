@@ -1,8 +1,8 @@
 import { Typography } from "@/src/components/ui";
-import ChatItem from "./item";
+import ChatItem from "./Item";
 import classes from "./styles.module.css";
 
-function ChatsList() {
+export function ChatsList() {
   return (
     <div className="mt-7">
       <hr className="mb-4 bg-[#B4B4B4]" />
@@ -22,5 +22,3 @@ function ChatsList() {
     </div>
   );
 }
-
-export default ChatsList;

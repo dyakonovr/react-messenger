@@ -1,19 +1,19 @@
-import Message from "./message";
+import ChatMessage from "./Message";
 import classes from "./styles.module.css";
 
 export function ChatMessages() {
   return (
     <div className={classes.messages_wrapper}>
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
-      <Message />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
+      <ChatMessage />
     </div>
   );
 }

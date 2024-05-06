@@ -2,7 +2,7 @@ import { FriendsHeader, FriendsList } from "./components";
 
 function FriendsPage() {
   return (
-    <div className="flex flex-col gap-5 p-[30px]">
+    <div className="default-page-offset flex flex-col gap-5">
       <FriendsHeader />
       <FriendsList />
     </div>
