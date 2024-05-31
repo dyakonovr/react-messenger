@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import type { ReactNode } from "react";
-import { HomeSidebar } from "@/src/components/layout";
+// import { LayoutSidebar } from "@/src/components/layout";
 
 const inter = Manrope({ subsets: ["latin", "cyrillic"] });
 
@@ -23,8 +23,7 @@ export default function RootLayout({
           " "
         )}
       >
-        <HomeSidebar />
-        <div className="w-full">{children}</div>
+        {children}
       </body>
     </html>
   );

@@ -27,7 +27,7 @@ function SettingsThemeExampleChat() {
       </div>
       <div className="flex w-full items-center gap-6 rounded-b-2xl bg-white p-5">
         <Input placeholder="Write a message ..." className="rounded-[10px] px-4 py-3.5" />
-        <Button variant="contained" className="p-2.5">
+        <Button isIcon variant="contained" className="p-2.5">
           <SendIcon size={24} />
         </Button>
       </div>

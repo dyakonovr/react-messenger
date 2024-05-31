@@ -9,8 +9,9 @@ export function SettingsProfilePreview() {
         width={60}
         height={60}
         alt="User avatar"
+        className="h-full"
       />
-      <Typography tag="p" variant="regular" className="ml-5 pt-1 font-bold">
+      <Typography tag="p" variant="regular" className="ml-3 pt-1 font-bold">
         Pink Panda
       </Typography>
     </div>
