@@ -22,18 +22,37 @@ model Role {
 }
 
 model User {
-  id       Int        @id @default(autoincrement())
-  nickname String     @unique
-  login    String     @unique
-  password String
-  avatar   String?
-  role_id  Int
-  role     Role       @relation(fields: [role_id], references: [id])
-  Settings Settings[]
-  friends  User[] @relation("friends")
-  friendOf User[] @relation("friends")
+  id                  Int          @id @default(autoincrement())
+  nickname            String       @unique
+  login               String       @unique
+  password            String
+  avatar              String?
+  role_id             Int
+  role                Role         @relation(fields: [role_id], references: [id])
+  Settings            Settings[]
+  inviterFriendships  Friendship[] @relation("InviterFriendships")
+  accepterFriendships Friendship[] @relation("AccepterFriendships")
 
   @@map("users")
+}
+
+model Friendship {
+  inviter_id  Int
+  accepter_id Int
+
+  inviter  User               @relation("InviterFriendships", fields: [inviter_id], references: [id])
+  accepter User               @relation("AccepterFriendships", fields: [accepter_id], references: [id])
+  status   FriendshipStatuses @default(REQUEST_SENT)
+
+  @@id([inviter_id, accepter_id])
+  @@unique([inviter_id, accepter_id])
+  @@map("friendships")
+}
+
+enum FriendshipStatuses {
+  REQUEST_SENT
+  REQUEST_ACCEPTED
+  REQUEST_ABORTED
 }
 
 model Settings {

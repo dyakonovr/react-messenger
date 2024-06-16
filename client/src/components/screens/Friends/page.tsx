@@ -1,11 +1,10 @@
-import type { IFriendsPageUser } from "@/src/types/features/user";
-import { FriendsHeader, FriendsList } from "./components";
+import { FriendsHeader, FriendsMain } from "./components";
 
-function FriendsPage({ users }: { users: IFriendsPageUser[] }) {
+function FriendsPage() {
   return (
     <div className="default-page-offset flex flex-col gap-5">
       <FriendsHeader />
-      <FriendsList users={users} />
+      <FriendsMain />
     </div>
   );
 }

@@ -8,13 +8,17 @@ import { AuthModule } from "./auth/auth.module";
 import { ConfigModule } from "@nestjs/config";
 import { APP_INTERCEPTOR } from "@nestjs/core";
 import { DelayInterceptor } from "./utils/interceptors/delay.interceptor";
+import { FriendshipModule } from "./friendship/friendship.module";
+import { FriendsModule } from "./friends/friends.module";
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".env" }),
     UserModule,
     RoleModule,
-    AuthModule
+    AuthModule,
+    FriendshipModule,
+    FriendsModule
   ],
   controllers: [AppController],
   providers: [

@@ -9,7 +9,7 @@ import { loginFormSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AuthService from "@/src/services/auth";
 import { useRouter } from "next/navigation";
-import { useUserStore } from "@/src/stores/user";
+import { useUserStore } from "@/src/stores/useUserStore";
 import { useState } from "react";
 
 export function Login() {
@@ -29,7 +29,7 @@ export function Login() {
     try {
       setIsLoading(true);
       const response = await AuthService.login(data);
-      setUser(response);
+      setUser(response.data);
       router.replace(PagePaths.HOME);
     } catch (error) {
       console.log(error);

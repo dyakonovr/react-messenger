@@ -1,6 +1,6 @@
 import { Button } from "@/src/components/ui";
 import { LogOut as LogoutIcon } from "lucide-react";
-import { useUserStore } from "@/src/stores/user";
+import { useUserStore } from "@/src/stores/useUserStore";
 import { useRouter } from "next/navigation";
 import AuthService from "@/src/services/auth";
 import { PagePaths } from "@/src/enums/PagePaths";

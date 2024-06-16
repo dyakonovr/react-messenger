@@ -19,6 +19,24 @@ CREATE TABLE "users" (
 );
 
 -- CreateTable
+CREATE TABLE "friendships" (
+    "id" SERIAL NOT NULL,
+    "inviter_id" INTEGER NOT NULL,
+    "accepter_id" INTEGER NOT NULL,
+    "status_id" INTEGER NOT NULL,
+
+    CONSTRAINT "friendships_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "friendship_statuses" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+
+    CONSTRAINT "friendship_statuses_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "settings" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
@@ -54,6 +72,12 @@ CREATE UNIQUE INDEX "users_nickname_key" ON "users"("nickname");
 CREATE UNIQUE INDEX "users_login_key" ON "users"("login");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "friendships_inviter_id_accepter_id_key" ON "friendships"("inviter_id", "accepter_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "friendship_statuses_name_key" ON "friendship_statuses"("name");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "interface_themes_name_key" ON "interface_themes"("name");
 
 -- CreateIndex
@@ -61,6 +85,15 @@ CREATE UNIQUE INDEX "interface_languages_name_key" ON "interface_languages"("nam
 
 -- AddForeignKey
 ALTER TABLE "users" ADD CONSTRAINT "users_role_id_fkey" FOREIGN KEY ("role_id") REFERENCES "roles"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "friendships" ADD CONSTRAINT "friendships_inviter_id_fkey" FOREIGN KEY ("inviter_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "friendships" ADD CONSTRAINT "friendships_accepter_id_fkey" FOREIGN KEY ("accepter_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "friendships" ADD CONSTRAINT "friendships_status_id_fkey" FOREIGN KEY ("status_id") REFERENCES "friendship_statuses"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "settings" ADD CONSTRAINT "settings_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

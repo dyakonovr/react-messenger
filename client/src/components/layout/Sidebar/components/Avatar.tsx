@@ -1,11 +1,10 @@
 "use client";
 
-import { useUserStore } from "@/src/stores/user";
+import { useUserStore } from "@/src/stores/useUserStore";
 import { Avatar } from "../../../ui/Avatar";
 
 export function SidebarAvatar() {
   const user = useUserStore((state) => state.user);
-  // if (!user) throw new Error("Unexpected error in avatar");
   if (!user) return null;
 
   return (

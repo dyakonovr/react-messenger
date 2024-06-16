@@ -7,7 +7,3 @@ export const userSchema = z.object({
 });
 
 export type IUser = z.infer<typeof userSchema>;
-
-export interface IFriendsPageUser extends IUser {
-  isFriend: boolean;
-}

@@ -14,7 +14,6 @@ import { LoginDto } from "./dto/login.dto";
 import { RegistrationDto } from "./dto/registration.dto";
 import { IToken, IUserReponse } from "./dto/auth-response.dto";
 import { Request, Response } from "express";
-import { AuthGuard } from "src/utils/guards/auth.guard";
 import { Tokens } from "src/utils/enums/tokens.enum";
 import { RefreshTokensGuard } from "src/utils/guards/refresh-tokens.guard";
 
@@ -65,11 +64,13 @@ export class AuthController {
   setTokensInCookie(response: Response, accessToken: IToken, refreshToken: IToken) {
     response.cookie(Tokens.ACCESS_TOKEN, accessToken.token, {
       httpOnly: true,
+      path: "/",
       maxAge: !isNaN(+accessToken.expiresIn) ? +accessToken.expiresIn : 1000 * 60 * 15 // 15 minutes
     });
 
     response.cookie(Tokens.REFRESH_TOKEN, refreshToken.token, {
       httpOnly: true,
+      path: "/",
       maxAge: !isNaN(+refreshToken.expiresIn)
         ? +refreshToken.expiresIn
         : 1000 * 60 * 60 * 24 * 7 // 7 days

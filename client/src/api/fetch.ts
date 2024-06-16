@@ -1,10 +1,17 @@
+import AuthService from "@/src/services/auth";
+import Router from "next/router";
+import { getNewTokens } from "../components/layout";
+import { useUserStore } from "../stores/useUserStore";
+
 const baseApiUrl = "http://localhost:8080/api";
 
-export async function customFetch<ResponseType = Response>(
+export async function customFetch(
   url: string,
-  options?: RequestInit
+  options?: RequestInit,
+  isRepeat: boolean = false
 ) {
-  const response = await fetch(`${baseApiUrl}/${url}`, {
+  const finalUrl = `${baseApiUrl}/${url}`;
+  const response = await fetch(finalUrl, {
     credentials: "include",
     headers: {
       ...options?.headers,
@@ -13,12 +20,36 @@ export async function customFetch<ResponseType = Response>(
     ...options
   });
 
+  if (response.status === 403) {
+    if (isRepeat) {
+      Router.push("/login");
+      return response;
+    }
+
+    const refreshResponse = await AuthService.getNewTokens();
+    if (refreshResponse.response.ok) {
+      useUserStore.getState().setUser(refreshResponse.data);
+      return customFetch(
+        url,
+        {
+          credentials: "include",
+          headers: {
+            ...options?.headers,
+            "Content-Type": "application/json"
+          },
+          ...options
+        },
+        true
+      );
+    } else {
+      Router.push("/login");
+      return response;
+    }
+  }
+
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
-  const contentLength = response.headers.get("Content-Length");
-
-  if (!contentLength || +contentLength === 0) return response;
-  return response.json() as ResponseType;
+  return response;
 }
