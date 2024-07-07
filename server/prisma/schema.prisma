@@ -29,9 +29,11 @@ model User {
   avatar              String?
   role_id             Int
   role                Role         @relation(fields: [role_id], references: [id])
-  Settings            Settings[]
   inviterFriendships  Friendship[] @relation("InviterFriendships")
   accepterFriendships Friendship[] @relation("AccepterFriendships")
+
+  sendedMessages    Message[] @relation("SenderMessages")
+  recipientMessages Message[] @relation("RecipientMessages")
 
   @@map("users")
 }
@@ -52,33 +54,46 @@ model Friendship {
 enum FriendshipStatuses {
   REQUEST_SENT
   REQUEST_ACCEPTED
-  REQUEST_ABORTED
 }
 
-model Settings {
-  id          Int               @id @default(autoincrement())
-  user_id     Int
-  user        User              @relation(fields: [user_id], references: [id])
-  theme_id    Int
-  language_id Int
-  theme       InterfaceTheme    @relation(fields: [theme_id], references: [id])
-  language    InterfaceLanguage @relation(fields: [language_id], references: [id])
+model Chat {
+  id     Int     @id @default(autoincrement())
+  name   String?
+  avatar String?
 
-  @@map("settings")
+  @@map("chats")
 }
 
-model InterfaceTheme {
-  id       Int        @id @default(autoincrement())
-  name     String     @unique
-  Settings Settings[]
-
-  @@map("interface_themes")
+model ChatParticipants {
+  chat_id Int
+  user_id Int
+  @@id([chat_id, user_id])
 }
 
-model InterfaceLanguage {
-  id       Int        @id @default(autoincrement())
-  name     String     @unique
-  Settings Settings[]
+model Message {
+  id           Int     @id @default(autoincrement())
+  sender_id    Int
+  recipient_id Int
+  text         String?
+  isRead       Boolean @default(false)
 
-  @@map("interface_languages")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  sender      User          @relation("SenderMessages", fields: [sender_id], references: [id])
+  recipient   User          @relation("RecipientMessages", fields: [recipient_id], references: [id])
+  MessageFile MessageFile[]
+
+  @@map("messages")
+}
+
+model MessageFile {
+  id         Int    @id @default(autoincrement())
+  name       String
+  message_id Int
+
+  message Message @relation(fields: [message_id], references: [id])
+
+  @@map("message_files")
 }

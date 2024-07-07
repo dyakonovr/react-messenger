@@ -8,7 +8,7 @@ import type { RegistrationFormSchemaType } from "./constants";
 import { registrationFormSchema } from "./constants";
 import { useForm } from "react-hook-form";
 import AuthService from "@/src/services/auth";
-import { useUserStore } from "@/src/stores/user";
+import { useUserStore } from "@/src/stores/useUserStore";
 
 export default function Registration() {
   const setUser = useUserStore((state) => state.setUser);

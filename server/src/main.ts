@@ -2,6 +2,8 @@ import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import * as cors from "cors";
 import * as cookieParser from "cookie-parser";
+import * as express from "express";
+import { join } from "path";
 import { ValidationPipe } from "@nestjs/common";
 
 async function bootstrap() {
@@ -18,7 +20,13 @@ async function bootstrap() {
       transform: true // Это включает автоматическую трансформацию
     })
   );
+
+  app.use("/uploads", express.static(join(__dirname, "..", "..", "uploads")));
+
   app.use(cookieParser());
-  await app.listen(process.env.SERVER_PORT ? +process.env.SERVER_PORT : 5000);
+
+  const port = process.env.SERVER_PORT ? +process.env.SERVER_PORT : 5000;
+  await app.listen(port);
+  console.log(`Application started on port ${port}`);
 }
 bootstrap();

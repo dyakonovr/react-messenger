@@ -1,6 +1,6 @@
+import type { FriendsPageUsersType } from "@/src/services/friend";
 import type { FriendshipRequestType } from "@/src/services/friendship/service";
 import FriendshipService from "@/src/services/friendship/service";
-import type { FriendsPageUsersType } from "@/src/services/user";
 import type { Nullable } from "@/src/types/general/nullable";
 import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

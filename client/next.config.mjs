@@ -7,6 +7,7 @@ const nextConfig = {
       { protocol: "https", hostname: "cloudflare-ipfs.com" },
     ]
   },
+  reactStrictMode: false
 };
 
 

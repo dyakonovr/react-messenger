@@ -10,6 +10,10 @@ import { APP_INTERCEPTOR } from "@nestjs/core";
 import { DelayInterceptor } from "./utils/interceptors/delay.interceptor";
 import { FriendshipModule } from "./friendship/friendship.module";
 import { FriendsModule } from "./friends/friends.module";
+import { DialogsModule } from "./dialogs/dialogs.module";
+import { FileModule } from "./file/file.module";
+import { MessageModule } from './message/message.module';
+import { DialogMessagesModule } from './dialog-messages/dialog-messages.module';
 
 @Module({
   imports: [
@@ -18,7 +22,11 @@ import { FriendsModule } from "./friends/friends.module";
     RoleModule,
     AuthModule,
     FriendshipModule,
-    FriendsModule
+    FriendsModule,
+    DialogsModule,
+    FileModule,
+    MessageModule,
+    DialogMessagesModule
   ],
   controllers: [AppController],
   providers: [

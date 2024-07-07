@@ -1,6 +1,6 @@
+import { Button } from "@/src/components/ui";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Button } from "../../../ui";
 
 interface ILayoutSidebarButtonProps {
   link: string;

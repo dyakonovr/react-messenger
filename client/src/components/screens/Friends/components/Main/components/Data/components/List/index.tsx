@@ -1,7 +1,7 @@
 import type { IFriendsPageUser } from "@/src/types/features/friend";
 import classes from "./styles.module.css";
 import { FriendItem } from "./Item";
-import type { FriendsPageUsersType } from "@/src/services/user";
+import type { FriendsPageUsersType } from "@/src/services/friend";
 
 interface Props {
   data: IFriendsPageUser[];

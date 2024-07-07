@@ -1,4 +1,4 @@
-import type { FriendsPageUsersType } from "@/src/services/user";
+import type { FriendsPageUsersType } from "@/src/services/friend";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter, useSearchParams } from "next/navigation";
 

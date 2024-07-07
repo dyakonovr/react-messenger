@@ -1,7 +1,7 @@
 "use client";
 
+import { Avatar } from "@/src/components/ui";
 import { useUserStore } from "@/src/stores/useUserStore";
-import { Avatar } from "../../../ui/Avatar";
 
 export function SidebarAvatar() {
   const user = useUserStore((state) => state.user);

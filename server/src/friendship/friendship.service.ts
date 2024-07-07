@@ -51,7 +51,7 @@ export class FriendshipService {
     UPDATE friendships SET
       inviter_id = ${friendId},
       accepter_id = ${currentUserId},
-      status = 'REQUEST_SENT'
+      status = ${FriendshipStatuses.REQUEST_SENT}
     FROM friendship_check
     WHERE (friendships.inviter_id = friendship_check.inviter_id AND friendships.accepter_id = friendship_check.accepter_id)
       OR (friendships.inviter_id = friendship_check.accepter_id AND friendships.accepter_id = friendship_check.inviter_id);

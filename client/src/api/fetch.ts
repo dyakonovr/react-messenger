@@ -1,9 +1,8 @@
 import AuthService from "@/src/services/auth";
 import Router from "next/router";
-import { getNewTokens } from "../components/layout";
 import { useUserStore } from "../stores/useUserStore";
 
-const baseApiUrl = "http://localhost:8080/api";
+export const baseApiUrl = "http://localhost:8080/api";
 
 export async function customFetch(
   url: string,

@@ -1,7 +1,15 @@
 .dialog_wrapper {
-  @apply flex cursor-pointer rounded-2xl bg-white p-4 transition-colors hover:bg-slate-200 [&:not(:last-child)]:mb-3.5 ;
+  @apply flex cursor-pointer rounded-2xl bg-white p-4 transition-colors hover:bg-slate-200 [&:not(:last-child)]:mb-3.5;
+}
+
+.dialog_wrapper_selected {
+  @apply bg-slate-200;
 }
 
 .new_messages_counter {
   @apply ms-auto mt-1.5 max-h-[20px] w-full max-w-[20px] rounded-full bg-[var(--main-color)] text-center text-[10px] text-white;
+}
+
+.unread_message {
+  @apply block m-auto max-h-[10px] w-full max-w-[10px] h-full rounded-full bg-[var(--main-color)];
 }

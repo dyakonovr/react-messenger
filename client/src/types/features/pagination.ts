@@ -14,6 +14,14 @@ export const getPaginationSchema = <ItemSchema extends ZodSchema>(
   });
 };
 
-export type PaginationType<ItemType extends unknown[]> = z.infer<
-  typeof defaultPaginationSchema
-> & { items: ItemType };
+export const getPaginationSchemaWithItemsAsObject = <ItemSchema extends ZodSchema>(
+  objectSchema: ItemSchema
+) => {
+  return defaultPaginationSchema.extend({
+    items: objectSchema
+  });
+};
+
+export type PaginationType<ItemType> = z.infer<typeof defaultPaginationSchema> & {
+  items: ItemType;
+};

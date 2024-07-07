@@ -1,12 +1,12 @@
 import type { IFriendsPageUser } from "@/src/types/features/friend";
 import { Typography } from "@/src/components/ui";
 import type { Nullable } from "@/src/types/general/nullable";
-import type { FriendsPageUsersType } from "@/src/services/user";
 import {
   FriendsListEmptyDataBlock,
   FriendsListDataError,
   FriendsMainList
 } from "./components";
+import type { FriendsPageUsersType } from "@/src/services/friend";
 
 interface Props {
   isLoading: boolean;

@@ -18,7 +18,7 @@ import type { ZodSchema } from "zod";
 import type { Nullable } from "../types/general/nullable";
 
 type Callback<Schema> = (error: Nullable<Error>, data: Nullable<Schema>) => void;
-type Result<Schema> = { data: Schema, response: Response };
+type Result<Schema> = { data: Schema; response: Response };
 
 export async function validateTypes<Schema>(
   schema: ZodSchema<Schema>,
@@ -32,7 +32,7 @@ export async function validateTypes<Schema>(
     const result = schema.safeParse(await response.json());
 
     if (!result.success) {
-      throw new Error("Data is invalidate");
+      throw new Error(`Data is invalidate: ${result.error}`);
     }
 
     if (callback) {
