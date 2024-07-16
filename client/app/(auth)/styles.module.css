@@ -1,0 +1,23 @@
+.auth-background {
+  background-color: #F0F4FA;
+}
+
+[data-theme="white-blue"] .auth-background {
+  background-color: #F0F4FA;
+}
+
+[data-theme="white-red"] .auth-background {
+  background-color: #fdfafa;
+}
+
+[data-theme="white-green"] .auth-background {
+  background-color: #f0fcf8;
+}
+
+[data-theme="white-purple"] .auth-background {
+  background-color: #f9f6ff;
+}
+
+[data-theme="white-pink"] .auth-background {
+  background-color: #fef4ff;
+}

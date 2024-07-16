@@ -32,7 +32,7 @@ export const useChatData = (selectedDialogId: string) => {
   const getChatMessages = useCallback(async () => {
     try {
       const response = await DialogMessagesService.getAll({
-        friendId: selectedDialogId,
+        chatId: selectedDialogId,
         limit: 20,
         page: 1
       });
@@ -55,6 +55,6 @@ export const useChatData = (selectedDialogId: string) => {
 
   return {
     chatMessages,
-    user: dialogs === null ? null : dialogs[selectedDialogId].user
+    info: dialogs === null ? null : dialogs[selectedDialogId].info
   };
 };

@@ -9,9 +9,11 @@ interface ILayoutSidebarButtonProps {
 }
 
 export function LayoutSidebarButton({ link, icon, pathname }: ILayoutSidebarButtonProps) {
+  const isSelected = pathname === link || pathname.startsWith(`${link}/`);
+
   return (
     <Link href={link}>
-      <Button isIcon={true} variant={pathname === link ? "contained" : "transparent"}>
+      <Button isIcon={true} variant={isSelected ? "contained" : "transparent"}>
         {icon}
       </Button>
     </Link>

@@ -16,13 +16,12 @@ import { PaginationResponseDto } from "src/utils/pagination/response.dto";
 // };
 
 type DialogType = {
-  userId: number;
-  nickname: string;
-  avatar: string | null;
+  chatId: number;
+  chatName: string;
+  chatAvatar: string | null;
   lastMessageId: number | null;
   lastMessageText: string | null;
   lastMessageSenderId: number | null;
-  lastMessageRecipientId: number | null;
   lastMessageCreatedAt: string | null;
   lastMessageUpdatedAt: string | null;
   lastMessageIsRead: boolean | null;
@@ -37,136 +36,144 @@ export class DialogsService {
     const offset = (requestDto.page - 1) * requestDto.limit;
 
     const items = await this.prisma.$queryRaw<DialogType[]>`
+        WITH last_messages AS (
+            SELECT DISTINCT ON (m."chat_id")
+                m."chat_id",
+                m.id AS "lastMessageId",
+                m.text AS "lastMessageText",
+                m."sender_id" AS "lastMessageSenderId",
+                m."created_at" AS "lastMessageCreatedAt",
+                m."updated_at" AS "lastMessageUpdatedAt",
+                m."is_read" AS "lastMessageIsRead"
+            FROM messages m
+            ORDER BY m."chat_id", m."created_at" DESC
+        ),
+        participant_count AS (
+            SELECT
+                cp."chat_id",
+                COUNT(cp."user_id") AS participant_count
+            FROM
+                chat_participants cp
+            GROUP BY
+                cp."chat_id"
+        ),
+        other_participant AS (
+            SELECT
+                cp1."chat_id",
+                u2.nickname AS other_nickname,
+                u2.avatar AS other_avatar
+            FROM
+                chat_participants cp1
+            JOIN chat_participants cp2 ON cp1."chat_id" = cp2."chat_id" AND cp1."user_id" <> cp2."user_id"
+            JOIN users u2 ON cp2."user_id" = u2.id
+            WHERE
+                cp1."user_id" = ${currentUserId}
+        )
         SELECT
-          u.id AS "userId",
-          u.nickname,
-          u.avatar,
-          lm.id AS "lastMessageId",
-          lm.text AS "lastMessageText",
-          lm."sender_id" AS "lastMessageSenderId",
-          lm."recipient_id" AS "lastMessageRecipientId",
-          lm."createdAt" AS "lastMessageCreatedAt",
-          lm."updatedAt" AS "lastMessageUpdatedAt",
-          lm."isRead" AS "lastMessageIsRead",
-          COUNT(CASE WHEN m."recipient_id" = ${currentUserId} AND m."isRead" = FALSE THEN 1 END) AS "newMessagesCount"
-      FROM
-          users u
-          LEFT JOIN friendships f ON (
-              (f."inviter_id" = u.id OR f."accepter_id" = u.id)
-              AND f.status = 'REQUEST_ACCEPTED'
-          )
-          LEFT JOIN LATERAL (
-              SELECT
-                  m.*
-              FROM
-                  messages m
-              WHERE
-                  (m."sender_id" = u.id AND m."recipient_id" = ${currentUserId})
-                  OR (m."recipient_id" = u.id AND m."sender_id" = ${currentUserId})
-              ORDER BY
-                  m."createdAt" DESC
-              LIMIT 1
-          ) lm ON TRUE
-          LEFT JOIN messages m ON (
-              (m."sender_id" = u.id AND m."recipient_id" = ${currentUserId})
-              OR (m."recipient_id" = u.id AND m."sender_id" = ${currentUserId})
-          )
-      WHERE
-          (f."inviter_id" = ${currentUserId} OR f."accepter_id" = ${currentUserId})
-          AND u.id <> ${currentUserId}
-      GROUP BY
-          u.id, lm.id, lm.text, lm."sender_id", lm."recipient_id", lm."createdAt", lm."updatedAt", lm."isRead"
-      ORDER BY
-          lm."createdAt" DESC
-      LIMIT ${requestDto.limit} OFFSET ${offset};
+            cp."chat_id" AS "chatId",
+            COALESCE(op.other_nickname, c.name) AS "chatName",
+            COALESCE(op.other_avatar, c.avatar) AS "chatAvatar",
+            lm."lastMessageId",
+            lm."lastMessageText",
+            lm."lastMessageSenderId",
+            lm."chat_id" AS "lastMessageChatId",
+            lm."lastMessageCreatedAt",
+            lm."lastMessageUpdatedAt",
+            lm."lastMessageIsRead",
+            COUNT(CASE WHEN m."chat_id" = cp."chat_id" AND m."is_read" = FALSE THEN 1 END) AS "newMessagesCount"
+        FROM
+            chat_participants cp
+            JOIN chats c ON cp."chat_id" = c.id
+            JOIN users u ON cp."user_id" = u.id
+            LEFT JOIN participant_count pc ON cp."chat_id" = pc."chat_id"
+            LEFT JOIN other_participant op ON cp."chat_id" = op."chat_id" AND pc.participant_count = 2
+            LEFT JOIN last_messages lm ON cp."chat_id" = lm."chat_id"
+            LEFT JOIN messages m ON cp."chat_id" = m."chat_id"
+        WHERE
+            cp."chat_id" IN (SELECT "chat_id" FROM chat_participants WHERE "user_id" = ${currentUserId})
+        GROUP BY
+            cp."chat_id", op.other_nickname, op.other_avatar, c.name, c.avatar, lm."lastMessageId", lm."lastMessageText", lm."lastMessageSenderId", lm."chat_id", lm."lastMessageCreatedAt", lm."lastMessageUpdatedAt", lm."lastMessageIsRead", pc.participant_count
+        ORDER BY
+            lm."lastMessageCreatedAt" DESC
+        LIMIT ${requestDto.limit} OFFSET ${offset};
     `;
 
-    const totalDialogs = await this.prisma.$queryRaw<{
-      count: number;
-    }>`
-        SELECT
-          COUNT(*)
-        FROM
-          users u
-          LEFT JOIN friendships f ON (
-            (f."inviter_id" = u.id OR f."accepter_id" = u.id)
-            AND f.status::text = 'REQUEST_ACCEPTED'
-          )
-        WHERE
-          (f."inviter_id" = ${currentUserId} OR f."accepter_id" = ${currentUserId})
-          AND u.id <> ${currentUserId};
-      `;
+    const totalDialogs = await this.prisma.chat.count({
+      where: {
+        ChatParticipant: {
+          every: {
+            user_id: currentUserId
+          }
+        }
+      }
+    });
 
-    const totalPages = Math.ceil(Number(totalDialogs[0].count) / requestDto.limit);
+    const totalPages = Math.ceil(Number(totalDialogs) / requestDto.limit);
     const formattedDialogs = this.formatData(items);
-
-    // const formattedDialogs = items.reduce((acc, current) => {
-    //   const { userId, ...rest } = current;
-
-    //   acc = { ...acc, ...this.formatData(userId, rest) };
-    //   // acc[userId] = {
-    //   //   user: {
-    //   //     nickname: rest.nickname,
-    //   //     avatar: rest.avatar
-    //   //   },
-    //   //   lastMessage: rest.lastMessageId
-    //   //     ? {
-    //   //         id: rest.lastMessageId,
-    //   //         text: rest.lastMessageText,
-    //   //         recipientId: rest.lastMessageRecipientId,
-    //   //         senderId: rest.lastMessageSenderId,
-    //   //         createdAt: rest.lastMessageCreatedAt,
-    //   //         updatedAt: rest.lastMessageUpdatedAt,
-    //   //         isRead: rest.lastMessageIsRead
-    //   //       }
-    //   //     : null,
-    //   //   newMessagesCount: Number(rest.newMessagesCount)
-    //   // };
-
-    //   return acc;
-    // }, {});
 
     return new PaginationResponseDto(formattedDialogs, requestDto.page, totalPages);
   }
 
-  async findOne(currentUserId: number, friendId: number) {
+  async findOne(chatId: number) {
     const result = await this.prisma.$queryRaw<DialogType[]>`
+        WITH last_messages AS (
+            SELECT DISTINCT ON (m."chat_id")
+                m."chat_id",
+                m.id AS "lastMessageId",
+                m.text AS "lastMessageText",
+                m."sender_id" AS "lastMessageSenderId",
+                m."created_at" AS "lastMessageCreatedAt",
+                m."updated_at" AS "lastMessageUpdatedAt",
+                m."is_read" AS "lastMessageIsRead"
+            FROM messages m
+            WHERE m."chat_id" = ${chatId}
+            ORDER BY m."chat_id", m."created_at" DESC
+        ),
+        participant_count AS (
+            SELECT
+                cp."chat_id",
+                COUNT(cp."user_id") AS participant_count
+            FROM
+                chat_participants cp
+            WHERE cp."chat_id" = ${chatId}
+            GROUP BY
+                cp."chat_id"
+        ),
+        other_participant AS (
+            SELECT
+                cp1."chat_id",
+                u2.nickname AS other_nickname,
+                u2.avatar AS other_avatar
+            FROM
+                chat_participants cp1
+            JOIN chat_participants cp2 ON cp1."chat_id" = cp2."chat_id" AND cp1."user_id" <> cp2."user_id"
+            JOIN users u2 ON cp2."user_id" = u2.id
+            WHERE
+                cp1."chat_id" = ${chatId}
+        )
         SELECT
-            u.id AS "userId",
-            u.nickname,
-            u.avatar,
-            lm.id AS "lastMessageId",
-            lm.text AS "lastMessageText",
-            lm."sender_id" AS "lastMessageSenderId",
-            lm."recipient_id" AS "lastMessageRecipientId",
-            lm."createdAt" AS "lastMessageCreatedAt",
-            lm."updatedAt" AS "lastMessageUpdatedAt",
-            lm."isRead" AS "lastMessageIsRead",
-            COUNT(CASE WHEN m."recipient_id" = ${currentUserId} AND m."isRead" = FALSE THEN 1 END) AS "newMessagesCount"
+            cp."chat_id" AS "chatId",
+            COALESCE(op.other_nickname, c.name) AS "chatName",
+            COALESCE(op.other_avatar, c.avatar) AS "chatAvatar",
+            lm."lastMessageId",
+            lm."lastMessageText",
+            lm."lastMessageSenderId",
+            lm."chat_id" AS "lastMessageChatId",
+            lm."lastMessageCreatedAt",
+            lm."lastMessageUpdatedAt",
+            lm."lastMessageIsRead",
+            COUNT(CASE WHEN m."chat_id" = cp."chat_id" AND m."is_read" = FALSE THEN 1 END) AS "newMessagesCount"
         FROM
-            users u
-            LEFT JOIN LATERAL (
-                SELECT
-                    m.*
-                FROM
-                    messages m
-                WHERE
-                    (m."sender_id" = u.id AND m."recipient_id" = ${currentUserId})
-                    OR (m."recipient_id" = u.id AND m."sender_id" = ${currentUserId})
-                ORDER BY
-                    m."createdAt" DESC
-                LIMIT 1
-            ) lm ON TRUE
-            LEFT JOIN messages m ON (
-                (m."sender_id" = u.id AND m."recipient_id" = ${currentUserId})
-                OR (m."recipient_id" = u.id AND m."sender_id" = ${currentUserId})
-            )
+            chat_participants cp
+            JOIN chats c ON cp."chat_id" = c.id
+            LEFT JOIN participant_count pc ON cp."chat_id" = pc."chat_id"
+            LEFT JOIN other_participant op ON cp."chat_id" = op."chat_id" AND pc.participant_count = 2
+            LEFT JOIN last_messages lm ON cp."chat_id" = lm."chat_id"
+            LEFT JOIN messages m ON cp."chat_id" = m."chat_id"
         WHERE
-            u.id = ${friendId}
+            cp."chat_id" = ${chatId}
         GROUP BY
-            u.id, lm.id, lm.text, lm."sender_id", lm."recipient_id", lm."createdAt", lm."updatedAt", lm."isRead"
-        ORDER BY
-            lm."createdAt" DESC;
+            cp."chat_id", op.other_nickname, op.other_avatar, c.name, c.avatar, lm."lastMessageId", lm."lastMessageText", lm."lastMessageSenderId", lm."chat_id", lm."lastMessageCreatedAt", lm."lastMessageUpdatedAt", lm."lastMessageIsRead", pc.participant_count;
     `;
 
     return this.formatData(result);
@@ -174,17 +181,16 @@ export class DialogsService {
 
   formatData(data: DialogType[]) {
     return data.reduce((acc, current) => {
-      const { userId, ...rest } = current;
-      acc[userId] = {
-        user: {
-          nickname: rest.nickname,
-          avatar: rest.avatar
+      const { chatId, ...rest } = current;
+      acc[chatId] = {
+        info: {
+          name: rest.chatName,
+          avatar: rest.chatAvatar
         },
         lastMessage: rest.lastMessageId
           ? {
               id: rest.lastMessageId,
               text: rest.lastMessageText,
-              recipientId: rest.lastMessageRecipientId,
               senderId: rest.lastMessageSenderId,
               createdAt: rest.lastMessageCreatedAt,
               updatedAt: rest.lastMessageUpdatedAt,
@@ -195,26 +201,5 @@ export class DialogsService {
       };
       return acc;
     }, {});
-
-    // return {
-    //   [userId]: {
-    //     user: {
-    //       nickname: data.nickname,
-    //       avatar: data.avatar
-    //     },
-    //     lastMessage: data.lastMessageId
-    //       ? {
-    //           id: data.lastMessageId,
-    //           text: data.lastMessageText,
-    //           recipientId: data.lastMessageRecipientId,
-    //           senderId: data.lastMessageSenderId,
-    //           createdAt: data.lastMessageCreatedAt,
-    //           updatedAt: data.lastMessageUpdatedAt,
-    //           isRead: data.lastMessageIsRead
-    //         }
-    //       : null,
-    //     newMessagesCount: Number(data.newMessagesCount)
-    //   }
-    // };
   }
 }

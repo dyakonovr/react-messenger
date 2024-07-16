@@ -1,4 +1,4 @@
-import { customFetch } from "../api/fetch";
+import { customFetch } from "./fetch";
 import type { ILoginRequest, IRegistrationRequest } from "../types/features/auth";
 import { userSchema } from "../types/features/user";
 import { validateTypes } from "./validateTypes";
@@ -10,7 +10,10 @@ class AuthService {
     const response = await customFetch(`${this.url}/login`, {
       cache: "no-cache",
       body: JSON.stringify(data),
-      method: "POST"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
 
     return validateTypes(userSchema, response);
@@ -20,7 +23,10 @@ class AuthService {
     const response = await customFetch(`${this.url}/registration`, {
       cache: "no-cache",
       body: JSON.stringify(data),
-      method: "POST"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
     });
 
     return validateTypes(userSchema, response);

@@ -20,7 +20,7 @@ const styles: StylesType = {
 
 const loadingIconStyles = {
   icon: "size-6 animate-spin",
-  default: "-ml-5 mr-2 size-4 animate-spin"
+  default: "ml-2 size-4 animate-spin"
 };
 
 const iconButtonStyles = "p-3";
@@ -36,7 +36,7 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
       <button
         type="button"
         {...props}
-        disabled={loading}
+        disabled={loading || props.disabled}
         ref={ref}
         className={clsx(
           "rounded-xl border-2 p-1.5 transition-colors disabled:opacity-80",
@@ -46,12 +46,12 @@ export const Button = forwardRef<HTMLButtonElement, IButtonProps>(
         )}
       >
         <div className="flex items-center justify-center">
+          {!isIconHide && children}
           {loading && (
             <LoaderIcon
               className={isIcon ? loadingIconStyles.icon : loadingIconStyles.default}
             />
           )}
-          {!isIconHide && children}
         </div>
       </button>
     );

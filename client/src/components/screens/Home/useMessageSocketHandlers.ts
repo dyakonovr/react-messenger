@@ -9,7 +9,7 @@ import MessageSocket from "@/src/sockets/message";
 import { useUserStore } from "@/src/stores/useUserStore";
 import type { IMessageWithoutId } from "@/src/types/features/chatMessages";
 
-type IReadMessageResponseItem = Pick<IMessageWithoutId, "recipientId" | "senderId"> & {
+type IReadMessageResponseItem = Pick<IMessageWithoutId, "senderId"> & {
   id: number;
 };
 
@@ -31,36 +31,36 @@ export const useMessageSocketHandlers = () => {
   const addMessageInChat = useChatsStore((state) => state.addMessageInChat);
   const readMessageInChat = useChatsStore((state) => state.readMessageInChat);
 
-  useEffect(() => {
-    if (!isConnected || !socket) return;
+  // useEffect(() => {
+  //   if (!isConnected || !socket) return;
 
-    MessageSocket.onMessageCreated(socket, (data: IDialogsRecord) => {
-      console.log("@message created!: ", data);
-      setNewDialogs(data);
+  //   MessageSocket.onMessageCreated(socket, (data: IDialogsRecord) => {
+  //     console.log("@message created!: ", data);
+  //     setNewDialogs(data);
 
-      const dialogId = Object.keys(data)[0];
-      const { id: messageId, ...restMessage } = data[dialogId].lastMessage;
-      addMessageInChat(dialogId, { [messageId]: restMessage });
-    });
+  //     const dialogId = Object.keys(data)[0];
+  //     const { id: messageId, ...restMessage } = data[dialogId].lastMessage;
+  //     addMessageInChat(dialogId, { [messageId]: restMessage });
+  //   });
 
-    MessageSocket.onMessageRead(socket, (data: IReadMessageResponse) => {
-      console.log("@read message:", data);
-      if (data.status !== "success" || !myId) return;
+  //   MessageSocket.onMessageRead(socket, (data: IReadMessageResponse) => {
+  //     console.log("@read message:", data);
+  //     if (data.status !== "success" || !myId) return;
 
-      const dialogId =
-        myId === data.messages.senderId
-          ? String(data.messages.recipientId)
-          : String(data.messages.senderId);
+  //     const dialogId =
+  //       myId === data.messages.senderId
+  //         ? String(data.messages.recipientId)
+  //         : String(data.messages.senderId);
 
-      data.messages.data.forEach((message) => {
-        readMessageInChat(dialogId, String(message.id));
-        setLastMessageIsRead(dialogId, String(message.id));
-      });
-    });
+  //     data.messages.data.forEach((message) => {
+  //       readMessageInChat(dialogId, String(message.id));
+  //       setLastMessageIsRead(dialogId, String(message.id));
+  //     });
+  //   });
 
-    return () => {
-      MessageSocket.offMessageCreated(socket);
-      MessageSocket.offMessageRead(socket);
-    };
-  }, [isConnected, socket, selectedDialogId]);
+  //   return () => {
+  //     MessageSocket.offMessageCreated(socket);
+  //     MessageSocket.offMessageRead(socket);
+  //   };
+  // }, [isConnected, socket, selectedDialogId]);
 };

@@ -5,5 +5,5 @@ export class CreateMessageDto {
   text: string;
 
   @IsString()
-  friendId: string;
+  chatId: string;
 }

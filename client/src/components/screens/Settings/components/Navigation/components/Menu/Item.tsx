@@ -1,20 +1,22 @@
 import { Typography } from "@/src/components/ui";
 import classes from "./styles.module.css";
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 interface ISettingsMenuItemProps {
   name: string;
   icon: ReactNode;
+  href: string;
 }
 
-function SettingsMenuItem({ name, icon }: ISettingsMenuItemProps) {
+function SettingsMenuItem({ name, icon, href }: ISettingsMenuItemProps) {
   return (
-    <div className={classes.menu_item}>
+    <Link href={href} className={classes.menu_item}>
       {icon}
       <Typography tag="p" variant="regular" className="font-bold">
         {name}
       </Typography>
-    </div>
+    </Link>
   );
 }
 

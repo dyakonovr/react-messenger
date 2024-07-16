@@ -1,7 +1,7 @@
-import SettingsPage from "@/src/components/screens/Settings/page";
+import { SettingsAccountDataScreen } from "@/src/components/screens/Settings/screens";
 
 function Settings() {
-  return <SettingsPage />;
+  return <SettingsAccountDataScreen />;
 }
 
 export default Settings;

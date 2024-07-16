@@ -1,4 +1,4 @@
-import { customFetch } from "../../api/fetch";
+import { customFetch } from "../fetch";
 import { validateTypes } from "../validateTypes";
 import { friendshipResponseSchema } from "./response.type";
 

@@ -5,6 +5,7 @@ import type { Nullable } from "@/src/types/general/nullable";
 import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 const getNeccesaryType = (
   type: FriendsPageUsersType
@@ -34,7 +35,7 @@ export const useFriendsRequestFunc = (userId: number, type: FriendsPageUsersType
       return FriendshipService.makeRequest(userId, requestType);
     },
     onSuccess({ data }) {
-      console.log(data.message);
+      toast.success(data.message);
       queryClient.invalidateQueries({
         queryKey: [
           "friends",
@@ -44,18 +45,9 @@ export const useFriendsRequestFunc = (userId: number, type: FriendsPageUsersType
       });
     },
     onError(error) {
-      console.log(error);
+      toast.success(error.message);
     }
   });
-
-  // return async () => {
-  //   try {
-  //     const response = await FriendshipService.makeRequest(userId, requestType);
-  //     console.log(response.data.message);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   return mutate;
 };

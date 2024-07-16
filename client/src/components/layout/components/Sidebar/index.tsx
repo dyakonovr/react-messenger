@@ -4,16 +4,17 @@ import { PagePaths } from "@/src/enums/PagePaths";
 import {
   MessageCircleMore as ChatIcon,
   UsersRound as FriendsIcon,
-  Settings as SettingsIcon,
+  Settings as SettingsIcon
 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { SidebarLogoutButton, LayoutSidebarButton, SidebarAvatar } from "./components";
+import classes from "./styles.module.css";
 
 export function LayoutSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col gap-3 bg-[#F0F4FA] p-6">
+    <div className={`flex flex-col gap-3 p-6 ${classes["sidebar-background"]}`}>
       <LayoutSidebarButton
         link={PagePaths.HOME}
         icon={<ChatIcon />}
@@ -26,7 +27,7 @@ export function LayoutSidebar() {
       />
       <hr className="bg-[#B4B4B4]" />
       <LayoutSidebarButton
-        link={PagePaths.SETTINGS}
+        link={PagePaths.SETTINGS.HOME}
         icon={<SettingsIcon />}
         pathname={pathname}
       />

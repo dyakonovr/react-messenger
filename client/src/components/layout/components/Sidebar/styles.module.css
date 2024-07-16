@@ -1,0 +1,23 @@
+.sidebar-background {
+  background-color: #F0F4FA;
+}
+
+[data-theme="white-blue"] .sidebar-background {
+  background-color: #F0F4FA;
+}
+
+[data-theme="white-red"] .sidebar-background {
+  background-color: #fdfafa;
+}
+
+[data-theme="white-green"] .sidebar-background {
+  background-color: #f0fcf8;
+}
+
+[data-theme="white-purple"] .sidebar-background {
+  background-color: #f9f6ff;
+}
+
+[data-theme="white-pink"] .sidebar-background {
+  background-color: #fef4ff;
+}

@@ -2,7 +2,6 @@ import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/co
 import { LoginDto } from "./dto/login.dto";
 import { UserService } from "src/user/user.service";
 import { hash, verify } from "argon2";
-import { RoleService } from "src/role/role.service";
 import { RegistrationDto } from "./dto/registration.dto";
 import { generateJWT } from "./utils/generate-jwt.helper";
 import { IJwtPayload, IJwtTokens } from "./types/jwt.types";
@@ -12,14 +11,11 @@ import { Tokens } from "src/utils/enums/tokens.enum";
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private userService: UserService,
-    private roleService: RoleService
-  ) {}
+  constructor(private userService: UserService) {}
 
   async login(dto: LoginDto): Promise<AuthReponseDto> {
     const existUser = await this.userService.findByLogin(dto.login);
-    if (!existUser) throw new NotFoundException(`User with login ${dto.login} not found`);
+    if (!existUser) throw new NotFoundException(`User with login '${dto.login}' not found`);
     if (!verify(existUser.password, dto.password))
       throw new UnauthorizedException("Invalid login or password");
 
@@ -37,13 +33,10 @@ export class AuthService {
 
   async registration(dto: RegistrationDto): Promise<AuthReponseDto> {
     const passwordHash = await hash(dto.password);
-    const userRoleId =
-      dto.role_id ?? (await this.roleService.findByNameIgnoreCase("USER")).id;
 
     const user = await this.userService.create({
       ...dto,
-      password: passwordHash,
-      role_id: userRoleId
+      password: passwordHash
     });
 
     const newTokens = this.getNewTokens({

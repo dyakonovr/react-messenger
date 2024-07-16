@@ -4,10 +4,14 @@ import { PrismaService } from "src/prisma.service";
 import { PaginationResponseDto } from "src/utils/pagination/response.dto";
 import { DialogMessagesRequestDto } from "./dto/request.dto";
 
-type MessageType = Omit<Message, "sender_id" | "recipient_id" | "deletedAt"> & {
-  isMy: boolean;
+type MessageType = Omit<
+  Message,
+  "sender_id" | "is_read" | "created_at" | "updated_at" | "deleted_at"
+> & {
   senderId: number;
-  recipientId: number;
+  isRead: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
 
 @Injectable()
@@ -17,59 +21,44 @@ export class DialogMessagesService {
   async findAll(userId: number, requestDto: DialogMessagesRequestDto) {
     const offset = (requestDto.page - 1) * requestDto.limit;
 
-    const totalMessages = await this.prisma.$queryRaw<
-      {
-        count: number;
-      }[]
-    >`
-      SELECT COUNT(*)
-      FROM messages
-      WHERE 
-        (sender_id = ${userId} AND recipient_id = ${requestDto.friendId}) 
-        OR (sender_id = ${requestDto.friendId} AND recipient_id = ${userId})
-    `;
-
-    // const messages = await this.prisma.$queryRaw<MessageType[]>`
-    //   SELECT
-    //     id,
-    //     text,
-    //     "isRead",
-    //     "createdAt",
-    //     "updatedAt",
-    //     CASE
-    //       WHEN sender_id = ${userId} THEN true
-    //       ELSE false
-    //     END as "isMy"
-    //   FROM
-    //     messages
-    //   WHERE
-    //     (sender_id = ${userId} AND recipient_id = ${requestDto.friendId})
-    //     OR (sender_id = ${requestDto.friendId} AND recipient_id = ${userId})
-    //   ORDER BY
-    //     "createdAt" DESC
-    //   LIMIT ${requestDto.limit} OFFSET ${offset}
-    // `;
+    const totalMessages = await this.prisma.message.count({
+      where: {
+        chat_id: requestDto.chatId,
+        chat: {
+          ChatParticipant: {
+            every: {
+              user_id: userId
+            }
+          }
+        }
+      }
+    });
 
     const messages = await this.prisma.$queryRaw<MessageType[]>`
       SELECT 
-        id, 
-        text, 
-        "isRead", 
-        "createdAt", 
-        "updatedAt", 
-        "sender_id" as "senderId",
-        "recipient_id" as "recipientId"
+          m.id,
+          m.text,
+          m.is_read as "isRead",
+          m.created_at as "createdAt",
+          m.updated_at as "updatedAt",
+          m.sender_id AS "senderId"
       FROM 
-        messages 
+          messages m
+      JOIN 
+          chats c ON m.chat_id = c.id
+      JOIN 
+          chat_participants cp ON c.id = cp.chat_id
       WHERE 
-        (sender_id = ${userId} AND recipient_id = ${requestDto.friendId}) 
-        OR (sender_id = ${requestDto.friendId} AND recipient_id = ${userId})
-      ORDER BY 
-        "createdAt" DESC 
-      LIMIT ${requestDto.limit} OFFSET ${offset}
+          cp.user_id = ${userId}
+          AND m.chat_id = ${requestDto.chatId}
+      LIMIT 
+          ${requestDto.limit}
+      OFFSET 
+          ${offset};
+
     `;
 
-    const totalPages = Math.ceil(Number(totalMessages[0].count) / requestDto.limit);
+    const totalPages = Math.ceil(Number(totalMessages) / requestDto.limit);
 
     const formattedMessages = messages.reduce((acc, current) => {
       const { id, ...rest } = current;

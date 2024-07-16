@@ -1,18 +1,20 @@
-import { Typography } from "@/src/components/ui";
-import Image from "next/image";
+"use client";
+
+import { Avatar, Typography } from "@/src/components/ui";
+import { useUserStore } from "@/src/stores/useUserStore";
 
 export function SettingsProfilePreview() {
+  const user = useUserStore((state) => state.user);
+
   return (
     <div className="flex">
-      <Image
-        src="https://avatar.iran.liara.run/public/9"
-        width={60}
-        height={60}
+      <Avatar
         alt="User avatar"
-        className="h-full"
+        nickname={user?.nickname || ""}
+        src={user?.avatar || ""}
       />
       <Typography tag="p" variant="regular" className="ml-3 pt-1 font-bold">
-        Pink Panda
+        {user?.nickname}
       </Typography>
     </div>
   );

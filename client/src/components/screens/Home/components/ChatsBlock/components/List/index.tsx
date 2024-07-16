@@ -19,12 +19,12 @@ export function ChatsList({ dialogs, selectDialog, selectedDialogId }: IProps) {
       </Typography>
       <div className={classes.chats_list}>
         {dialogs &&
-          Object.keys(dialogs).map((userId) => (
+          Object.keys(dialogs).map((chatId) => (
             <ChatItem
-              dialog={dialogs[userId]}
-              userId={userId}
-              key={userId}
-              isSelected={selectedDialogId === null ? false : selectedDialogId === userId}
+              dialog={dialogs[chatId]}
+              userId={chatId}
+              key={chatId}
+              isSelected={selectedDialogId === null ? false : selectedDialogId === chatId}
               selectDialog={selectDialog}
             />
           ))}

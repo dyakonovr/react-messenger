@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "@/src/stores/useUserStore";
 import { useState } from "react";
 import { PagePaths } from "@/src/enums/PagePaths";
+import toast from "react-hot-toast";
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,7 @@ export const useLogin = () => {
       setUser(response.data);
       router.replace(PagePaths.HOME);
     } catch (error) {
-      console.log(error);
+      toast.error((error as Error).message);
       setIsLoading(false);
     }
   }

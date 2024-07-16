@@ -1,4 +1,4 @@
-import { customFetch } from "../api/fetch";
+import { customFetch } from "./fetch";
 import { friendsPageUserSchema } from "../types/features/friend";
 import { getPaginationSchema } from "../types/features/pagination";
 import type { IRequestFilters } from "../types/general/paginationOptions";

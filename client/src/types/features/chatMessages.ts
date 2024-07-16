@@ -5,8 +5,7 @@ export const messageWithoutIdSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string(),
   isRead: z.boolean(),
-  senderId: z.number(),
-  recipientId: z.number()
+  senderId: z.number()
 });
 
 export const chatMessagesSchema = z.record(

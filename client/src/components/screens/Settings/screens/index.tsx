@@ -1,2 +1,2 @@
-export * from "./AccountDataPanel";
-export * from "./ThemePanel";
+export * from "./AccountData";
+export * from "./Theme";

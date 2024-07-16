@@ -7,7 +7,8 @@ import {
   Res,
   Get,
   UseGuards,
-  Req
+  Req,
+  HttpCode
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
@@ -23,10 +24,8 @@ export class AuthController {
 
   @Post("login")
   @UsePipes(new ValidationPipe())
-  async login(
-    @Body() dto: LoginDto,
-    @Res({ passthrough: true }) response: Response
-  ): Promise<IUserReponse> {
+  @HttpCode(200)
+  async login(@Body() dto: LoginDto, @Res({ passthrough: true }) response: Response) {
     const responseData = await this.authService.login(dto);
     this.setTokensInCookie(response, responseData.accessToken, responseData.refreshToken);
     return responseData.user;

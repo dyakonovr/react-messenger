@@ -1,14 +1,18 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { PrismaService } from "src/prisma.service";
-import { RoleService } from "src/role/role.service";
+import { hash, verify } from "argon2";
+
+export type UserUpdateData = {
+  nickname: string;
+  login: string;
+  oldPassword: string;
+  newPassword: string;
+};
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private roleService: RoleService
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   create(dto: CreateUserDto) {
     return this.prisma.user.create({ data: dto });
@@ -20,5 +24,41 @@ export class UserService {
 
   findByLogin(login: string) {
     return this.prisma.user.findFirst({ where: { login } });
+  }
+
+  async update(
+    avatarFile: Express.Multer.File | undefined,
+    otherData: Partial<UserUpdateData> | undefined,
+    userId: number
+  ) {
+    const existUser = await this.findById(userId);
+    if (!existUser) throw new NotFoundException("User is not defined!");
+
+    if (otherData.oldPassword && otherData.newPassword) {
+      const isOldPasswordCorrect = await verify(
+        existUser.password,
+        otherData.oldPassword
+      );
+      if (!isOldPasswordCorrect) throw new NotFoundException("Incorrect user password!");
+    }
+
+    return this.prisma.user.update({
+      where: {
+        id: userId
+      },
+      data: {
+        avatar: avatarFile ? avatarFile.path : null,
+        password: otherData.newPassword
+          ? await hash(otherData.newPassword)
+          : existUser.password,
+        nickname: otherData.nickname ? otherData.nickname : existUser.nickname,
+        login: otherData.login ? otherData.login : existUser.login
+      },
+      select: {
+        id: true,
+        avatar: true,
+        nickname: true
+      }
+    });
   }
 }

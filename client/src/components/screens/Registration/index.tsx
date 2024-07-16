@@ -25,7 +25,7 @@ export default function Registration() {
   async function onSubmit(data: RegistrationFormSchemaType) {
     try {
       const response = await AuthService.registration(data);
-      setUser(response);
+      setUser(response.data);
     } catch (error) {
       console.log(error);
     }

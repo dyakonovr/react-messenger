@@ -13,27 +13,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Role {
-  id   Int    @id @default(autoincrement())
-  name String @unique
-  User User[]
-
-  @@map("roles")
-}
-
 model User {
-  id                  Int          @id @default(autoincrement())
-  nickname            String       @unique
-  login               String       @unique
-  password            String
-  avatar              String?
-  role_id             Int
-  role                Role         @relation(fields: [role_id], references: [id])
-  inviterFriendships  Friendship[] @relation("InviterFriendships")
-  accepterFriendships Friendship[] @relation("AccepterFriendships")
+  id       Int     @id @default(autoincrement())
+  nickname String  @unique
+  login    String  @unique
+  password String
+  avatar   String?
 
-  sendedMessages    Message[] @relation("SenderMessages")
-  recipientMessages Message[] @relation("RecipientMessages")
+  inviterFriendships  Friendship[]      @relation("InviterFriendships")
+  accepterFriendships Friendship[]      @relation("AccepterFriendships")
+  ChatParticipant     ChatParticipant[]
+  Message             Message[]
 
   @@map("users")
 }
@@ -57,32 +47,41 @@ enum FriendshipStatuses {
 }
 
 model Chat {
-  id     Int     @id @default(autoincrement())
-  name   String?
-  avatar String?
+  id              Int               @id @default(autoincrement())
+  name            String?
+  avatar          String?
+  ChatParticipant ChatParticipant[]
+  Message         Message[]
 
   @@map("chats")
 }
 
-model ChatParticipants {
+model ChatParticipant {
   chat_id Int
   user_id Int
+
+  chat Chat @relation(fields: [chat_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+
   @@id([chat_id, user_id])
+  @@map("chat_participants")
 }
 
 model Message {
-  id           Int     @id @default(autoincrement())
-  sender_id    Int
-  recipient_id Int
-  text         String?
-  isRead       Boolean @default(false)
+  id      Int     @id @default(autoincrement())
+  text    String?
+  is_read Boolean @default(false)
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  sender_id Int
+  sender    User @relation(fields: [sender_id], references: [id])
 
-  sender      User          @relation("SenderMessages", fields: [sender_id], references: [id])
-  recipient   User          @relation("RecipientMessages", fields: [recipient_id], references: [id])
+  chat_id Int
+  chat    Chat @relation(fields: [chat_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now()) @updatedAt
+  deleted_at DateTime?
+
   MessageFile MessageFile[]
 
   @@map("messages")

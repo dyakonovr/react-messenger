@@ -25,13 +25,13 @@ export const useInViewUnreadMessage = (
     enabled: isEnabled
   });
 
-  useEffect(() => {
-    if (isEnabled && inView) {
-      console.log("@user viewed message (messageId):", messageId);
-      // MessageSocket.readMessage(socket, messageId);
-      markMessageAsRead(messageId);
-    }
-  }, [inView, isEnabled]);
+  // useEffect(() => {
+  //   if (isEnabled && inView) {
+  //     console.log("@user viewed message (messageId):", messageId);
+  //     // MessageSocket.readMessage(socket, messageId);
+  //     markMessageAsRead(messageId);
+  //   }
+  // }, [inView, isEnabled]);
 
   return ref;
 };

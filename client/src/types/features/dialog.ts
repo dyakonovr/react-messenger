@@ -1,26 +1,22 @@
 import { z } from "zod";
-import { userSchema } from "./user";
 import { messageWithoutIdSchema } from "./chatMessages";
 
-// const lastMessageSchema = z.object({
-//   id: z.number(),
-//   text: z.string(),
-//   createdAt: z.string(),
-//   senderId: z.number(),
-//   recipientId: z.number(),
-//   isRead: z.boolean()
-// });
+const dialogInfoSchema = z.object({
+  name: z.string(),
+  avatar: z.string().nullable()
+});
 
 export const dialogSchema = z.object({
-  user: userSchema.omit({ id: true }),
-  lastMessage: messageWithoutIdSchema.extend({ id: z.number() }),
+  info: dialogInfoSchema,
+  lastMessage: messageWithoutIdSchema.extend({ id: z.number() }).nullable(),
   newMessagesCount: z.number()
 });
 
 export const dialogItemsSchema = z.record(
-  z.string(), // userId
+  z.string(), // chatId
   dialogSchema
 );
 
 export type IDialog = z.infer<typeof dialogSchema>;
+export type IDialogInfo = z.infer<typeof dialogInfoSchema>;
 export type IDialogsRecord = z.infer<typeof dialogItemsSchema>;

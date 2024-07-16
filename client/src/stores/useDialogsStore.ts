@@ -45,7 +45,10 @@ export const useDialogsStore = create<State & Actions>()(
           );
 
           // isRead = true;
-          if (messageId === String(state.dialogs[dialogId].lastMessage.id)) {
+          if (
+            state.dialogs[dialogId].lastMessage &&
+            messageId === String(state.dialogs[dialogId].lastMessage.id)
+          ) {
             state.dialogs[dialogId].lastMessage.isRead = true;
           }
         })
