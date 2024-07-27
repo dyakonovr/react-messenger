@@ -26,7 +26,7 @@ export const useChatsStore = create<State & Actions>()(
       addNewChat: (dialogId: string, chatMessages: IChatMessages) =>
         set((state) => {
           if (!state.chats) state.chats = { [dialogId]: chatMessages };
-          else state.chats[dialogId] = chatMessages;
+          else state.chats[dialogId] = { ...chatMessages, ...state.chats[dialogId] };
         }),
       addMessageInChat: (dialogId: string, message: IChatMessages) =>
         set((state) => {
@@ -35,7 +35,8 @@ export const useChatsStore = create<State & Actions>()(
         }),
       readMessageInChat: (dialogId: string, messageId: string) =>
         set((state) => {
-          if (!state.chats || !state.chats[dialogId] || !state.chats[dialogId][messageId]) return;
+          if (!state.chats || !state.chats[dialogId] || !state.chats[dialogId][messageId])
+            return;
           state.chats[dialogId][messageId].isRead = true;
         })
     }))

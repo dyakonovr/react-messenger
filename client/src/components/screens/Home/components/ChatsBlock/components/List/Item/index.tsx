@@ -8,10 +8,10 @@ interface IProps {
   userId: string;
   dialog: IDialog;
   isSelected: boolean;
-  selectDialog: (dialogId: Nullable<string>) => void;
+  selectChat: (chatId: Nullable<string>) => void;
 }
 
-function ChatItem({ dialog, userId, isSelected, selectDialog }: IProps) {
+function ChatItem({ dialog, userId, isSelected, selectChat }: IProps) {
   const {
     date,
     dialogItemClasses,
@@ -21,7 +21,7 @@ function ChatItem({ dialog, userId, isSelected, selectDialog }: IProps) {
   } = useDialogContent(dialog, isSelected);
 
   return (
-    <div className={dialogItemClasses} onClick={() => selectDialog(userId)}>
+    <div className={dialogItemClasses} onClick={() => selectChat(userId)}>
       <Avatar
         alt={dialog.info.name}
         nickname={dialog.info.name}

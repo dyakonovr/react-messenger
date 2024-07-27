@@ -15,7 +15,7 @@
 // }
 
 import type { ZodSchema } from "zod";
-import type { Nullable } from "../types/general/nullable";
+import type { Nullable } from "../../types/general/nullable";
 
 type Callback<Schema> = (error: Nullable<Error>, data: Nullable<Schema>) => void;
 type Result<Schema> = { data: Schema; response: Response };

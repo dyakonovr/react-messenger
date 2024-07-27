@@ -1,6 +1,6 @@
 import AuthService from "@/src/services/auth";
+import { useUserStore } from "@/src/stores/useUserStore";
 import Router from "next/router";
-import { useUserStore } from "../stores/useUserStore";
 
 export const baseApiUrl = process.env.NEXT_PUBLIC_SERVER_PATH + "/api";
 

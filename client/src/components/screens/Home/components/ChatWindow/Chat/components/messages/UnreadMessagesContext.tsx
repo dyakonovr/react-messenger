@@ -9,20 +9,32 @@ import React, {
 import { useSocketContext } from "@/src/components/layout/SocketProvider";
 import MessageSocket from "@/src/sockets/message";
 import { debounce } from "@/src/hooks/general/useDebounceCallback/debounce";
+import { useSelectedChatContext } from "@/src/components/screens/Home/providers/SelectedChatProvider";
+import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
 
 const ReadMessagesContext = createContext<
   undefined | { markMessageAsRead: (messageId: string) => void }
 >(undefined);
 
-export const UnreadMessagesProvider = ({ children }: { children: ReactNode }) => {
+interface IProps {
+  children: ReactNode;
+}
+
+export const UnreadMessagesProvider = ({ children }: IProps) => {
   const { socket } = useSocketContext();
-  const [unreadMessageIds, setUnreadMessageIds] = useState<string[]>([]);
+  const [unreadMessageIds, setUnreadMessageIds] = useState<number[]>([]);
+  const { selectedChatId } = useSelectedChatContext();
 
   const debouncedReadMessages = useCallback(
-    debounce((messageIds: string[]) => {
+    debounce((messageIds: number[]) => {
+      if (!selectedChatId) return;
       if (messageIds.length > 0 && socket) {
-        MessageSocket.readMessages(socket, messageIds);
-        // console.log("@read messages:", messageIds);
+        console.log("@send read messages:", { messageIds, chatId: selectedChatId });
+        MessageSocket.readMessages(socket, {
+          messageIds,
+          chatId: transformStringToNumber(selectedChatId)
+        });
+        setUnreadMessageIds([]);
       }
     }, 500),
     [socket]
@@ -31,12 +43,12 @@ export const UnreadMessagesProvider = ({ children }: { children: ReactNode }) =>
   useEffect(() => {
     if (unreadMessageIds.length > 0) {
       debouncedReadMessages(unreadMessageIds);
-      setUnreadMessageIds([]);
     }
   }, [unreadMessageIds, debouncedReadMessages]);
 
   const markMessageAsRead = (messageId: string) => {
-    setUnreadMessageIds((prev) => [...prev, messageId]);
+    if (isNaN(+messageId)) return;
+    setUnreadMessageIds((prev) => [...prev, +messageId]);
   };
 
   return (
@@ -46,7 +58,7 @@ export const UnreadMessagesProvider = ({ children }: { children: ReactNode }) =>
   );
 };
 
-export const useReadMessages = () => {
+export const useUnreadMessagesContext = () => {
   const context = useContext(ReadMessagesContext);
   if (context === undefined) {
     throw new Error("useReadMessages must be used within a UnreadMessagesProvider");

@@ -34,7 +34,7 @@ export function Avatar({
         className
       )}
     >
-      {nickname[0].toUpperCase()}
+      {nickname === "" ? "U" : nickname[0].toUpperCase()}
     </div>
   );
 }

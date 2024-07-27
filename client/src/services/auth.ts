@@ -1,7 +1,7 @@
-import { customFetch } from "./fetch";
+import { customFetch } from "./_core/fetch";
 import type { ILoginRequest, IRegistrationRequest } from "../types/features/auth";
 import { userSchema } from "../types/features/user";
-import { validateTypes } from "./validateTypes";
+import { validateTypes } from "./_core/validateTypes";
 
 class AuthService {
   private url = "auth";

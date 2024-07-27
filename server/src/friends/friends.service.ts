@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "src/prisma.service";
 import { FriendshipStatuses, User } from "@prisma/client";
-import { UserRequestDto } from "./dto/request.dto";
-import { PaginationResponseDto } from "src/utils/pagination/response.dto";
+import { PaginationResponseDto } from "src/utils/dto/pagination/response.dto";
+import { PaginationWithSearchTermRequestDto } from "src/utils/dto/pagination-with-search-term.dto";
 
 @Injectable()
 export class FriendsService {
@@ -10,7 +10,7 @@ export class FriendsService {
 
   async findAllFriends(
     currentUserId: number,
-    requestDto: UserRequestDto
+    requestDto: PaginationWithSearchTermRequestDto
   ): Promise<PaginationResponseDto> {
     const offset = (requestDto.page - 1) * requestDto.limit;
     const searchQuery = requestDto.searchTerm ? `%${requestDto.searchTerm}%` : "%";
@@ -69,7 +69,7 @@ export class FriendsService {
 
   async findAll(
     currentUserId: number,
-    requestDto: UserRequestDto
+    requestDto: PaginationWithSearchTermRequestDto
   ): Promise<PaginationResponseDto> {
     const offset = (requestDto.page - 1) * requestDto.limit;
     const searchQuery = requestDto.searchTerm ? `%${requestDto.searchTerm}%` : "%";
@@ -115,7 +115,7 @@ export class FriendsService {
 
   async findSentRequests(
     currentUserId: number,
-    requestDto: UserRequestDto
+    requestDto: PaginationWithSearchTermRequestDto
   ): Promise<PaginationResponseDto> {
     const offset = (requestDto.page - 1) * requestDto.limit;
     const searchQuery = requestDto.searchTerm ? `%${requestDto.searchTerm}%` : "%";
@@ -171,7 +171,7 @@ export class FriendsService {
 
   async findReceivedRequests(
     currentUserId: number,
-    requestDto: UserRequestDto
+    requestDto: PaginationWithSearchTermRequestDto
   ): Promise<PaginationResponseDto> {
     const offset = (requestDto.page - 1) * requestDto.limit;
     const searchQuery = requestDto.searchTerm ? `%${requestDto.searchTerm}%` : "%";

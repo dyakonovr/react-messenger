@@ -20,6 +20,9 @@ import { RefreshTokensGuard } from "src/utils/guards/refresh-tokens.guard";
 
 @Controller("auth")
 export class AuthController {
+  DEFAULT_ACCESS_TOKEN_MAX_AGE: number = 1000 * 60 * 15; // 15 minutes
+  DEFAULT_REFRESH_TOKEN_MAX_AGE: number = 1000 * 60 * 60 * 24 * 7; // 7 days
+
   constructor(private readonly authService: AuthService) {}
 
   @Post("login")
@@ -64,7 +67,9 @@ export class AuthController {
     response.cookie(Tokens.ACCESS_TOKEN, accessToken.token, {
       httpOnly: true,
       path: "/",
-      maxAge: !isNaN(+accessToken.expiresIn) ? +accessToken.expiresIn : 1000 * 60 * 15 // 15 minutes
+      maxAge: !isNaN(+accessToken.expiresIn)
+        ? +accessToken.expiresIn
+        : this.DEFAULT_ACCESS_TOKEN_MAX_AGE
     });
 
     response.cookie(Tokens.REFRESH_TOKEN, refreshToken.token, {
@@ -72,7 +77,7 @@ export class AuthController {
       path: "/",
       maxAge: !isNaN(+refreshToken.expiresIn)
         ? +refreshToken.expiresIn
-        : 1000 * 60 * 60 * 24 * 7 // 7 days
+        : this.DEFAULT_REFRESH_TOKEN_MAX_AGE
     });
   }
 }

@@ -1,5 +1,5 @@
 import type { Socket } from "socket.io-client";
-import type { ISendMessage } from "../types/features/message";
+import type { IReadMessage, ISendMessage } from "../types/features/message";
 import type { IDialogsRecord } from "../types/features/dialog";
 import type { IReadMessageResponse } from "../components/screens/Home/useMessageSocketHandlers";
 
@@ -16,8 +16,8 @@ class MessageSocket {
     socket.off("MESSAGE:CREATED");
   }
 
-  readMessages(socket: Socket, messageIds: string[]) {
-    socket.emit("MESSAGE:READ", JSON.stringify(messageIds));
+  readMessages(socket: Socket, data: IReadMessage) {
+    socket.emit("MESSAGE:READ", JSON.stringify(data));
   }
 
   onMessageRead(socket: Socket, callback: (data: IReadMessageResponse) => void) {

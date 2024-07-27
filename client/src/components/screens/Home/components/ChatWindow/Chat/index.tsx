@@ -1,14 +1,20 @@
 import { ChatFooter, ChatHeader, ChatMessages } from "./components";
-import { useChatData } from "./useChatData";
+import { useChatData } from "./hooks/useChatData";
+import { useHandleEscapeClick } from "./hooks/useHandleEscapeClick";
 
-function Chat({ selectedDialogId }: { selectedDialogId: string }) {
-  const { chatMessages, info } = useChatData(selectedDialogId);
+function Chat() {
+  useHandleEscapeClick();
+  const { chatMessages, chatInfo, isLoading, triggerFetchData } = useChatData();
 
   return (
     <div className="flex max-h-screen flex-col max-[840px]:hidden">
-      <ChatHeader info={info} />
-      <ChatMessages messages={chatMessages} />
-      <ChatFooter />
+      <ChatHeader info={chatInfo} isLoading={isLoading} />
+      <ChatMessages
+        messages={chatMessages}
+        isChatLoading={isLoading}
+        triggerFetchData={triggerFetchData}
+      />
+      <ChatFooter isLoading={isLoading} />
     </div>
   );
 }

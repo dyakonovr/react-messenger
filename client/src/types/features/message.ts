@@ -1,4 +1,9 @@
 export interface ISendMessage {
   text: string;
-  friendId: string;
+  chatId: string;
+}
+
+export interface IReadMessage {
+  messageIds: number[];
+  chatId: number;
 }

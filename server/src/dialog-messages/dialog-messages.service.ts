@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Message } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
-import { PaginationResponseDto } from "src/utils/pagination/response.dto";
+import { PaginationResponseDto } from "src/utils/dto/pagination/response.dto";
 import { DialogMessagesRequestDto } from "./dto/request.dto";
 
 type MessageType = Omit<
@@ -26,7 +26,7 @@ export class DialogMessagesService {
         chat_id: requestDto.chatId,
         chat: {
           ChatParticipant: {
-            every: {
+            some: {
               user_id: userId
             }
           }
@@ -51,6 +51,8 @@ export class DialogMessagesService {
       WHERE 
           cp.user_id = ${userId}
           AND m.chat_id = ${requestDto.chatId}
+      ORDER BY
+          m.created_at DESC
       LIMIT 
           ${requestDto.limit}
       OFFSET 

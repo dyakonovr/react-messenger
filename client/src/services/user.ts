@@ -1,7 +1,6 @@
-import { customFetch } from "./fetch";
-import type { UpdateAccountDataFormSchemaType } from "../components/screens/Settings/screens/AccountData/Form/constants";
+import { customFetch } from "./_core/fetch";
 import { userSchema } from "../types/features/user";
-import { validateTypes } from "./validateTypes";
+import { validateTypes } from "./_core/validateTypes";
 
 class UserService {
   private url = "user";

@@ -1,7 +1,12 @@
 import { Avatar, Typography } from "@/src/components/ui";
 import type { IDialogInfo } from "@/src/types/features/dialog";
 
-export function ChatHeader({ info }: { info: IDialogInfo | null }) {
+interface IProps {
+  info: IDialogInfo | null;
+  isLoading: boolean;
+}
+
+export function ChatHeader({ info, isLoading }: IProps) {
   return (
     <div className="flex bg-[#F8FAFF] px-8 py-4">
       <Avatar
@@ -16,14 +21,7 @@ export function ChatHeader({ info }: { info: IDialogInfo | null }) {
           tag="p"
           className="max-w-[250px] truncate font-bold"
         >
-          {info?.name}
-        </Typography>
-        <Typography
-          variant="small"
-          tag="p"
-          className="max-w-[250px] truncate text-[#7C7C7D]"
-        >
-          Online
+          {isLoading ? "Loading..." : info?.name}
         </Typography>
       </div>
     </div>

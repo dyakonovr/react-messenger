@@ -1,22 +1,18 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const users = Array.from({ length: 50 }).map(() => ({
+  const users: Omit<User, "id">[] = Array.from({ length: 50 }).map(() => ({
     nickname: faker.internet.userName(),
     login: faker.internet.email(),
     password: faker.internet.password(),
-    avatar: faker.image.avatar(),
-    role_id: 1
+    avatar: faker.image.avatar()
   }));
 
   // Insert users into the database
-  for (const user of users) {
-    await prisma.user.create({ data: user });
-  }
-
+  await prisma.user.createMany({ data: users });
   console.log("Seeding complete");
 }
 

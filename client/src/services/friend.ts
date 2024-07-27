@@ -1,8 +1,8 @@
-import { customFetch } from "./fetch";
+import { customFetch } from "./_core/fetch";
 import { friendsPageUserSchema } from "../types/features/friend";
 import { getPaginationSchema } from "../types/features/pagination";
 import type { IRequestFilters } from "../types/general/paginationOptions";
-import { validateTypes } from "./validateTypes";
+import { validateTypes } from "./_core/validateTypes";
 
 export type FriendsPageUsersType = "friends" | "all" | "sent" | "received";
 

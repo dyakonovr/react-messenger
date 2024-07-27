@@ -2,28 +2,59 @@ import { Injectable } from "@nestjs/common";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { PrismaService } from "src/prisma.service";
 import { DialogsService } from "src/dialogs/dialogs.service";
+import { ReadMessageDto } from "./dto/read-message.dto";
 
 @Injectable()
 export class MessageService {
-  // constructor(
-  //   private readonly prisma: PrismaService,
-  //   private readonly dialogService: DialogsService
-  // ) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly dialogService: DialogsService
+  ) {}
 
-  // async create(userId: number, dto: CreateMessageDto) {
-  //   await this.prisma.message.create({
-  //     data: {
-  //       text: dto.text,
-  //       sender_id: userId,
-  //       chat_id: +dto.chatId
-  //     }
-  //   });
+  async create(userId: number, dto: CreateMessageDto) {
+    return await this.prisma.message.create({
+      data: {
+        text: dto.text,
+        sender_id: userId,
+        chat_id: +dto.chatId
+      }
+    });
+  }
 
-  //   const myDialog = await this.dialogService.findOne(userId, +dto.friendId);
-  //   const friendDialog = await this.dialogService.findOne(+dto.friendId, userId);
+  async markAsRead(dto: ReadMessageDto) {
+    return await this.prisma.$transaction(async (prisma) => {
+      const lastMessageId = Math.max(...dto.messageIds);
+      const lastMessage = await prisma.message.findFirst({
+        where: { id: lastMessageId }
+      });
 
-  //   return { myDialog, friendDialog };
-  // }
+      const needToUpdateMessages = await prisma.message.findMany({
+        where: {
+          is_read: false,
+          created_at: {
+            lte: lastMessage.created_at
+          },
+          chat_id: dto.chatId
+        },
+        select: {
+          id: true
+        }
+      });
+
+      const needToUpdateMessageIds = needToUpdateMessages.map((el) => el.id);
+
+      await prisma.message.updateMany({
+        where: {
+          id: { in: needToUpdateMessageIds }
+        },
+        data: {
+          is_read: true
+        }
+      });
+
+      return needToUpdateMessageIds;
+    });
+  }
 
   // async markAsRead(messageIds: string[]) {
   //   return await this.prisma.$transaction(async (prisma) => {

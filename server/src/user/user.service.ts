@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { PrismaService } from "src/prisma.service";
 import { hash, verify } from "argon2";
+import { unlink } from "fs/promises";
 
 export type UserUpdateData = {
   nickname: string;
@@ -40,6 +41,13 @@ export class UserService {
         otherData.oldPassword
       );
       if (!isOldPasswordCorrect) throw new NotFoundException("Incorrect user password!");
+    }
+
+    // Delete previous avatar file
+    if (existUser.avatar) {
+      unlink(existUser.avatar)
+        .then(() => console.log("previous avatar deleted"))
+        .catch((error) => console.log("previous avatar delete error:", error));
     }
 
     return this.prisma.user.update({

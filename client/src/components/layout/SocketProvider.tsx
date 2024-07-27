@@ -1,6 +1,6 @@
 "use client";
 
-import { customIo } from "@/src/sockets/socket";
+import { customIo } from "@/src/sockets/_core/socket";
 import type { ReactNode } from "react";
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { Socket } from "socket.io-client";

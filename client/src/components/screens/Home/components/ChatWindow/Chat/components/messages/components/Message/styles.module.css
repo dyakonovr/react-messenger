@@ -1,0 +1,19 @@
+.message {
+  @apply flex pr-6;
+}
+
+.message_is_my {
+  @apply justify-end self-end !pr-0 pl-6;
+}
+
+.message_text {
+  @apply flex items-center justify-center rounded-2xl px-5 py-3 bg-white text-[#696969];
+}
+
+.message_is_my .message_text {
+  @apply bg-[var(--main-color)] text-white;
+}
+
+.message_date {
+  @apply -mb-1 ms-2 block min-w-fit self-end text-xs text-[#888];
+}

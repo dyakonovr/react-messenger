@@ -33,7 +33,7 @@ export class FriendshipService {
     // });
 
     return await this.prisma.$transaction(async (prisma) => {
-      await this.chatService.create([currentUserId, friendId]);
+      await this.chatService.create([currentUserId, friendId], null, null);
 
       return await prisma.friendship.update({
         where: {

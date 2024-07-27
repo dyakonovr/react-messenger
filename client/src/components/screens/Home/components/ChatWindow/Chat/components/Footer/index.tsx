@@ -5,13 +5,12 @@ import type { SendMessageFormSchemaType } from "./constants";
 import { sendMessageFormSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import type { ISendMessage } from "@/src/types/features/message";
-import { useDialogsStore } from "@/src/stores/useDialogsStore";
 import MessageSocket from "@/src/sockets/message";
+import { useSelectedChatContext } from "@/src/components/screens/Home/providers/SelectedChatProvider";
 
-export function ChatFooter() {
+export function ChatFooter({ isLoading }: { isLoading: boolean }) {
   const { isConnected, socket } = useSocketContext();
-  const selectedDialogId = useDialogsStore((state) => state.selectedDialogId);
+  const { selectedChatId } = useSelectedChatContext();
   const { register, handleSubmit, reset } = useForm<SendMessageFormSchemaType>({
     resolver: zodResolver(sendMessageFormSchema),
     defaultValues: {
@@ -21,9 +20,9 @@ export function ChatFooter() {
 
   // Functions
   function onSubmit(data: SendMessageFormSchemaType) {
-    if (!isConnected || !socket || !selectedDialogId) return;
+    if (!isConnected || !socket || !selectedChatId) return;
 
-    MessageSocket.sendMessage(socket, { ...data, friendId: selectedDialogId });
+    MessageSocket.sendMessage(socket, { ...data, chatId: selectedChatId });
     reset();
   }
   // Functions END
@@ -38,7 +37,13 @@ export function ChatFooter() {
         className="rounded-[10px] px-4 py-3.5"
         {...register("text")}
       />
-      <Button isIcon variant="contained" className="p-2.5" type="submit">
+      <Button
+        isIcon
+        variant="contained"
+        className="p-2.5"
+        type="submit"
+        disabled={isLoading}
+      >
         <SendIcon size={24} />
       </Button>
     </form>

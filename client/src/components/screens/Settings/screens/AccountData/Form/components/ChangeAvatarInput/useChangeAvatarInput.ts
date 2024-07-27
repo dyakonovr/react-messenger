@@ -7,8 +7,6 @@ export const useChangeAvatarInput = (defaultAvatar: string | null) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(defaultAvatar);
   const watchedFile = watch("avatar");
 
-  console.log("@previewUrl:", previewUrl);
-
   useEffect(() => {
     if (watchedFile && watchedFile.length > 0) {
       const file = watchedFile[0];

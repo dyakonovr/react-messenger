@@ -1,23 +1,24 @@
+import { useUrlParamsContext } from "@/src/providers/UrlParamProvider/provider";
 import type { FriendsPageUsersType } from "@/src/services/friend";
 import { useQueryClient } from "@tanstack/react-query";
-import { useRouter, useSearchParams } from "next/navigation";
 
 export const useFriendsFilter = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
+  const { setParams, getParamValue } = useUrlParamsContext();
+  const activeType: FriendsPageUsersType =
+    (getParamValue("type") as FriendsPageUsersType) ?? "friends";
 
-  const changeFriendsFilter = (type: FriendsPageUsersType) => {
-    const queryParams = new URLSearchParams();
-    queryParams.set("type", type);
-    router.push(`${window.location.pathname}?${queryParams.toString()}`);
+  // Functions
+  function changeFriendsFilter(type: FriendsPageUsersType) {
+    setParams({ type });
     queryClient.removeQueries({
       queryKey: ["friends", type]
     });
-  };
+  }
+  // Functions END
 
   return {
     changeFriendsFilter,
-    activeType: (searchParams.get("type") as FriendsPageUsersType) ?? "friends"
+    activeType
   };
 };

@@ -1,26 +1,30 @@
 "use client";
 
-import DialogService from "@/src/services/dialog";
-import { useDialogsStore } from "@/src/stores/useDialogsStore";
-import { useEffect } from "react";
+import type { KeyboardEvent } from "react";
+import { useSelectedChatContext } from "../../providers/SelectedChatProvider";
+import { useUrlParamsContext } from "@/src/providers/UrlParamProvider/provider";
+import { useDialogsDataContext } from "../../providers/DialogsDataProvider";
 
 export const useDialogsData = () => {
-  const { dialogs, setNewDialogs, selectedDialogId, selectDialog } = useDialogsStore();
+  const { selectedChatId, selectChat } = useSelectedChatContext();
+  const { dialogs, triggerFetchData } = useDialogsDataContext();
+  const { setParams, deleteUrlParam } = useUrlParamsContext();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const response = await DialogService.getAll({
-          limit: 20,
-          page: 1,
-          searchTerm: ""
-        });
-        setNewDialogs(response.data.items);
-      } catch (error) {
-        console.log(error);
-      }
-    })();
-  }, []);
+  // Functions
+  function updateChatSearchTerm(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      const newChatSearchTerm = (event.target as HTMLInputElement).value;
+      if (!newChatSearchTerm) return deleteUrlParam("chatSearchTerm");
+      setParams({ chatSearchTerm: newChatSearchTerm });
+    }
+  }
+  // Functions END
 
-  return { dialogs, selectedDialogId, selectDialog };
+  return {
+    dialogs,
+    selectedChatId,
+    selectChat,
+    triggerFetchData,
+    updateChatSearchTerm
+  };
 };

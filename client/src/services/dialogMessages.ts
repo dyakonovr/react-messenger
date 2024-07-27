@@ -1,8 +1,8 @@
-import { customFetch } from "./fetch";
+import { customFetch } from "./_core/fetch";
 import { chatMessagesSchema } from "../types/features/chatMessages";
 import { getPaginationSchemaWithItemsAsObject } from "../types/features/pagination";
 import type { IPaginationOptions } from "../types/general/paginationOptions";
-import { validateTypes } from "./validateTypes";
+import { validateTypes } from "./_core/validateTypes";
 
 class DialogMessagesService {
   private url = "dialog-messages";

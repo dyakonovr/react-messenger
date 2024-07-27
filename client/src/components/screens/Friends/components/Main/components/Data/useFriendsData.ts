@@ -2,17 +2,23 @@
 
 import type { FriendsPageUsersType } from "@/src/services/friend";
 import FriendsService from "@/src/services/friend";
-import { useSearchParams } from "next/navigation";
 import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
-import { useAddUrlAttribute } from "@/src/hooks/general/useAddUrlAttribute";
 import { useQuery } from "@tanstack/react-query";
+import { useUrlParams } from "@/src/hooks/general/useUrlParams";
+
+type UrlParams = {
+  page: string;
+  type: FriendsPageUsersType;
+  searchTerm: string;
+};
 
 export const useFriendsData = () => {
-  const searchParams = useSearchParams();
+  const { setParams, getParamValue } = useUrlParams<UrlParams>();
+
   const type: FriendsPageUsersType =
-    (searchParams.get("type") as FriendsPageUsersType) ?? "friends";
-  const page: number = transformStringToNumber(searchParams.get("page") ?? "1");
-  const searchTerm = searchParams.get("searchTerm") ?? "";
+    (getParamValue("type") as FriendsPageUsersType) ?? "friends";
+  const page: number = transformStringToNumber(getParamValue("page") ?? "1");
+  const searchTerm = getParamValue("searchTerm") ?? "";
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["friends", type, page, searchTerm],
@@ -22,16 +28,13 @@ export const useFriendsData = () => {
         limit: 24,
         searchTerm
       }),
-    select: ({ data }) => data,
-    staleTime: Infinity
+    select: ({ data }) => data
   });
-
-  const addUrlAttribute = useAddUrlAttribute();
 
   // Functions
   function setCurrentPage(newPage: number) {
     if (newPage === page) return;
-    addUrlAttribute("page", newPage);
+    setParams({ page: String(newPage) });
   }
   // Functions END
 
