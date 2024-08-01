@@ -5,8 +5,7 @@ import { ChatsSearchInput, ChatsList } from "./components";
 import { useDialogsData } from "./useDialogsData";
 
 export function Chats() {
-  const { dialogs, selectedChatId, selectChat, triggerFetchData, updateChatSearchTerm } =
-    useDialogsData();
+  const updateChatSearchTerm = useDialogsData();
 
   return (
     <div className="custom-shadow z-[1] w-full bg-[#F8FAFF] p-[30px]">
@@ -14,12 +13,7 @@ export function Chats() {
         Chats
       </Typography>
       <ChatsSearchInput onKeyDown={updateChatSearchTerm} />
-      <ChatsList
-        dialogs={dialogs}
-        selectedChatId={selectedChatId}
-        selectChat={selectChat}
-        triggerFetchData={triggerFetchData}
-      />
+      <ChatsList />
     </div>
   );
 }

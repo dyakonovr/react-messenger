@@ -12,13 +12,14 @@ interface IProps {
 
 export function ChatMessage({ message, id }: IProps) {
   const isMy = useIsMyMessage(message.senderId);
+  const classNames = `${classes.message} ${isMy && classes.message_is_my} ${!message.isRead && classes.message_is_unread}`;
   const messageDate = getMessageDateText(message.createdAt, message.updatedAt);
   const ref = useInViewUnreadMessage(id, isMy, message.isRead);
 
   return (
-    <div className={`${classes.message} ${isMy && classes.message_is_my}`} ref={ref}>
+    <div className={classNames} ref={ref}>
       <Typography tag="p" variant="regular" className={classes.message_text}>
-        {!message.isRead && "(Unread)"} {message.text}
+        {message.text}
       </Typography>
       <Typography variant="small" tag="span" className={classes.message_date}>
         {messageDate}

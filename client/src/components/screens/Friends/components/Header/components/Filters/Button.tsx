@@ -1,7 +1,7 @@
 import { Button } from "@/src/components/ui";
 import type { ComponentProps } from "react";
 import clsx from "clsx";
-import type { FriendsPageUsersType } from "@/src/services/friend";
+import type { FriendsPageUsersType } from "@/src/services/friend/type";
 
 interface IProps extends Omit<ComponentProps<"button">, "onClick"> {
   activeFilterType: FriendsPageUsersType;

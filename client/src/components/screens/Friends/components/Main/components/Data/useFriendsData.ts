@@ -1,24 +1,17 @@
 "use client";
 
-import type { FriendsPageUsersType } from "@/src/services/friend";
-import FriendsService from "@/src/services/friend";
-import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
+import { typesArray, type FriendsPageUsersType } from "@/src/services/friend/type";
+import FriendsService from "@/src/services/friend/service";
 import { useQuery } from "@tanstack/react-query";
-import { useUrlParams } from "@/src/hooks/general/useUrlParams";
-
-type UrlParams = {
-  page: string;
-  type: FriendsPageUsersType;
-  searchTerm: string;
-};
+import { parseAsInteger, parseAsString, parseAsStringLiteral, useQueryState } from "nuqs";
 
 export const useFriendsData = () => {
-  const { setParams, getParamValue } = useUrlParams<UrlParams>();
-
-  const type: FriendsPageUsersType =
-    (getParamValue("type") as FriendsPageUsersType) ?? "friends";
-  const page: number = transformStringToNumber(getParamValue("page") ?? "1");
-  const searchTerm = getParamValue("searchTerm") ?? "";
+  const [type] = useQueryState(
+    "type",
+    parseAsStringLiteral(typesArray).withDefault("friends")
+  );
+  const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(1));
+  const [searchTerm] = useQueryState("searchTerm", parseAsString.withDefault(""));
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["friends", type, page, searchTerm],
@@ -34,7 +27,7 @@ export const useFriendsData = () => {
   // Functions
   function setCurrentPage(newPage: number) {
     if (newPage === page) return;
-    setParams({ page: String(newPage) });
+    setPage(page);
   }
   // Functions END
 

@@ -1,16 +1,18 @@
-import { useUrlParamsContext } from "@/src/providers/UrlParamProvider/provider";
-import type { FriendsPageUsersType } from "@/src/services/friend";
+import type { FriendsPageUsersType } from "@/src/services/friend/type";
+import { typesArray } from "@/src/services/friend/type";
 import { useQueryClient } from "@tanstack/react-query";
+import { parseAsStringLiteral, useQueryState } from "nuqs";
 
 export const useFriendsFilter = () => {
   const queryClient = useQueryClient();
-  const { setParams, getParamValue } = useUrlParamsContext();
-  const activeType: FriendsPageUsersType =
-    (getParamValue("type") as FriendsPageUsersType) ?? "friends";
+  const [activeType, setActiveType] = useQueryState(
+    "type",
+    parseAsStringLiteral(typesArray).withDefault("friends")
+  );
 
   // Functions
   function changeFriendsFilter(type: FriendsPageUsersType) {
-    setParams({ type });
+    setActiveType(type);
     queryClient.removeQueries({
       queryKey: ["friends", type]
     });

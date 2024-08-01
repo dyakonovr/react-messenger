@@ -6,6 +6,7 @@ import type { IDialogsRecord } from "@/src/types/features/dialog";
 
 interface IDialogsDataContext {
   dialogs: Nullable<IDialogsRecord>;
+  isFetching: boolean;
   triggerFetchData: () => void;
 }
 

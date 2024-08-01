@@ -1,19 +1,18 @@
 "use client";
 
 import { Input } from "@/src/components/ui";
+import { useQueryState } from "nuqs";
 import type { KeyboardEvent } from "react";
-import { useUrlParamsContext } from "@/src/providers/UrlParamProvider/provider";
 
 export function FriendsHeaderInput() {
-  const { setParams, deleteUrlParam } = useUrlParamsContext();
+  const [_, setSearchTerm] = useQueryState("searchTerm");
 
   // Functions
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key !== "Enter") return;
 
     const value = (event.target as HTMLInputElement).value;
-    if (!value) deleteUrlParam("searchTerm");
-    setParams({ searchTerm: value });
+    setSearchTerm(value);
   }
   // Functions END
 

@@ -15,14 +15,11 @@ export function ChatMessagesList({ messages, setIsLoading }: IProps) {
     setIsLoading(!chatMessageBlock);
   }, [chatMessageBlock]);
 
-  return (
-    <>
-      {!isChatEmpty && chatMessageBlock}
-      {isChatEmpty && (
-        <Typography variant="subtitle" tag="p" className="mx-auto">
-          Send your first message!
-        </Typography>
-      )}
-    </>
+  return isChatEmpty ? (
+    <Typography variant="subtitle" tag="p" className="mx-auto">
+      Send your first message!
+    </Typography>
+  ) : (
+    chatMessageBlock
   );
 }

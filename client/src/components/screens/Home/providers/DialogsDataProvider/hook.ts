@@ -3,14 +3,13 @@
 import DialogService from "@/src/services/dialog";
 import { useDialogsStore } from "@/src/stores/useDialogsStore";
 import { useEffect, useRef, useState } from "react";
-import { useUrlParamsContext } from "@/src/providers/UrlParamProvider/provider";
+import { parseAsString, useQueryState } from "nuqs";
 
 export const useDialogsDataProvider = () => {
   const { dialogs, dialogsBySearch, setNewDialogs, setNewDialogsBySearch } =
     useDialogsStore();
 
-  const { getParamValue } = useUrlParamsContext();
-  const chatSearchTerm = getParamValue("chatSearchTerm") ?? "";
+  const [chatSearchTerm] = useQueryState("chatSearchTerm", parseAsString.withDefault(""));
 
   const [isFetching, setIsFetching] = useState(false);
   const pageRef = useRef(1);
@@ -23,7 +22,6 @@ export const useDialogsDataProvider = () => {
 
   // Functions
   function triggerFetchData() {
-    console.log("@chatSearchTerm: ", chatSearchTerm);
     fetchData(pageRef.current + 1, chatSearchTerm);
   }
 
@@ -55,6 +53,7 @@ export const useDialogsDataProvider = () => {
 
   return {
     dialogs: !chatSearchTerm ? dialogs : dialogsBySearch,
+    isFetching,
     triggerFetchData
   };
 };

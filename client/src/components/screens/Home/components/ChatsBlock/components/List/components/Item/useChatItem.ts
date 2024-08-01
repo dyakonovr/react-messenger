@@ -8,7 +8,7 @@ function getNewMessagesCounterText(lastMessageIsMy: boolean, newMessagesCount: n
   return newMessagesCount < 10 ? newMessagesCount : "9+";
 }
 
-export const useDialogContent = (dialog: IDialog, isSelected: boolean) => {
+export const useChatItem = (dialog: IDialog, isSelected: boolean) => {
   const isMy = useIsMyMessage(dialog.lastMessage?.senderId);
 
   const dialogItemClasses = !isSelected

@@ -1,26 +1,11 @@
-import type { ReactNode } from "react";
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback
-} from "react";
 import { useSocketContext } from "@/src/components/layout/SocketProvider";
-import MessageSocket from "@/src/sockets/message";
-import { debounce } from "@/src/hooks/general/useDebounceCallback/debounce";
 import { useSelectedChatContext } from "@/src/components/screens/Home/providers/SelectedChatProvider";
+import { debounce } from "@/src/hooks/general/useDebounceCallback/debounce";
+import { useCallback, useEffect, useState } from "react";
+import MessageSocket from "@/src/sockets/message";
 import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
 
-const ReadMessagesContext = createContext<
-  undefined | { markMessageAsRead: (messageId: string) => void }
->(undefined);
-
-interface IProps {
-  children: ReactNode;
-}
-
-export const UnreadMessagesProvider = ({ children }: IProps) => {
+export const useUnreadMessagesProvider = () => {
   const { socket } = useSocketContext();
   const [unreadMessageIds, setUnreadMessageIds] = useState<number[]>([]);
   const { selectedChatId } = useSelectedChatContext();
@@ -51,17 +36,5 @@ export const UnreadMessagesProvider = ({ children }: IProps) => {
     setUnreadMessageIds((prev) => [...prev, +messageId]);
   };
 
-  return (
-    <ReadMessagesContext.Provider value={{ markMessageAsRead }}>
-      {children}
-    </ReadMessagesContext.Provider>
-  );
-};
-
-export const useUnreadMessagesContext = () => {
-  const context = useContext(ReadMessagesContext);
-  if (context === undefined) {
-    throw new Error("useReadMessages must be used within a UnreadMessagesProvider");
-  }
-  return context;
+  return markMessageAsRead;
 };

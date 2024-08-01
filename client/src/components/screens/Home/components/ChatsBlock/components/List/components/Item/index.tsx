@@ -2,7 +2,7 @@ import { Avatar, Typography } from "@/src/components/ui";
 import classes from "./styles.module.css";
 import type { IDialog } from "@/src/types/features/dialog";
 import type { Nullable } from "@/src/types/general/nullable";
-import { useDialogContent } from "./useDialogContent";
+import { useChatItem } from "./useChatItem";
 
 interface IProps {
   userId: string;
@@ -18,7 +18,7 @@ function ChatItem({ dialog, userId, isSelected, selectChat }: IProps) {
     messageText,
     myMessageIsUnread,
     newMessagesCounterText
-  } = useDialogContent(dialog, isSelected);
+  } = useChatItem(dialog, isSelected);
 
   return (
     <div className={dialogItemClasses} onClick={() => selectChat(userId)}>

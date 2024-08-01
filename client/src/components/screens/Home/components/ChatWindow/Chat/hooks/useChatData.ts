@@ -2,7 +2,6 @@
 
 import DialogMessagesService from "@/src/services/dialogMessages";
 import { useChatsStore } from "@/src/stores/useChatsStore";
-import type { IChatMessages } from "@/src/types/features/chatMessages";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSelectedChatContext } from "../../../../providers/SelectedChatProvider";
 import { useDialogsDataContext } from "../../../../providers/DialogsDataProvider";
@@ -16,8 +15,8 @@ export const useChatData = () => {
   const addNewChat = useChatsStore((state) => state.addNewChat);
 
   const [isFetching, setIsFetching] = useState(false);
+  const [isAdditionalMessagesFetching, setIsAdditionalMessagesFetching] = useState(false);
   const [chatInfo, setChatInfo] = useState<IDialogInfo | null>(null);
-  // const [chatMessages, setChatMessages] = useState<IChatMessages | null>(null);
 
   const pageRef = useRef(1);
   const totalPagesRef = useRef(1);
@@ -27,18 +26,13 @@ export const useChatData = () => {
       return;
     }
     setChatInfo(dialogs[selectedChatId].info);
-  }, [selectedChatId]);
+  }, [selectedChatId, dialogs]);
 
   useEffect(() => {
     if (!selectedChatId) return;
-    // if (!chats || !(selectedChatId in chats)) {
-    //   return;
-    // }
-
     if (chats && selectedChatId in chats) return;
-    getChatMessages(1, selectedChatId);
 
-    // setChatMessages(chats[selectedChatId]);
+    getChatMessages(1, selectedChatId);
   }, [selectedChatId]);
 
   // Functions
@@ -46,10 +40,13 @@ export const useChatData = () => {
     async (page: number, selectedChatId: string) => {
       if (page > totalPagesRef.current) return;
 
+      setIsAdditionalMessagesFetching(page !== 1);
+      setIsFetching(true);
+
       try {
         const response = await DialogMessagesService.getAll({
           chatId: selectedChatId,
-          limit: 10,
+          limit: 20,
           page
         });
 
@@ -57,11 +54,11 @@ export const useChatData = () => {
         totalPagesRef.current = response.data.totalPages;
 
         addNewChat(selectedChatId, response.data.items);
-        // setChatMessages(response.data.items);
       } catch (error) {
         console.log(error);
       } finally {
         setIsFetching(false);
+        setIsAdditionalMessagesFetching(false);
       }
     },
     [selectedChatId, addNewChat]
@@ -69,7 +66,6 @@ export const useChatData = () => {
 
   function triggerFetchData() {
     if (!selectedChatId) return;
-    console.log("@trigger");
     getChatMessages(pageRef.current + 1, selectedChatId);
   }
   // Functions END
@@ -77,7 +73,8 @@ export const useChatData = () => {
   return {
     chatMessages: chats && selectedChatId ? chats[selectedChatId] : null,
     chatInfo,
-    isLoading: isFetching,
+    isFetching,
+    isAdditionalMessagesFetching,
     triggerFetchData
   };
 };

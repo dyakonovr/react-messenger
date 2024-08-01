@@ -4,17 +4,24 @@ import { useHandleEscapeClick } from "./hooks/useHandleEscapeClick";
 
 function Chat() {
   useHandleEscapeClick();
-  const { chatMessages, chatInfo, isLoading, triggerFetchData } = useChatData();
+  const {
+    chatMessages,
+    chatInfo,
+    isFetching,
+    isAdditionalMessagesFetching,
+    triggerFetchData
+  } = useChatData();
 
   return (
     <div className="flex max-h-screen flex-col max-[840px]:hidden">
-      <ChatHeader info={chatInfo} isLoading={isLoading} />
+      <ChatHeader info={chatInfo} isLoading={isFetching} />
       <ChatMessages
         messages={chatMessages}
-        isChatLoading={isLoading}
+        isChatFetching={isFetching}
+        isAdditionalMessagesFetching={isAdditionalMessagesFetching}
         triggerFetchData={triggerFetchData}
       />
-      <ChatFooter isLoading={isLoading} />
+      <ChatFooter isLoading={isFetching} />
     </div>
   );
 }

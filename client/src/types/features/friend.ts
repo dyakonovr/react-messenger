@@ -7,5 +7,3 @@ export const friendsPageUserSchema = userSchema.extend({
 });
 
 export type IFriendsPageUser = z.infer<typeof friendsPageUserSchema>;
-
-export interface IToggleFriendRequest {}

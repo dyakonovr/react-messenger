@@ -13,6 +13,7 @@ export function ChatHeader({ info, isLoading }: IProps) {
         alt={`${info?.name} avatar`}
         nickname={info?.name ?? ""}
         src={info?.avatar ?? ""}
+        isLoading={isLoading}
       />
 
       <div className="ms-4 flex flex-col">

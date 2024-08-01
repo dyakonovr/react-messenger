@@ -1,6 +1,5 @@
 "use client";
 
-import { UrlParamsProvider } from "@/src/providers/UrlParamProvider/provider";
 import { ChatWindow, Chats } from "./components";
 import { SelectedChatProvider } from "./providers/SelectedChatProvider";
 import classes from "./styles.module.css";
@@ -12,14 +11,12 @@ function HomePage() {
 
   return (
     <main className={classes.index_page}>
-      <UrlParamsProvider>
-        <DialogsDataProvider>
-          <SelectedChatProvider>
-            <Chats />
-            <ChatWindow />
-          </SelectedChatProvider>
-        </DialogsDataProvider>
-      </UrlParamsProvider>
+      <DialogsDataProvider>
+        <SelectedChatProvider>
+          <Chats />
+          <ChatWindow />
+        </SelectedChatProvider>
+      </DialogsDataProvider>
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import { useSocketContext } from "@/src/components/layout/SocketProvider";
 import { useIntersectionObserver } from "@/src/hooks/general/useIntersectionObserver";
 import { useEffect, useRef } from "react";
-import { useUnreadMessagesContext } from "../../../UnreadMessagesContext";
+import { useUnreadMessagesContext } from "../../../providers/UnreadMessagesProvider";
 
 export const useInViewUnreadMessage = (
   messageId: string,

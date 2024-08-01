@@ -1,10 +1,9 @@
-import { customFetch } from "./_core/fetch";
-import { friendsPageUserSchema } from "../types/features/friend";
-import { getPaginationSchema } from "../types/features/pagination";
-import type { IRequestFilters } from "../types/general/paginationOptions";
-import { validateTypes } from "./_core/validateTypes";
-
-export type FriendsPageUsersType = "friends" | "all" | "sent" | "received";
+import { customFetch } from "../_core/fetch";
+import { friendsPageUserSchema } from "../../types/features/friend";
+import { getPaginationSchema } from "../../types/features/pagination";
+import type { IRequestFilters } from "../../types/general/paginationOptions";
+import { validateTypes } from "../_core/validateTypes";
+import type { FriendsPageUsersType } from "./type";
 
 class FriendsService {
   private url = "friends";

@@ -1,27 +1,12 @@
-import { Typography } from "@/src/components/ui";
-import ChatItem from "./Item";
+import { LoaderSpin, Typography } from "@/src/components/ui";
 import classes from "./styles.module.css";
-import type { IDialogsRecord } from "@/src/types/features/dialog";
-import type { Nullable } from "@/src/types/general/nullable";
-import { useSortedDialogs } from "./hooks/useSortedDialogs";
 import { useScrollPagination } from "@/src/hooks/general/useScrollPagination";
+import { ChatsListData } from "./components/Data";
+import { useDialogsDataContext } from "../../../../providers/DialogsDataProvider";
 
-interface IProps {
-  dialogs: Nullable<IDialogsRecord>;
-  selectedChatId: Nullable<string>;
-  selectChat: (chatId: Nullable<string>) => void;
-  triggerFetchData: () => void;
-}
-
-export function ChatsList({
-  dialogs,
-  selectChat,
-  selectedChatId,
-  triggerFetchData
-}: IProps) {
-  const isDialogsEmpty = dialogs && Object.keys(dialogs).length === 0;
+export function ChatsList() {
+  const { isFetching, triggerFetchData } = useDialogsDataContext();
   const listRef = useScrollPagination<HTMLDivElement>(triggerFetchData, "bottom");
-  const sortedDialogIds = useSortedDialogs(dialogs);
 
   return (
     <div className="mt-7">
@@ -29,20 +14,14 @@ export function ChatsList({
       <Typography tag="p" variant="regular" className="mb-6 font-bold text-[#676667]">
         All chats
       </Typography>
-      <div className={classes.chats_list} ref={listRef}>
-        {dialogs &&
-          sortedDialogIds.map((chatId) => (
-            <ChatItem
-              dialog={dialogs[chatId]}
-              userId={chatId}
-              key={chatId}
-              isSelected={selectedChatId === null ? false : selectedChatId === chatId}
-              selectChat={selectChat}
-            />
-          ))}
-        {isDialogsEmpty && <Typography variant="regular">No chats...</Typography>}
-      </div>
-      {dialogs === null && <Typography variant="small">Loading...</Typography>}
+
+      {isFetching && <LoaderSpin size="xs" />}
+
+      {!isFetching && (
+        <div className={classes.chats_list} ref={listRef}>
+          <ChatsListData />
+        </div>
+      )}
     </div>
   );
 }

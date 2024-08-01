@@ -1,3 +1,4 @@
 export function transformStringToNumber(str: string): number {
-  return isNaN(+str) ? 0 : +str;
+  if (isNaN(+str)) throw new Error(`String '${str}' is not a number`);
+  return +str;
 }

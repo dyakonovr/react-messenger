@@ -6,16 +6,16 @@ import {
   FriendsListDataError,
   FriendsMainList
 } from "./components";
-import type { FriendsPageUsersType } from "@/src/services/friend";
+import type { FriendsPageUsersType } from "@/src/services/friend/type";
 
-interface Props {
+interface IProps {
   isLoading: boolean;
   data: IFriendsPageUser[];
   error: Nullable<Error>;
   type: FriendsPageUsersType;
 }
 
-export function FriendsMainData({ isLoading, data, error, type }: Props) {
+export function FriendsMainData({ isLoading, data, error, type }: IProps) {
   const isDataSuccessResponse = !isLoading && !error;
   const isDataEmpty = isDataSuccessResponse && data.length === 0;
   const isDataShowed = isDataSuccessResponse && !!data.length;
