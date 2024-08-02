@@ -10,13 +10,13 @@ type IChat = {
 
 type State = {
   chats: Nullable<IChat>;
-  // selectedDialog: Nullable<string>;
 };
 
 type Actions = {
   addNewChat: (dialogId: string, chatMessages: IChatMessages) => void;
   addMessageInChat: (dialogId: string, message: IChatMessages) => void;
   readMessageInChat: (dialogId: string, messageId: string) => void;
+  clearChats: () => void;
 };
 
 export const useChatsStore = create<State & Actions>()(
@@ -38,6 +38,10 @@ export const useChatsStore = create<State & Actions>()(
           if (!state.chats || !state.chats[dialogId] || !state.chats[dialogId][messageId])
             return;
           state.chats[dialogId][messageId].isRead = true;
+        }),
+      clearChats: () =>
+        set((state) => {
+          state.chats = null;
         })
     }))
   )

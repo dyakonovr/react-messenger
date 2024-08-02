@@ -7,6 +7,7 @@ import {
   FriendsMainList
 } from "./components";
 import type { FriendsPageUsersType } from "@/src/services/friend/type";
+import { useTranslations } from "use-intl";
 
 interface IProps {
   isLoading: boolean;
@@ -16,6 +17,7 @@ interface IProps {
 }
 
 export function FriendsMainData({ isLoading, data, error, type }: IProps) {
+  const t = useTranslations("common");
   const isDataSuccessResponse = !isLoading && !error;
   const isDataEmpty = isDataSuccessResponse && data.length === 0;
   const isDataShowed = isDataSuccessResponse && !!data.length;
@@ -25,7 +27,7 @@ export function FriendsMainData({ isLoading, data, error, type }: IProps) {
       {isDataEmpty && <FriendsListEmptyDataBlock key="isDataEmpty" />}
       {isLoading && (
         <Typography variant="subtitle" key="isLoading">
-          Loading...
+          {t("loading")}
         </Typography>
       )}
       {isDataShowed && <FriendsMainList data={data} type={type} key="isDataShowed" />}

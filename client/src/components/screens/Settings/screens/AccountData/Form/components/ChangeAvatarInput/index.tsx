@@ -4,6 +4,7 @@ import type { Nullable } from "@/src/types/general/nullable";
 import { forwardRef, type ComponentProps } from "react";
 import { useChangeAvatarInput } from "./useChangeAvatarInput";
 import type { FieldError } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 interface IProps extends ComponentProps<"input"> {
   user: Nullable<IUser>;
@@ -12,6 +13,7 @@ interface IProps extends ComponentProps<"input"> {
 
 export const SettingsPanelChangeAvatarInput = forwardRef<HTMLInputElement, IProps>(
   ({ user, error, ...props }, ref) => {
+    const t = useTranslations("screens.Settings.Account_Data.avatar");
     const { previewUrl, setCurrentAvatar, deleteAvatar } = useChangeAvatarInput(
       user?.avatar ?? null
     );
@@ -19,7 +21,7 @@ export const SettingsPanelChangeAvatarInput = forwardRef<HTMLInputElement, IProp
     return (
       <div className="flex flex-col gap-2">
         <Typography tag="label" variant="regular">
-          Avatar
+          {t("label")}
         </Typography>
         <div className="flex items-center gap-3">
           <Avatar
@@ -37,10 +39,10 @@ export const SettingsPanelChangeAvatarInput = forwardRef<HTMLInputElement, IProp
             {...props}
           />
           <Button variant="contained" className="min-w-fit" onClick={setCurrentAvatar}>
-            Reset to current
+            {t("reset_to_current_button")}
           </Button>
           <Button variant="contained" className="min-w-fit" onClick={deleteAvatar}>
-            Delete
+            {t("delete_button")}
           </Button>
         </div>
         {error && (

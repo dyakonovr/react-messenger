@@ -1,0 +1,78 @@
+{
+  "common": {
+    "days": {
+      "yesterday": "Вчера",
+      "today": "Сегодня"
+    },
+    "loading": "Загрузка..."
+  },
+  "screens": {
+    "ApplicationLoader": {
+      "text": "Пожалуйста подождите. Мы вспоминаем кто вы, выставляем ваши настройки..."
+    },
+    "Login": {
+      "title": "Авторизация",
+      "login_input_placeholder": "Введите ваш логин",
+      "password_input_placeholder": "Введите ваш пароль",
+      "submit_button": "Войти",
+      "go_to_registration_button": "Перейти к регистрации"
+    },
+    "Registration": {
+      "title": "Регистрация",
+      "nickname_input_placeholder": "Введите ваш никнейм",
+      "login_input_placeholder": "Введите ваш логин",
+      "password_input_placeholder": "Введите ваш пароль",
+      "submit_button": "Зарегистрироваться",
+      "go_to_login_button": "Перейти к авторизации"
+    },
+    "Friends": {
+      "title": "Друзья",
+      "search_input_placeholder": "Начинайте набирать...",
+      "types": {
+        "only_friends": "Только друзья",
+        "all_users": "Все пользователи",
+        "sent_requests": "Отправленные заявки",
+        "received_requests": "Полученные заявки"
+      }
+    },
+    "Settings": {
+      "Sidebar": {
+        "title": "Настройки",
+        "menu_items": {
+          "account_data": "Данные аккаунта",
+          "theme": "Тема"
+        }
+      },
+      "Account_Data": {
+        "title": "Данные аккаунта",
+        "nickname_input_label": "Никнейм",
+        "login_input_label": "Логин",
+        "old_password_input_label": "Старый пароль",
+        "new_password_input_label": "Новый пароль",
+        "avatar": {
+          "label": "Аватар",
+          "reset_to_current_button": "Сбросить до текущей",
+          "delete_button": "Удалить"
+        },
+        "update_data_button": "Обновить данные"
+      },
+      "Theme": {
+        "title": "Тема",
+        "example_label": "Пример",
+        "update_button": "Обновить"
+      }
+    },
+    "Chats": {
+      "Sidebar": {
+        "title": "Чаты",
+        "search_input_placeholder": "Поиск",
+        "all_chats_block_subtitle": "Все чаты",
+        "no_chats_subtitle": "Чаты не найдены...",
+        "your_message_prefix": "Вы:"
+      },
+      "Main_Window": {
+        "select_conversation_subtitle": "Выберите чат"
+      }
+    }
+  }
+}

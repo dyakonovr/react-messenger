@@ -1,0 +1,78 @@
+{
+  "common": {
+    "days": {
+      "yesterday": "Yesterday",
+      "today": "Today"
+    },
+    "loading": "Loading..."
+  },
+  "screens": {
+    "ApplicationLoader": {
+      "text": "Please wait. We remember who you are, set your preferences..."
+    },
+    "Login": {
+      "title": "Login",
+      "login_input_placeholder": "Enter your login",
+      "password_input_placeholder": "Enter your password",
+      "submit_button": "Sign in",
+      "go_to_registration_button": "Go to registration"
+    },
+    "Registration": {
+      "title": "Registration",
+      "nickname_input_placeholder": "Enter your nickname",
+      "login_input_placeholder": "Enter your login",
+      "password_input_placeholder": "Enter your password",
+      "submit_button": "Sign up",
+      "go_to_login_button": "Go to login"
+    },
+    "Friends": {
+      "title": "Friends",
+      "search_input_placeholder": "Start typing...",
+      "types": {
+        "only_friends": "Only friends",
+        "all_users": "All users",
+        "sent_requests": "Sent requests",
+        "received_requests": "Received requests"
+      }
+    },
+    "Settings": {
+      "Sidebar": {
+        "title": "Settings",
+        "menu_items": {
+          "account_data": "Account Data",
+          "theme": "Theme"
+        }
+      },
+      "Account_Data": {
+        "title": "Account data",
+        "nickname_input_label": "Nickname",
+        "login_input_label": "Login",
+        "old_password_input_label": "Old password",
+        "new_password_input_label": "New password",
+        "avatar": {
+          "label": "Avatar",
+          "reset_to_current_button": "Reset to current",
+          "delete_button": "Delete"
+        },
+        "update_data_button": "Update data"
+      },
+      "Theme": {
+        "title": "Theme",
+        "example_label": "Example",
+        "update_button": "Update"
+      }
+    },
+    "Chats": {
+      "Sidebar": {
+        "title": "Chats",
+        "search_input_placeholder": "Search",
+        "all_chats_block_subtitle": "All chats",
+        "no_chats_subtitle": "No chats...",
+        "your_message_prefix": "You:"
+      },
+      "Main_Window": {
+        "select_conversation_subtitle": "Select a conversation"
+      }
+    }
+  }
+}

@@ -3,8 +3,8 @@
 import { useUserStore } from "@/src/stores/useUserStore";
 import AuthService from "@/src/services/auth";
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { PagePaths } from "@/src/enums/PagePaths";
+import { useRouter } from "@/src/utils/navigation";
 
 export const useGetNewTokens = () => {
   const user = useUserStore((state) => state.user);

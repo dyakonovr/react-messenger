@@ -11,7 +11,7 @@ import {
 // import { FriendshipStatuses } from "@/src/enums/FriendshipStatuses";
 import { useState, type ReactNode } from "react";
 import { useFriendsRequestFunc } from "./useFriendsRequests";
-import type { FriendsPageUsersType } from "@/src/services/friend";
+import type { FriendsPageUsersType } from "@/src/services/friend/type";
 
 interface IFriendItemProps {
   user: IFriendsPageUser;

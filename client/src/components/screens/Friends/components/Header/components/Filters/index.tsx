@@ -1,8 +1,10 @@
-import { useFriendsFilter } from "./useFriendsFilter";
+import { useFriendsHeaderFilters } from "./useFriendsHeaderFilters";
 import { FriendsHeaderFiltersButton } from "./Button";
+import { useTranslations } from "next-intl";
 
 export function FriendsHeaderFilters() {
-  const { changeFriendsFilter, activeType } = useFriendsFilter();
+  const { changeFriendsFilter, activeType } = useFriendsHeaderFilters();
+  const t = useTranslations("screens.Friends");
 
   return (
     <div className="flex items-center gap-2">
@@ -11,28 +13,28 @@ export function FriendsHeaderFilters() {
         filterType={"friends"}
         activeFilterType={activeType}
       >
-        Friends
+        {t("types.only_friends")}
       </FriendsHeaderFiltersButton>
       <FriendsHeaderFiltersButton
         changeFriendsFilter={changeFriendsFilter}
         filterType={"all"}
         activeFilterType={activeType}
       >
-        All&nbsp;users
+        {t("types.all_users")}
       </FriendsHeaderFiltersButton>
       <FriendsHeaderFiltersButton
         changeFriendsFilter={changeFriendsFilter}
         filterType={"sent"}
         activeFilterType={activeType}
       >
-        Sent&nbsp;requests
+        {t("types.sent_requests")}
       </FriendsHeaderFiltersButton>
       <FriendsHeaderFiltersButton
         changeFriendsFilter={changeFriendsFilter}
         filterType={"received"}
         activeFilterType={activeType}
       >
-        Received&nbsp;requests
+        {t("types.received_requests")}
       </FriendsHeaderFiltersButton>
     </div>
   );

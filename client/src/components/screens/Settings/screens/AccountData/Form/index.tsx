@@ -4,8 +4,10 @@ import { Button } from "@/src/components/ui";
 import { SettingsPanelInput, SettingsPanelChangeAvatarInput } from "./components";
 import { useSettingsAccountData } from "./useSettingsAccountData";
 import { FormProvider } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 function SettingsAccountDataForm() {
+  const t = useTranslations("screens.Settings.Account_Data");
   const { user, onSubmit, formMethods, isButtonLoading } = useSettingsAccountData();
   const errors = formMethods.formState.errors;
 
@@ -17,24 +19,24 @@ function SettingsAccountDataForm() {
       >
         <div className="grid grid-cols-2 gap-5">
           <SettingsPanelInput
-            label="Nickname"
+            label={t("nickname_input_label")}
             defaultValue={user?.nickname}
             error={errors["nickname"]}
             {...formMethods.register("nickname")}
           />
           <SettingsPanelInput
-            label="Login"
+            label={t("login_input_label")}
             error={errors["login"]}
             {...formMethods.register("login")}
           />
           <SettingsPanelInput
-            label="Enter old password"
+            label={t("old_password_input_label")}
             error={errors["oldPassword"]}
             type="password"
             {...formMethods.register("oldPassword")}
           />
           <SettingsPanelInput
-            label="Enter new password"
+            label={t("new_password_input_label")}
             error={errors["newPassword"]}
             type="password"
             {...formMethods.register("newPassword", { required: false })}
@@ -51,7 +53,7 @@ function SettingsAccountDataForm() {
           loading={isButtonLoading}
           type="submit"
         >
-          Update data
+          {t("update_data_button")}
         </Button>
       </form>
     </FormProvider>

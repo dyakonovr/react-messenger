@@ -14,6 +14,7 @@ type Actions = {
   updateDialog: (dialog: IDialogsRecord) => void;
   setNewDialogsBySearch: (dialogs: Nullable<IDialogsRecord>) => void;
   setLastMessageIsRead: (dialogId: string, messageId: string) => void;
+  clearDialogs: () => void;
 };
 
 export const useDialogsStore = create<State & Actions>()(
@@ -88,6 +89,11 @@ export const useDialogsStore = create<State & Actions>()(
               state.dialogsBySearch[dialogId].lastMessage.isRead = true;
             }
           }
+        }),
+      clearDialogs: () =>
+        set((state) => {
+          state.dialogs = null;
+          state.dialogsBySearch = null;
         })
     }))
   )

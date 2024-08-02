@@ -2,6 +2,7 @@ import type { IDialog } from "@/src/types/features/dialog";
 import classes from "./styles.module.css";
 import { parseDateString } from "@/src/utils/parseDateString";
 import { useIsMyMessage } from "@/src/hooks/features/useIsMyMessage";
+import { useTranslations } from "next-intl";
 
 function getNewMessagesCounterText(lastMessageIsMy: boolean, newMessagesCount: number) {
   if (lastMessageIsMy || newMessagesCount <= 0) return null;
@@ -9,6 +10,7 @@ function getNewMessagesCounterText(lastMessageIsMy: boolean, newMessagesCount: n
 }
 
 export const useChatItem = (dialog: IDialog, isSelected: boolean) => {
+  const t = useTranslations("screens.Chats.Sidebar");
   const isMy = useIsMyMessage(dialog.lastMessage?.senderId);
 
   const dialogItemClasses = !isSelected
@@ -25,7 +27,10 @@ export const useChatItem = (dialog: IDialog, isSelected: boolean) => {
     };
   }
 
-  const messageText = isMy ? `You: ${dialog.lastMessage.text}` : dialog.lastMessage.text;
+  const messageText = isMy
+    ? `${t("your_message_prefix")} ${dialog.lastMessage.text}`
+    : dialog.lastMessage.text;
+
   const newMessagesCounterText = getNewMessagesCounterText(isMy, dialog.newMessagesCount);
   const myMessageIsUnread = isMy && !dialog.lastMessage.isRead;
 

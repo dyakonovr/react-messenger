@@ -1,19 +1,19 @@
 import { Button } from "@/src/components/ui";
 import { LogOut as LogoutIcon } from "lucide-react";
-import { useUserStore } from "@/src/stores/useUserStore";
-import { useRouter } from "next/navigation";
 import AuthService from "@/src/services/auth";
 import { PagePaths } from "@/src/enums/PagePaths";
+import { useRouter } from "@/src/utils/navigation";
+import { useLogout } from "@/src/hooks/general/useLogout";
 
 export function SidebarLogoutButton() {
   const router = useRouter();
-  const clearUser = useUserStore((state) => state.clearUser);
+  const logoutFunc = useLogout();
 
   // Functions
   function logout() {
     try {
       AuthService.logout();
-      clearUser();
+      logoutFunc();
       router.push(PagePaths.LOGIN);
     } catch (error) {
       console.log(error);

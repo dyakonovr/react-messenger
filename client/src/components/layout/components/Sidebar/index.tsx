@@ -6,7 +6,7 @@ import {
   UsersRound as FriendsIcon,
   Settings as SettingsIcon
 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/src/utils/navigation";
 import { SidebarLogoutButton, LayoutSidebarButton, SidebarAvatar } from "./components";
 import classes from "./styles.module.css";
 

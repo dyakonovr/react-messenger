@@ -3,7 +3,7 @@ import { typesArray } from "@/src/services/friend/type";
 import { useQueryClient } from "@tanstack/react-query";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 
-export const useFriendsFilter = () => {
+export const useFriendsHeaderFilters = () => {
   const queryClient = useQueryClient();
   const [activeType, setActiveType] = useQueryState(
     "type",

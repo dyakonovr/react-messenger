@@ -1,7 +1,7 @@
 import { Typography } from "@/src/components/ui";
 import classes from "./styles.module.css";
 import type { ReactNode } from "react";
-import Link from "next/link";
+import { Link } from "@/src/utils/navigation";
 
 interface ISettingsMenuItemProps {
   name: string;

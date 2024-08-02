@@ -7,19 +7,22 @@ import {
   LockKeyhole as LockIcon,
   Palette as PaletteIcon
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function SettingsMenu() {
+  const t = useTranslations("screens.Settings.Sidebar.menu_items");
+  
   return (
     <div className="flex flex-col">
       <SettingsMenuItem
         icon={<CircleUserIcon />}
-        name="Account Data"
+        name={t("account_data")}
         href={PagePaths.SETTINGS.HOME}
       />
       {/* <SettingsMenuItem icon={<LockIcon />} name="Privacy" /> */}
       <SettingsMenuItem
         icon={<PaletteIcon />}
-        name="Theme"
+        name={t("theme")}
         href={PagePaths.SETTINGS.THEME}
       />
       {/* <SettingsMenuItem icon={<BellIcon />} name="Notifications" /> */}

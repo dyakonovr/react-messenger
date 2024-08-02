@@ -1,5 +1,5 @@
 import { Button } from "@/src/components/ui";
-import Link from "next/link";
+import { Link } from "@/src/utils/navigation";
 import type { ReactNode } from "react";
 
 interface ILayoutSidebarButtonProps {

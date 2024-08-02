@@ -14,7 +14,10 @@ function Chat() {
 
   return (
     <div className="flex max-h-screen flex-col max-[840px]:hidden">
-      <ChatHeader info={chatInfo} isLoading={isFetching} />
+      <ChatHeader
+        info={chatInfo}
+        isLoading={isFetching && !isAdditionalMessagesFetching}
+      />
       <ChatMessages
         messages={chatMessages}
         isChatFetching={isFetching}

@@ -1,5 +1,6 @@
 import { Avatar, Typography } from "@/src/components/ui";
 import type { IDialogInfo } from "@/src/types/features/dialog";
+import { useTranslations } from "next-intl";
 
 interface IProps {
   info: IDialogInfo | null;
@@ -7,6 +8,8 @@ interface IProps {
 }
 
 export function ChatHeader({ info, isLoading }: IProps) {
+  const t = useTranslations("common");
+
   return (
     <div className="flex bg-[#F8FAFF] px-8 py-4">
       <Avatar
@@ -22,7 +25,7 @@ export function ChatHeader({ info, isLoading }: IProps) {
           tag="p"
           className="max-w-[250px] truncate font-bold"
         >
-          {isLoading ? "Loading..." : info?.name}
+          {isLoading ? t("loading") : info?.name}
         </Typography>
       </div>
     </div>

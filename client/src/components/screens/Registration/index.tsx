@@ -3,14 +3,16 @@
 import { Button, Input, Typography } from "@/src/components/ui";
 import { PagePaths } from "@/src/enums/PagePaths";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import type { RegistrationFormSchemaType } from "./constants";
 import { registrationFormSchema } from "./constants";
 import { useForm } from "react-hook-form";
 import AuthService from "@/src/services/auth";
 import { useUserStore } from "@/src/stores/useUserStore";
+import { useTranslations } from "next-intl";
+import { Link } from "@/src/utils/navigation";
 
 export default function Registration() {
+  const t = useTranslations("screens.Registration");
   const setUser = useUserStore((state) => state.setUser);
   const { register, handleSubmit } = useForm<RegistrationFormSchemaType>({
     resolver: zodResolver(registrationFormSchema),
@@ -35,30 +37,30 @@ export default function Registration() {
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
       <Typography variant="title" tag="h1" className="mb-5 text-center">
-        Registration
+        {t("title")}
       </Typography>
 
       <div className="flex flex-col gap-3">
         {/* Only unique nickname! */}
         <Input
-          placeholder="Enter your nickname"
+          placeholder={t("nickname_input_placeholder")}
           {...register("nickname", { required: true })}
         />
         <Input
-          placeholder="Enter your login"
+          placeholder={t("login_input_placeholder")}
           {...register("login", { required: true })}
         />
         <Input
-          placeholder="Enter your password"
+          placeholder={t("password_input_placeholder")}
           {...register("password", { required: true })}
         />
       </div>
 
       <Button variant="contained" className="mt-5" type="submit">
-        Sign up
+        {t("submit_button")}
       </Button>
       <Link href={PagePaths.LOGIN} className="mx-auto mt-2 no-underline hover:underline">
-        Go to login
+        {t("go_to_login_button")}
       </Link>
     </form>
   );
