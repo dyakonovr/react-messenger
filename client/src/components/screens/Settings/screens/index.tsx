@@ -1,2 +1,2 @@
 export * from "./AccountData";
-export * from "./Theme";
+export * from "./Appearance";

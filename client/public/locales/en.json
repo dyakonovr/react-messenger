@@ -40,7 +40,7 @@
         "title": "Settings",
         "menu_items": {
           "account_data": "Account Data",
-          "theme": "Theme"
+          "appearance": "Appearance"
         }
       },
       "Account_Data": {
@@ -56,10 +56,17 @@
         },
         "update_data_button": "Update data"
       },
-      "Theme": {
-        "title": "Theme",
-        "example_label": "Example",
-        "update_button": "Update"
+      "Appearance": {
+        "Theme": {
+          "title": "Theme",
+          "example_label": "Example",
+          "update_button": "Update"
+        },
+        "Language": {
+          "title": "Language",
+          "pick_language_label": "Select one of the options",
+          "update_language_button": "Update"
+        }
       }
     },
     "Chats": {

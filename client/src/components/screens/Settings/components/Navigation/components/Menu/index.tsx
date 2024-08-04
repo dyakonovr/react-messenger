@@ -5,7 +5,8 @@ import {
   CircleUser as CircleUserIcon,
   Languages as LanguagesIcon,
   LockKeyhole as LockIcon,
-  Palette as PaletteIcon
+  Palette as PaletteIcon,
+  Paintbrush as PaintbrushIcon
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -21,12 +22,12 @@ export function SettingsMenu() {
       />
       {/* <SettingsMenuItem icon={<LockIcon />} name="Privacy" /> */}
       <SettingsMenuItem
-        icon={<PaletteIcon />}
-        name={t("theme")}
-        href={PagePaths.SETTINGS.THEME}
+        icon={<PaintbrushIcon />}
+        name={t("appearance")}
+        href={PagePaths.SETTINGS.APPEARANCE}
       />
       {/* <SettingsMenuItem icon={<BellIcon />} name="Notifications" /> */}
-      {/* <SettingsMenuItem icon={<LanguagesIcon />} name="Language" /> */}
+      {/* <SettingsMenuItem icon={<LanguagesIcon />} name={t("language")} href={""} /> */}
     </div>
   );
 }

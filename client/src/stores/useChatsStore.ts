@@ -5,7 +5,11 @@ import { devtools } from "zustand/middleware";
 import type { IChatMessages } from "../types/features/chatMessages";
 
 type IChat = {
-  [userId: string]: IChatMessages;
+  [userId: string]: {
+    messages: IChatMessages;
+    page: number;
+    totalPages: number;
+  };
 };
 
 type State = {
@@ -13,7 +17,12 @@ type State = {
 };
 
 type Actions = {
-  addNewChat: (dialogId: string, chatMessages: IChatMessages) => void;
+  addNewChat: (
+    dialogId: string,
+    chatMessages: IChatMessages,
+    page: number,
+    totalPages: number
+  ) => void;
   addMessageInChat: (dialogId: string, message: IChatMessages) => void;
   readMessageInChat: (dialogId: string, messageId: string) => void;
   clearChats: () => void;
@@ -23,10 +32,29 @@ export const useChatsStore = create<State & Actions>()(
   devtools(
     immer((set) => ({
       chats: null,
-      addNewChat: (dialogId: string, chatMessages: IChatMessages) =>
+      addNewChat: (
+        dialogId: string,
+        chatMessages: IChatMessages,
+        page: number,
+        totalPages: number
+      ) =>
         set((state) => {
-          if (!state.chats) state.chats = { [dialogId]: chatMessages };
-          else state.chats[dialogId] = { ...chatMessages, ...state.chats[dialogId] };
+          const chat: IChat = {
+            [dialogId]: {
+              messages: chatMessages,
+              page,
+              totalPages
+            }
+          };
+
+          if (!state.chats) state.chats = chat;
+          else {
+            state.chats[dialogId] = {
+              messages: { ...chatMessages, ...state.chats[dialogId].messages },
+              page,
+              totalPages
+            };
+          }
         }),
       addMessageInChat: (dialogId: string, message: IChatMessages) =>
         set((state) => {
@@ -35,9 +63,13 @@ export const useChatsStore = create<State & Actions>()(
         }),
       readMessageInChat: (dialogId: string, messageId: string) =>
         set((state) => {
-          if (!state.chats || !state.chats[dialogId] || !state.chats[dialogId][messageId])
+          if (
+            !state.chats ||
+            !state.chats[dialogId] ||
+            !state.chats[dialogId].messages[messageId]
+          )
             return;
-          state.chats[dialogId][messageId].isRead = true;
+          state.chats[dialogId].messages[messageId].isRead = true;
         }),
       clearChats: () =>
         set((state) => {

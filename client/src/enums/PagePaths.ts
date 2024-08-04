@@ -3,7 +3,7 @@ export const PagePaths = {
   FRIENDS: "/friends",
   SETTINGS: {
     HOME: "/settings",
-    THEME: "/settings/theme"
+    APPEARANCE: "/settings/appearance"
   },
   LOGIN: "/login",
   REGISTRATION: "/registration"

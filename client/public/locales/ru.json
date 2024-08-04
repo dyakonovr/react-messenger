@@ -40,7 +40,7 @@
         "title": "Настройки",
         "menu_items": {
           "account_data": "Данные аккаунта",
-          "theme": "Тема"
+          "appearance": "Внешний вид"
         }
       },
       "Account_Data": {
@@ -56,10 +56,17 @@
         },
         "update_data_button": "Обновить данные"
       },
-      "Theme": {
-        "title": "Тема",
-        "example_label": "Пример",
-        "update_button": "Обновить"
+      "Appearance": {
+        "Theme": {
+          "title": "Тема",
+          "example_label": "Пример",
+          "update_button": "Обновить"
+        },
+        "Language": {
+          "title": "Язык",
+          "pick_language_label": "Выберите один из вариантов",
+          "update_language_button": "Обновить"
+        }
       }
     },
     "Chats": {

@@ -4,7 +4,7 @@ import type { Themes } from "@/src/types/general/theme";
 import { useTranslations } from "next-intl";
 
 export function SettingsThemeExample({ theme }: { theme: Themes }) {
-  const t = useTranslations("screens.Settings.Theme");
+  const t = useTranslations("screens.Settings.Appearance.Theme");
 
   return (
     <div className="mt-5">
