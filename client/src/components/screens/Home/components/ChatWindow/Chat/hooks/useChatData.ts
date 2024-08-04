@@ -6,9 +6,10 @@ import { useCallback, useEffect, useState } from "react";
 import { useSelectedChatContext } from "../../../../providers/SelectedChatProvider";
 import { useDialogsDataContext } from "../../../../providers/DialogsDataProvider";
 import type { IDialogInfo } from "@/src/types/features/dialog";
+import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
 
 export const useChatData = () => {
-  const { selectedChatId } = useSelectedChatContext();
+  const { selectedChatId, selectChat } = useSelectedChatContext();
   const { dialogs } = useDialogsDataContext();
 
   const chats = useChatsStore((state) => state.chats);
@@ -46,6 +47,13 @@ export const useChatData = () => {
           limit: 20,
           page
         });
+
+        if (response.error !== null) {
+          selectChat(null);
+          return fetchDataErrorToast(response.error);
+        }
+
+        if (response.data === null) throw new Error("Unexpected error");
 
         addNewChat(
           selectedChatId,

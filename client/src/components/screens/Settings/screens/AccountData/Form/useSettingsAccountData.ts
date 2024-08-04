@@ -11,6 +11,7 @@ import { useState } from "react";
 import UserService from "@/src/services/user";
 import { deleteEmptyFieldsInObject } from "@/src/utils/deleteEmptyFieldsInObject";
 import toast from "react-hot-toast";
+import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
 
 export const useSettingsAccountData = () => {
   const user = useUserStore((state) => state.user);
@@ -48,6 +49,13 @@ export const useSettingsAccountData = () => {
       );
 
       const response = await UserService.update(formData);
+
+      if (response.error !== null) {
+        return fetchDataErrorToast(response.error);
+      }
+
+      if (response.data === null) throw new Error("Unexpected error");
+
       setUser(response.data);
       formMethods.reset({
         newPassword: "",

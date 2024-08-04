@@ -8,6 +8,7 @@ import { useUserStore } from "@/src/stores/useUserStore";
 import { useState } from "react";
 import { PagePaths } from "@/src/enums/PagePaths";
 import toast from "react-hot-toast";
+import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
 
 export const useLogin = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,6 +27,13 @@ export const useLogin = () => {
     try {
       setIsLoading(true);
       const response = await AuthService.login(data);
+
+      if (response.error !== null) {
+        return fetchDataErrorToast(response.error);
+      }
+
+      if (response.data === null) throw new Error("Unexpected error");
+
       setUser(response.data);
       router.replace(PagePaths.HOME);
     } catch (error) {

@@ -1,31 +1,36 @@
-// import type { ZodSchema } from "zod";
-
-// export function validateTypes<T>(
-//   schema: ZodSchema,
-//   data: T,
-//   errorCallback?: (...args: unknown[]) => void
-// ) {
-//   const validationResult = schema.safeParse(data);
-//   if (!validationResult.success) {
-//     if (errorCallback) return errorCallback();
-//     throw new Error("Data is invalidate");
-//   }
-
-//   return validationResult.data as T;
-// }
-
-import type { ZodSchema } from "zod";
+import { z, type ZodSchema } from "zod";
 import type { Nullable } from "../../types/general/nullable";
 
-type Callback<Schema> = (error: Nullable<Error>, data: Nullable<Schema>) => void;
-type Result<Schema> = { data: Schema; response: Response };
+const errorSchema = z.object({
+  message: z.array(z.string()),
+  error: z.string(),
+  statusCode: z.number()
+});
+
+export type ErrorSchema = z.infer<typeof errorSchema>;
+
+type Result<Schema> = {
+  data: Nullable<Schema>;
+  error: Nullable<ErrorSchema>;
+  response: Response;
+};
 
 export async function validateTypes<Schema>(
   schema: ZodSchema<Schema>,
-  response: Response,
-  callback?: Callback<Schema>
+  // errorSchema: ZodSchema<ErrorSchema>,
+  response: Response
 ): Promise<Result<Schema>> {
   try {
+    if (!response.ok) {
+      const error = await response.json();
+      const errorResult = errorSchema.safeParse(error);
+      if (!errorResult.success) {
+        throw new Error("Unexpected error");
+      }
+
+      return { data: null, error: errorResult.data, response };
+    }
+
     const contentLength = response.headers.get("Content-Length");
     if (!contentLength || +contentLength === 0) throw new Error("Empty data");
 
@@ -35,14 +40,17 @@ export async function validateTypes<Schema>(
       throw new Error(`Data is invalidate: ${result.error}`);
     }
 
-    if (callback) {
-      callback(null, result.data);
-    }
-    return { data: result.data, response };
+    return { data: result.data, error: null, response };
   } catch (error) {
-    if (callback) {
-      callback(error as Error, null);
-    }
-    throw error;
+    console.log(error);
+    return {
+      data: null,
+      error: {
+        message: [(error as Error).message],
+        error: "Unexpected error",
+        statusCode: -1
+      },
+      response
+    };
   }
 }

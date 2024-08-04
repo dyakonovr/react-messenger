@@ -4,6 +4,7 @@ import DialogService from "@/src/services/dialog";
 import { useDialogsStore } from "@/src/stores/useDialogsStore";
 import { useEffect, useRef, useState } from "react";
 import { parseAsString, useQueryState } from "nuqs";
+import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
 
 export const useDialogsDataProvider = () => {
   const { dialogs, dialogsBySearch, setNewDialogs, setNewDialogsBySearch } =
@@ -35,6 +36,12 @@ export const useDialogsDataProvider = () => {
         page,
         searchTerm
       });
+
+      if (response.error !== null) {
+        return fetchDataErrorToast(response.error);
+      }
+
+      if (response.data === null) throw new Error("Unexpected error");
 
       pageRef.current = page;
       totalPagesRef.current = response.data.totalPages;

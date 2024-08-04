@@ -1,4 +1,4 @@
-import { customFetch } from "./_core/fetch";
+import { baseApiUrl, customFetch } from "./_core/fetch";
 import type { ILoginRequest, IRegistrationRequest } from "../types/features/auth";
 import { userSchema } from "../types/features/user";
 import { validateTypes } from "./_core/validateTypes";
@@ -40,7 +40,8 @@ class AuthService {
   };
 
   getNewTokens = async () => {
-    const response = await customFetch(`${this.url}/tokens`, {
+    const response = await fetch(`${baseApiUrl}/${this.url}/tokens`, {
+      credentials: "include",
       cache: "no-cache"
     });
 

@@ -2,37 +2,13 @@
 
 import { Button, Input, Typography } from "@/src/components/ui";
 import { PagePaths } from "@/src/enums/PagePaths";
-import { zodResolver } from "@hookform/resolvers/zod";
-import type { RegistrationFormSchemaType } from "./constants";
-import { registrationFormSchema } from "./constants";
-import { useForm } from "react-hook-form";
-import AuthService from "@/src/services/auth";
-import { useUserStore } from "@/src/stores/useUserStore";
 import { useTranslations } from "next-intl";
 import { Link } from "@/src/utils/navigation";
+import { useRegistration } from "./useRegistration";
 
 export default function Registration() {
   const t = useTranslations("screens.Registration");
-  const setUser = useUserStore((state) => state.setUser);
-  const { register, handleSubmit } = useForm<RegistrationFormSchemaType>({
-    resolver: zodResolver(registrationFormSchema),
-    defaultValues: {
-      login: "",
-      password: "",
-      nickname: ""
-    }
-  });
-
-  // Fuctions
-  async function onSubmit(data: RegistrationFormSchemaType) {
-    try {
-      const response = await AuthService.registration(data);
-      setUser(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  // Fuctions END
+  const { register, handleSubmit, onSubmit } = useRegistration();
 
   return (
     <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>

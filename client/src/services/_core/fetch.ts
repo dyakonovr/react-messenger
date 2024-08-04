@@ -25,29 +25,30 @@ export async function customFetch(
     }
 
     const refreshResponse = await AuthService.getNewTokens();
-    if (refreshResponse.response.ok) {
-      useUserStore.getState().setUser(refreshResponse.data);
-      return customFetch(
-        url,
-        {
-          credentials: "include",
-          headers: {
-            ...options?.headers,
-            "Content-Type": "application/json"
-          },
-          ...options
-        },
-        true
-      );
-    } else {
+
+    if (refreshResponse.error !== null || refreshResponse.data === null) {
       Router.push("/login");
       return response;
     }
+
+    useUserStore.getState().setUser(refreshResponse.data);
+    return customFetch(
+      url,
+      {
+        credentials: "include",
+        headers: {
+          ...options?.headers,
+          "Content-Type": "application/json"
+        },
+        ...options
+      },
+      true
+    );
   }
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
+  // if (!response.ok) {
+  //   throw new Error("Network response was not ok");
+  // }
 
   return response;
 }
