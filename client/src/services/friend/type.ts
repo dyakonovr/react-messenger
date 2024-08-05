@@ -1,6 +1,6 @@
 export type FriendsPageUsersType = "friends" | "all" | "sent" | "received";
 
-export const typesArray: FriendsPageUsersType[] = [
+export const friendsPageUsersTypesArray: FriendsPageUsersType[] = [
   "all",
   "friends",
   "received",

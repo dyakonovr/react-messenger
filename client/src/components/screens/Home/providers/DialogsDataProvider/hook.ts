@@ -5,12 +5,16 @@ import { useDialogsStore } from "@/src/stores/useDialogsStore";
 import { useEffect, useRef, useState } from "react";
 import { parseAsString, useQueryState } from "nuqs";
 import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
+import { URL_ATTRIBUTE_CHAT_SEARCH_TERM } from "../../constants";
 
 export const useDialogsDataProvider = () => {
   const { dialogs, dialogsBySearch, setNewDialogs, setNewDialogsBySearch } =
     useDialogsStore();
 
-  const [chatSearchTerm] = useQueryState("chatSearchTerm", parseAsString.withDefault(""));
+  const [chatSearchTerm] = useQueryState(
+    URL_ATTRIBUTE_CHAT_SEARCH_TERM,
+    parseAsString.withDefault("")
+  );
 
   const [isFetching, setIsFetching] = useState(false);
   const pageRef = useRef(1);

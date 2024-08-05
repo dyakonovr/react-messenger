@@ -2,9 +2,10 @@
 
 import { type KeyboardEvent } from "react";
 import { useQueryState } from "nuqs";
+import { URL_ATTRIBUTE_CHAT_SEARCH_TERM } from "../../constants";
 
 export const useDialogsData = () => {
-  const [, setChatSearchTerm] = useQueryState("chatSearchTerm");
+  const [, setChatSearchTerm] = useQueryState(URL_ATTRIBUTE_CHAT_SEARCH_TERM);
 
   // Functions
   function updateChatSearchTerm(event: KeyboardEvent<HTMLInputElement>) {

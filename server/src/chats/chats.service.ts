@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { ChatParticipant } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 
 @Injectable()
@@ -40,13 +41,24 @@ export class ChatsService {
     });
   }
 
-  async getChatParticipantsById(chatId: number) {
+  async getChatParticipantsById(
+    chatId: number
+  ): Promise<{ user_id: ChatParticipant["user_id"] }[]> {
     return this.prisma.chatParticipant.findMany({
       where: {
         chat_id: chatId
       },
       select: {
         user_id: true
+      }
+    });
+  }
+
+  async isUserExistInChat(chatId: number, userId: number): Promise<boolean> {
+    return !!this.prisma.chatParticipant.findFirst({
+      where: {
+        chat_id: chatId,
+        user_id: userId
       }
     });
   }

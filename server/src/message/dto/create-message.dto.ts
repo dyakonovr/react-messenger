@@ -1,9 +1,10 @@
-import { IsString } from "class-validator";
+import { IsNumber, IsString, Min } from "class-validator";
 
 export class CreateMessageDto {
   @IsString()
   text: string;
 
-  @IsString()
+  @IsNumber()
+  @Min(1)
   chatId: string;
 }

@@ -10,9 +10,14 @@ import {
 } from "@nestjs/websockets";
 import { MessageService } from "./message.service";
 import { Server, Socket } from "socket.io";
-import { Message } from "@prisma/client";
 import { CreateMessageDto } from "./dto/create-message.dto";
-import { ExecutionContext, Inject, UseGuards } from "@nestjs/common";
+import {
+  ExecutionContext,
+  Inject,
+  UseFilters,
+  UseGuards,
+  ValidationPipe
+} from "@nestjs/common";
 import { WsAuthGuard } from "src/utils/guards/ws-auth.guard";
 import { SocketWithUser } from "src/utils/types/socket-with-user.type";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
@@ -20,6 +25,7 @@ import { Cache } from "cache-manager";
 import { ChatsService } from "src/chats/chats.service";
 import { DialogsService } from "src/dialogs/dialogs.service";
 import { ReadMessageDto } from "./dto/read-message.dto";
+import { BadRequestTransformationFilter } from "./filter";
 
 @WebSocketGateway({
   cors: {
@@ -54,19 +60,16 @@ export class MessageGateway
       console.log("Client disconnected due to failed authentication");
       return;
     }
-
     // If authenticated, save user id in cache
     const socketWithUser = client as SocketWithUser;
     if (socketWithUser.user && socketWithUser.user.id) {
       const oldSocketIds =
         ((await this.cacheManager.get(String(socketWithUser.user.id))) as string) || "[]";
-
       await this.cacheManager.set(
         String(socketWithUser.user.id),
         JSON.stringify([...JSON.parse(oldSocketIds), socketWithUser.id]),
         0
       );
-
       console.log(
         `User '${socketWithUser.user.nickname}' (ID: ${socketWithUser.user.id}) with socket ID ${socketWithUser.id} saved to cache.`
       );
@@ -101,12 +104,12 @@ export class MessageGateway
 
   @SubscribeMessage("MESSAGE:CREATE")
   @UseGuards(WsAuthGuard)
+  @UseFilters(BadRequestTransformationFilter) // Иначе сервер падает при инвалидации данных
   async create(
     @ConnectedSocket() client: SocketWithUser,
-    @MessageBody() payload: string
+    @MessageBody(new ValidationPipe()) payload: CreateMessageDto
   ) {
-    const dto = JSON.parse(payload) as CreateMessageDto;
-    const result = await this.messageService.create(client.user.id, dto);
+    const result = await this.messageService.create(client.user.id, payload);
 
     const userIds = await this.chatService.getChatParticipantsById(result.chat_id);
     userIds.forEach(async (obj) => {
@@ -116,17 +119,20 @@ export class MessageGateway
   }
 
   @SubscribeMessage("MESSAGE:READ")
+  @UseFilters(BadRequestTransformationFilter)
   @UseGuards(WsAuthGuard)
-  async read(@ConnectedSocket() client: SocketWithUser, @MessageBody() payload: string) {
-    const dto = JSON.parse(payload) as ReadMessageDto;
-    const updatedMessageIds = await this.messageService.markAsRead(dto);
+  async read(
+    @ConnectedSocket() _client: SocketWithUser,
+    @MessageBody(new ValidationPipe()) payload: ReadMessageDto
+  ) {
+    const updatedMessageIds = await this.messageService.markAsRead(payload);
 
     if (updatedMessageIds.length === 0) return;
-    const userIds = await this.chatService.getChatParticipantsById(dto.chatId);
+    const userIds = await this.chatService.getChatParticipantsById(payload.chatId);
     userIds.forEach(async (obj) => {
       this.emitToUser(obj.user_id, "MESSAGE:READ", {
         messageIds: updatedMessageIds,
-        chatId: dto.chatId,
+        chatId: payload.chatId,
         status: "success"
       });
     });

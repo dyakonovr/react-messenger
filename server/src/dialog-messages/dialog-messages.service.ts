@@ -1,8 +1,9 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Message } from "@prisma/client";
 import { PrismaService } from "src/prisma.service";
 import { PaginationResponseDto } from "src/utils/dto/pagination/response.dto";
 import { DialogMessagesRequestDto } from "./dto/request.dto";
+import { ChatsService } from "src/chats/chats.service";
 
 type MessageType = Omit<
   Message,
@@ -16,9 +17,18 @@ type MessageType = Omit<
 
 @Injectable()
 export class DialogMessagesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly chatService: ChatsService
+  ) {}
 
   async findAll(userId: number, requestDto: DialogMessagesRequestDto) {
+    const isUserInChat = await this.chatService.isUserExistInChat(
+      requestDto.chatId,
+      userId
+    );
+    if (isUserInChat) throw new BadRequestException("Unable to receive chat messages");
+
     const offset = (requestDto.page - 1) * requestDto.limit;
 
     const totalMessages = await this.prisma.message.count({

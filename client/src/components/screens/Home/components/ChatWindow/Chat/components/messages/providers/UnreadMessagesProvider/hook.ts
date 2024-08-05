@@ -1,9 +1,9 @@
-import { useSocketContext } from "@/src/components/layout/SocketProvider";
 import { useSelectedChatContext } from "@/src/components/screens/Home/providers/SelectedChatProvider";
 import { debounce } from "@/src/hooks/general/useDebounceCallback/debounce";
 import { useCallback, useEffect, useState } from "react";
 import MessageSocket from "@/src/sockets/message";
 import { transformStringToNumber } from "@/src/utils/transformStringToNumber";
+import { useSocketContext } from "@/src/components/layout/providers/SocketProvider";
 
 export const useUnreadMessagesProvider = () => {
   const { socket } = useSocketContext();

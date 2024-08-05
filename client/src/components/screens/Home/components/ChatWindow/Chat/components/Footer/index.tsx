@@ -1,6 +1,6 @@
 import { Button, Input } from "@/src/components/ui";
 import { Send as SendIcon } from "lucide-react";
-import { useSocketContext } from "../../../../../../../layout/SocketProvider";
+import { useSocketContext } from "../../../../../../../layout/providers/SocketProvider";
 import type { SendMessageFormSchemaType } from "./constants";
 import { sendMessageFormSchema } from "./constants";
 import { zodResolver } from "@hookform/resolvers/zod";

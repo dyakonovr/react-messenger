@@ -12,11 +12,11 @@ import {
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { LoginDto } from "./dto/login.dto";
-import { RegistrationDto } from "./dto/registration.dto";
 import { IToken, IUserReponse } from "./dto/auth-response.dto";
 import { Request, Response } from "express";
 import { Tokens } from "src/utils/enums/tokens.enum";
 import { RefreshTokensGuard } from "src/utils/guards/refresh-tokens.guard";
+import { CreateUserDto } from "src/user/dto/create-user.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -37,7 +37,7 @@ export class AuthController {
   @Post("registration")
   @UsePipes(new ValidationPipe())
   async registration(
-    @Body() dto: RegistrationDto,
+    @Body() dto: CreateUserDto,
     @Res({ passthrough: true }) response: Response
   ): Promise<IUserReponse> {
     const responseData = await this.authService.registration(dto);

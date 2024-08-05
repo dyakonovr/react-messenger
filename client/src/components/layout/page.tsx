@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useGetNewTokens } from "./hooks/usetGetNewTokens";
 import { ApplicationLoader, LayoutSidebar } from "./components";
 import type { ReactNode } from "react";
-import { SocketProvider } from "./SocketProvider";
+import { SocketProvider } from "./providers/SocketProvider";
 import { useSetTheme } from "./hooks/useSetTheme";
 
 const queryClient = new QueryClient();

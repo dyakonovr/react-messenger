@@ -2,7 +2,7 @@ import { z, type ZodSchema } from "zod";
 import type { Nullable } from "../../types/general/nullable";
 
 const errorSchema = z.object({
-  message: z.array(z.string()),
+  message: z.union([z.array(z.string()), z.string()]),
   error: z.string(),
   statusCode: z.number()
 });

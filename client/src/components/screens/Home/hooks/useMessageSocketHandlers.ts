@@ -6,7 +6,7 @@ import type { IDialogsRecord } from "@/src/types/features/dialog";
 import { useChatsStore } from "@/src/stores/useChatsStore";
 import MessageSocket from "@/src/sockets/message";
 import { useUserStore } from "@/src/stores/useUserStore";
-import { useSocketContext } from "@/src/components/layout/SocketProvider";
+import { useSocketContext } from "@/src/components/layout/providers/SocketProvider";
 
 export interface IReadMessageResponse {
   status: "success";

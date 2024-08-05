@@ -15,18 +15,30 @@ export const useGetNewTokens = () => {
   useEffect(() => {
     if (user) return;
 
-    (async () => {
-      try {
-        // Запрос выполняется после логаута
-        const response = await AuthService.getNewTokens();
-        setUser(response.data);
-        isLoadingRef.current = false;
-      } catch (error) {
-        console.log(error);
-        router.push(PagePaths.LOGIN);
-      }
-    })();
+    connectToSocket();
   }, []);
+
+  useEffect(() => {
+    console.log("@socket isConnected:", isLoadingRef.current);
+  }, [isLoadingRef]);
+
+  // Functions
+  async function connectToSocket() {
+    try {
+      // Запрос выполняется после логаута
+      const response = await AuthService.getNewTokens();
+
+      if (response.data === null || response.error !== null)
+        throw new Error("Unexpected error");
+
+      setUser(response.data);
+      isLoadingRef.current = false;
+    } catch (error) {
+      console.log(error);
+      router.push(PagePaths.LOGIN);
+    }
+  }
+  // Functions END
 
   return isLoadingRef.current;
 };
