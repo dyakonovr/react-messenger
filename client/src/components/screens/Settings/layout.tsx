@@ -1,13 +1,17 @@
 import type { ReactNode } from "react";
 import { SettingsNavigation } from "./components";
-import classes from "./styles.module.css";
+import { ScreenLayoutWithSidebar } from "../../ui";
+import { ScreenLayoutWithSidebarSidebar } from "../../ui/ScreenLayoutWithSidebar/Sidebar";
+import { ScreenLayoutWithSidebarMainWindow } from "../../ui/ScreenLayoutWithSidebar/MainWindow";
 
 function SettingsPageLayout({ children }: { children: ReactNode }) {
   return (
-    <div className={classes.settings_page}>
-      <SettingsNavigation />
-      {children}
-    </div>
+    <ScreenLayoutWithSidebar>
+      <ScreenLayoutWithSidebarSidebar>
+        <SettingsNavigation />
+      </ScreenLayoutWithSidebarSidebar>
+      <ScreenLayoutWithSidebarMainWindow>{children}</ScreenLayoutWithSidebarMainWindow>
+    </ScreenLayoutWithSidebar>
   );
 }
 

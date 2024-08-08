@@ -1,4 +1,5 @@
 import { Avatar, Typography } from "@/src/components/ui";
+import { ScreenLayoutWithSidebarBackToSidebarButton } from "@/src/components/ui/ScreenLayoutWithSidebar/BackToSidebarButton";
 import type { IDialogInfo } from "@/src/types/features/dialog";
 import { useTranslations } from "next-intl";
 
@@ -12,6 +13,7 @@ export function ChatHeader({ info, isLoading }: IProps) {
 
   return (
     <div className="flex bg-[#F8FAFF] px-8 py-4">
+      <ScreenLayoutWithSidebarBackToSidebarButton className="mr-5 !px-2 !py-1" />
       <Avatar
         alt={`${info?.name} avatar`}
         nickname={info?.name ?? ""}

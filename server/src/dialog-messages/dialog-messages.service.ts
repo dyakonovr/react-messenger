@@ -27,7 +27,7 @@ export class DialogMessagesService {
       requestDto.chatId,
       userId
     );
-    if (isUserInChat) throw new BadRequestException("Unable to receive chat messages");
+    if (!isUserInChat) throw new BadRequestException("Unable to receive chat messages");
 
     const offset = (requestDto.page - 1) * requestDto.limit;
 

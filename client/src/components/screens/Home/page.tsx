@@ -1,22 +1,26 @@
 "use client";
 
 import { ChatWindow, Chats } from "./components";
-import { SelectedChatProvider } from "./providers/SelectedChatProvider";
-import classes from "./styles.module.css";
+import { ScreenLayoutWithSidebar } from "../../ui";
+import { ScreenLayoutWithSidebarSidebar } from "../../ui/ScreenLayoutWithSidebar/Sidebar";
+import { ScreenLayoutWithSidebarMainWindow } from "../../ui/ScreenLayoutWithSidebar/MainWindow";
+import { useSelectedChatContext } from "./providers/SelectedChatProvider";
 import { useMessageSocketHandlers } from "./hooks/useMessageSocketHandlers";
-import { DialogsDataProvider } from "./providers/DialogsDataProvider";
 
 function HomePage() {
+  const { selectedChatId } = useSelectedChatContext();
   useMessageSocketHandlers();
 
   return (
-    <main className={classes.index_page}>
-      <DialogsDataProvider>
-        <SelectedChatProvider>
+    <main className="h-full">
+      <ScreenLayoutWithSidebar isSidebarShowedByDefault={!selectedChatId}>
+        <ScreenLayoutWithSidebarSidebar>
           <Chats />
+        </ScreenLayoutWithSidebarSidebar>
+        <ScreenLayoutWithSidebarMainWindow>
           <ChatWindow />
-        </SelectedChatProvider>
-      </DialogsDataProvider>
+        </ScreenLayoutWithSidebarMainWindow>
+      </ScreenLayoutWithSidebar>
     </main>
   );
 }

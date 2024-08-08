@@ -13,7 +13,7 @@ function Chat() {
   } = useChatData();
 
   return (
-    <div className="flex max-h-screen flex-col max-[840px]:hidden">
+    <div className="flex h-full max-h-screen flex-col">
       <ChatHeader
         info={chatInfo}
         isLoading={isFetching && !isAdditionalMessagesFetching}

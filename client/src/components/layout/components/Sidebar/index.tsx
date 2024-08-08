@@ -14,7 +14,9 @@ export function LayoutSidebar() {
   const pathname = usePathname();
 
   return (
-    <div className={`flex flex-col gap-3 p-6 ${classes["sidebar-background"]}`}>
+    <div
+      className={`flex flex-col gap-3 p-6 ${classes["sidebar-background"]} max-[768px]:flex-row max-[768px]:justify-between`}
+    >
       <LayoutSidebarButton
         link={PagePaths.HOME}
         icon={<ChatIcon />}
@@ -25,7 +27,7 @@ export function LayoutSidebar() {
         icon={<FriendsIcon />}
         pathname={pathname}
       />
-      <hr className="bg-[#B4B4B4]" />
+      <hr className="bg-[#B4B4B4] max-[768px]:hidden" />
       <LayoutSidebarButton
         link={PagePaths.SETTINGS.HOME}
         icon={<SettingsIcon />}

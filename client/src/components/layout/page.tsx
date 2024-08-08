@@ -18,8 +18,10 @@ function Layout({ children }: { children: ReactNode }) {
   return (
     <SocketProvider>
       <QueryClientProvider client={queryClient}>
-        <LayoutSidebar />
-        <div className="w-full">{children}</div>
+        <div className="flex size-full max-[768px]:flex-col-reverse">
+          <LayoutSidebar />
+          <div className="size-full overflow-y-auto">{children}</div>
+        </div>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </SocketProvider>

@@ -1,20 +1,31 @@
-import { Typography } from "@/src/components/ui";
+"use client";
+
+import { Typography, useScreenLayoutWithSidebarContext } from "@/src/components/ui";
 import classes from "./styles.module.css";
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Link } from "@/src/utils/navigation";
 
-interface ISettingsMenuItemProps {
-  name: string;
+const SettingsMenuItemTypographyTag: ComponentProps<typeof Typography>["tag"] = "p";
+
+interface ISettingsMenuItemProps
+  extends ComponentProps<typeof SettingsMenuItemTypographyTag> {
+  itemText: string;
   icon: ReactNode;
   href: string;
 }
 
-function SettingsMenuItem({ name, icon, href }: ISettingsMenuItemProps) {
+function SettingsMenuItem({ itemText, icon, href, ...props }: ISettingsMenuItemProps) {
+  const { setIsSidebarOnFullMobileScreen } = useScreenLayoutWithSidebarContext();
+
   return (
-    <Link href={href} className={classes.menu_item}>
+    <Link
+      href={href}
+      className={classes.menu_item}
+      onClick={() => setIsSidebarOnFullMobileScreen(false)}
+    >
       {icon}
-      <Typography tag="p" variant="regular" className="font-bold">
-        {name}
+      <Typography tag="p" variant="regular" className="font-bold" {...props}>
+        {itemText}
       </Typography>
     </Link>
   );

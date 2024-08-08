@@ -6,7 +6,7 @@ export function SettingsNavigation() {
   const t = useTranslations("screens.Settings.Sidebar");
 
   return (
-    <div className="default-page-offset custom-shadow bg-[#F8FAFF]">
+    <div className="default-page-offset custom-shadow h-full bg-[#F8FAFF]">
       <Typography tag="h1" variant="title">
         {t("title")}
       </Typography>

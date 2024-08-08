@@ -1,5 +1,5 @@
-import HomePage from "@/src/components/screens/Home/page";
+import Home from "@/src/components/screens/Home";
 
-export default function Home() {
-  return <HomePage />;
+export default function HomeNextPage() {
+  return <Home />;
 }

@@ -1,5 +1,3 @@
-"use client";
-
 import { SettingsAppearanceLanguage } from "./components/Language";
 import { SettingsAppearanceTheme } from "./components/Theme";
 

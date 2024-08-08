@@ -49,7 +49,7 @@ function SettingsAccountDataForm() {
         />
         <Button
           variant="contained"
-          className="w-fit"
+          className="mt-5 w-fit"
           loading={isButtonLoading}
           type="submit"
         >

@@ -1,4 +1,8 @@
-import { Avatar, Typography } from "@/src/components/ui";
+import {
+  Avatar,
+  Typography,
+  useScreenLayoutWithSidebarContext
+} from "@/src/components/ui";
 import classes from "./styles.module.css";
 import type { IDialog } from "@/src/types/features/dialog";
 import type { Nullable } from "@/src/types/general/nullable";
@@ -19,9 +23,17 @@ function ChatItem({ dialog, userId, isSelected, selectChat }: IProps) {
     myMessageIsUnread,
     newMessagesCounterText
   } = useChatItem(dialog, isSelected);
+  const { setIsSidebarOnFullMobileScreen } = useScreenLayoutWithSidebarContext();
+
+  // Functions
+  function onClick() {
+    selectChat(userId);
+    setIsSidebarOnFullMobileScreen(false);
+  }
+  // Functions END
 
   return (
-    <div className={dialogItemClasses} onClick={() => selectChat(userId)}>
+    <div className={dialogItemClasses} onClick={onClick}>
       <Avatar
         alt={dialog.info.name}
         nickname={dialog.info.name}

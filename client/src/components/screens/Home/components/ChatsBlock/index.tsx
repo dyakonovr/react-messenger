@@ -10,7 +10,7 @@ export function Chats() {
   const updateChatSearchTerm = useDialogsData();
 
   return (
-    <div className="custom-shadow z-[1] w-full bg-[#F8FAFF] p-[30px]">
+    <div className="custom-shadow z-[1] size-full min-h-full bg-[#F8FAFF] p-[30px] max-[840px]:h-auto">
       <Typography tag="h1" variant="title" className="mb-7">
         {t("title")}
       </Typography>

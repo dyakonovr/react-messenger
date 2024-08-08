@@ -24,6 +24,7 @@ export function FriendsHeaderFiltersButton({
       variant={!isActive ? "contained" : "transparent"}
       className={clsx(
         !isActive ? "h-fit py-1.5" : "h-fit border-2 !border-[var(--main-color)] py-1.5",
+        "min-w-fit",
         className
       )}
       {...props}

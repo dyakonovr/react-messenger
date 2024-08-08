@@ -7,7 +7,7 @@ function SelectChatWindow() {
   const t = useTranslations("screens.Chats.Main_Window");
 
   return (
-    <div className="flex flex-col items-center justify-center gap-14">
+    <div className="flex h-full flex-col items-center justify-center gap-14">
       <Image src={SelectChatIcon} alt="Select chat icon" />
       <Typography variant="regular" tag="p" className="font-bold">
         {t("select_conversation_subtitle")}

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Typography } from "@/src/components/ui";
 import { SettingsAppearanceLanguageFormItem } from "./Item";
 import { useSettingsAppearanceLanguageForm } from "./useSettingsAppearanceLanguageForm";
@@ -13,7 +15,7 @@ export function SettingsAppearanceLanguageForm() {
         {t("pick_language_label")}
       </Typography>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="grid grid-cols-10 gap-5">
+        <div className="grid grid-cols-10 max-[1600px]:grid-cols-5 max-[992px]:grid-cols-3 max-[576px]:grid-cols-2 gap-5">
           <SettingsAppearanceLanguageFormItem
             label="Русский"
             value="ru"

@@ -1,3 +1,5 @@
+"use client";
+
 import type { Nullable } from "@/src/types/general/nullable";
 import type { ReactNode } from "react";
 import { createContext, useContext } from "react";

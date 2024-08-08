@@ -1,0 +1,3 @@
+.layout {
+  @apply min-[840px]:grid h-full min-[840px]:grid-cols-[5fr_7fr] lg:grid-cols-[4fr_8fr] 2xl:grid-cols-[3fr_9fr] flex h-full;
+}

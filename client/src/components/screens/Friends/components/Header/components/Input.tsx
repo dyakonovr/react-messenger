@@ -21,7 +21,7 @@ export function FriendsHeaderInput() {
   return (
     <Input
       placeholder={t("search_input_placeholder")}
-      className="ml-5 mr-7 w-full max-w-[500px]"
+      className="w-full max-w-[500px]"
       onKeyDown={handleKeyDown}
     />
   );
