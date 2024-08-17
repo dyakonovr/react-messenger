@@ -56,7 +56,9 @@ export type UseIntersectionObserver = {
   ): UseIntersectionObserverReturn & { ref: RefObject<Target> };
 };
 
-export const useIntersectionObserver = ((...params: any[]) => {
+export const useIntersectionObserver = ((...params: unknown[]) => {
+  if (params[0] === null) return;
+
   const target = (
     typeof params[0] === "object" && !("current" in params[0]) ? undefined : params[0]
   ) as UseIntersectionObserverTarget | undefined;

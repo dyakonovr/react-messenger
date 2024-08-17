@@ -1,13 +1,6 @@
 import { PagePaths } from "@/src/enums/PagePaths";
 import SettingsMenuItem from "./Item";
-import {
-  Bell as BellIcon,
-  CircleUser as CircleUserIcon,
-  Languages as LanguagesIcon,
-  LockKeyhole as LockIcon,
-  Palette as PaletteIcon,
-  Paintbrush as PaintbrushIcon
-} from "lucide-react";
+import { CircleUser as CircleUserIcon, Paintbrush as PaintbrushIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export function SettingsMenu() {

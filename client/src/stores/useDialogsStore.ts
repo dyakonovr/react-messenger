@@ -70,9 +70,9 @@ export const useDialogsStore = create<State & Actions>()(
 
             if (
               state.dialogs[dialogId].lastMessage &&
-              messageId === String(state.dialogs[dialogId].lastMessage.id)
+              messageId === String(state.dialogs[dialogId].lastMessage?.id)
             ) {
-              state.dialogs[dialogId].lastMessage.isRead = true;
+              state.dialogs[dialogId].lastMessage!.isRead = true;
             }
           }
 
@@ -84,9 +84,9 @@ export const useDialogsStore = create<State & Actions>()(
 
             if (
               state.dialogsBySearch[dialogId].lastMessage &&
-              messageId === String(state.dialogsBySearch[dialogId].lastMessage.id)
+              messageId === String(state.dialogsBySearch[dialogId].lastMessage?.id)
             ) {
-              state.dialogsBySearch[dialogId].lastMessage.isRead = true;
+              state.dialogsBySearch[dialogId].lastMessage!.isRead = true;
             }
           }
         }),

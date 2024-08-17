@@ -18,10 +18,6 @@ export const useGetNewTokens = () => {
     connectToSocket();
   }, []);
 
-  useEffect(() => {
-    console.log("@socket isConnected:", isLoadingRef.current);
-  }, [isLoadingRef]);
-
   // Functions
   async function connectToSocket() {
     try {

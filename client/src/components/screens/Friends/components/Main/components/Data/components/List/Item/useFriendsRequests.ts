@@ -1,4 +1,4 @@
-import type { FriendsPageUsersType } from "@/src/services/friend";
+import type { FriendsPageUsersType } from "@/src/services/friend/type";
 import type { FriendshipRequestType } from "@/src/services/friendship/service";
 import FriendshipService from "@/src/services/friendship/service";
 import type { Nullable } from "@/src/types/general/nullable";
@@ -35,6 +35,8 @@ export const useFriendsRequestFunc = (userId: number, type: FriendsPageUsersType
       return FriendshipService.makeRequest(userId, requestType);
     },
     onSuccess({ data }) {
+      if (!data) return;
+
       toast.success(data.message);
       queryClient.invalidateQueries({
         queryKey: [

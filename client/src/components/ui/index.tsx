@@ -3,5 +3,4 @@ export * from "./Typography";
 export * from "./Input";
 export * from "./Avatar";
 export * from "./LoaderSpin";
-export * from "./ComponentWithData";
 export * from "./ScreenLayoutWithSidebar";

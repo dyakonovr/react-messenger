@@ -7,7 +7,7 @@ export const useSortedDialogs = (dialogs: Nullable<IDialogsRecord>) => {
     if (!dialogs) return [];
 
     return Object.entries(dialogs)
-      .sort(([keyA, dialogA], [keyB, dialogB]) => {
+      .sort(([, dialogA], [, dialogB]) => {
         if (dialogA.lastMessage === null && dialogB.lastMessage === null) return 0;
         if (dialogA.lastMessage === null) return 1;
         if (dialogB.lastMessage === null) return -1;
