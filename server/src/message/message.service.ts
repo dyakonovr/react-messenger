@@ -1,17 +1,22 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { CreateMessageDto } from "./dto/create-message.dto";
 import { PrismaService } from "src/prisma.service";
-import { DialogsService } from "src/dialogs/dialogs.service";
 import { ReadMessageDto } from "./dto/read-message.dto";
+import { ChatsService } from "src/chats/chats.service";
 
 @Injectable()
 export class MessageService {
   constructor(
     private readonly prisma: PrismaService,
-    private readonly dialogService: DialogsService
+    private readonly chatService: ChatsService
   ) {}
 
   async create(userId: number, dto: CreateMessageDto) {
+    const isUserExistInChat = this.chatService.isUserExistInChat(+dto.chatId, userId);
+    if (!isUserExistInChat) {
+      throw new BadRequestException("Error sending message to chat");
+    }
+
     return await this.prisma.message.create({
       data: {
         text: dto.text,
@@ -21,8 +26,13 @@ export class MessageService {
     });
   }
 
-  async markAsRead(dto: ReadMessageDto) {
+  async markAsRead(userId: number, dto: ReadMessageDto) {
     return await this.prisma.$transaction(async (prisma) => {
+      const isUserExistInChat = this.chatService.isUserExistInChat(+dto.chatId, userId);
+      if (!isUserExistInChat) {
+        throw new BadRequestException("Error sending message to chat");
+      }
+
       const lastMessageId = Math.max(...dto.messageIds);
       const lastMessage = await prisma.message.findFirst({
         where: { id: lastMessageId }

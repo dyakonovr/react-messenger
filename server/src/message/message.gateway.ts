@@ -122,10 +122,13 @@ export class MessageGateway
   @UseFilters(BadRequestTransformationFilter)
   @UseGuards(WsAuthGuard)
   async read(
-    @ConnectedSocket() _client: SocketWithUser,
+    @ConnectedSocket() client: SocketWithUser,
     @MessageBody(new ValidationPipe()) payload: ReadMessageDto
   ) {
-    const updatedMessageIds = await this.messageService.markAsRead(payload);
+    const updatedMessageIds = await this.messageService.markAsRead(
+      client.user.id,
+      payload
+    );
 
     if (updatedMessageIds.length === 0) return;
     const userIds = await this.chatService.getChatParticipantsById(payload.chatId);
