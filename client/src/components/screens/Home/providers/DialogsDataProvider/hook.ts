@@ -42,7 +42,8 @@ export const useDialogsDataProvider = () => {
       });
 
       if (response.error !== null) {
-        return fetchDataErrorToast(response.error);
+        fetchDataErrorToast(response.error);
+        throw response.error;
       }
 
       if (response.data === null) throw new Error("Unexpected error");
@@ -55,7 +56,7 @@ export const useDialogsDataProvider = () => {
       setNewDialogs(response.data.items);
       setNewDialogsBySearch(null);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsFetching(false);
     }

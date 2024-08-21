@@ -7,8 +7,11 @@ import { useSelectedChatContext } from "../../../../providers/SelectedChatProvid
 import { useDialogsDataContext } from "../../../../providers/DialogsDataProvider";
 import type { IDialogInfo } from "@/src/types/features/dialog";
 import { fetchDataErrorToast } from "@/src/utils/fetchDataErrorToast";
+import { useScreenLayoutWithSidebarContext } from "@/src/components/ui";
 
 export const useChatData = () => {
+  const { setIsSidebarOnFullMobileScreen } = useScreenLayoutWithSidebarContext();
+
   const { selectedChatId, selectChat } = useSelectedChatContext();
   const { dialogs } = useDialogsDataContext();
 
@@ -49,8 +52,8 @@ export const useChatData = () => {
         });
 
         if (response.error !== null) {
-          selectChat(null);
-          return fetchDataErrorToast(response.error);
+          fetchDataErrorToast(response.error);
+          throw response.error;
         }
 
         if (response.data === null) throw new Error("Unexpected error");
@@ -62,7 +65,9 @@ export const useChatData = () => {
           response.data.totalPages
         );
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        selectChat(null);
+        setIsSidebarOnFullMobileScreen(true);
       } finally {
         setIsFetching(false);
         setIsAdditionalMessagesFetching(false);

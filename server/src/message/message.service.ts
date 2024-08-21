@@ -12,7 +12,7 @@ export class MessageService {
   ) {}
 
   async create(userId: number, dto: CreateMessageDto) {
-    const isUserExistInChat = this.chatService.isUserExistInChat(+dto.chatId, userId);
+    const isUserExistInChat = this.chatService.isUserInChat(+dto.chatId, userId);
     if (!isUserExistInChat) {
       throw new BadRequestException("Error sending message to chat");
     }
@@ -28,7 +28,7 @@ export class MessageService {
 
   async markAsRead(userId: number, dto: ReadMessageDto) {
     return await this.prisma.$transaction(async (prisma) => {
-      const isUserExistInChat = this.chatService.isUserExistInChat(+dto.chatId, userId);
+      const isUserExistInChat = this.chatService.isUserInChat(+dto.chatId, userId);
       if (!isUserExistInChat) {
         throw new BadRequestException("Error sending message to chat");
       }

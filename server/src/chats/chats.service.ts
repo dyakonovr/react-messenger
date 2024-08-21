@@ -54,12 +54,14 @@ export class ChatsService {
     });
   }
 
-  async isUserExistInChat(chatId: number, userId: number): Promise<boolean> {
-    return !!this.prisma.chatParticipant.findFirst({
+  async isUserInChat(chatId: number, userId: number): Promise<boolean> {
+    const result = await this.prisma.chatParticipant.findFirst({
       where: {
         chat_id: chatId,
         user_id: userId
       }
     });
+
+    return !!result;
   }
 }

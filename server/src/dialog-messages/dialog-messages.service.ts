@@ -23,10 +23,7 @@ export class DialogMessagesService {
   ) {}
 
   async findAll(userId: number, requestDto: DialogMessagesRequestDto) {
-    const isUserInChat = await this.chatService.isUserExistInChat(
-      requestDto.chatId,
-      userId
-    );
+    const isUserInChat = await this.chatService.isUserInChat(requestDto.chatId, userId);
     if (!isUserInChat) throw new BadRequestException("Unable to receive chat messages");
 
     const offset = (requestDto.page - 1) * requestDto.limit;

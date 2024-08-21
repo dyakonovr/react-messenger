@@ -1,0 +1,351 @@
+{
+	"info": {
+		"_postman_id": "e52f30e2-6f11-4501-9366-9facb40ee400",
+		"name": "FriendSpace API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30810230"
+	},
+	"item": [
+		{
+			"name": "Friend",
+			"item": [
+				{
+					"name": "getAllUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/friends/all?page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"friends",
+								"all"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllFriends",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/friends/friends?page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"friends",
+								"friends"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllRecievedRequests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/friends/received?page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"friends",
+								"received"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllSentRequests",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/friends/sent?page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"friends",
+								"sent"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"login\": \"hhhhhhhhh\",\r\n    \"password\": \"hhhhhhhhh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/auth/login",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\": \"1hhh\",\r\n    \"login\": \"1hhh\",\r\n    \"password\": \"1hhh\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base-url}}/auth/registration",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"auth",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Dialog",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/dialogs?page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"dialogs"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "DialogMessages",
+			"item": [
+				{
+					"name": "getAll",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base-url}}/dialog-messages?chatId=1&page=1&limit=20",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"dialog-messages"
+							],
+							"query": [
+								{
+									"key": "chatId",
+									"value": "1"
+								},
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "File",
+			"item": [
+				{
+					"name": "create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/dyako/Downloads/eye-svgrepo-com.svg"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/file",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"file"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"type": "file",
+									"src": "/C:/Users/dyako/Downloads/Фома Аквинский 1225-1274 (2).svg"
+								},
+								{
+									"key": "data",
+									"value": "{\"nickname\":\"new-ttt\",\"oldPassword\": \"new-ttt\",\"newPassword\":\"new-ttt\"}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base-url}}/user",
+							"host": [
+								"{{base-url}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base-url",
+			"value": "http://localhost:8080/api"
+		}
+	]
+}
